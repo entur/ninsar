@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "dev": "ninsar-dev",
+    "staging": "ninsar-staging",
+    "production": "ninsar-prod",
+    "default": "ninsar-dev"
+  }
+}
