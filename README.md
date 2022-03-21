@@ -1,5 +1,3 @@
-# ninsar
+# Ninsar
 
-> Sometimes good, sometimes evil
-
-A frontend application to display NeTEx validation reports from [antu](https://github.com/entur/antu).
+A frontend application to display line statistics from [marduk](https://github.com/entur/marduk) and [Uttu](https://github.com/entur/uttu).
