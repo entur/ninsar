@@ -1,32 +1,41 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AppProvider } from './AppProvider';
 import './App.css';
 import { DefaultPayload } from '@entur/micro-frontend';
-import {StatisticsForProvider} from "./pages/statisticsForProvider";
+import { LineStatisticsForProvider } from './pages/lineStatisticsForProvider';
+import { LineStatistics } from './pages/lineStatistics';
+import { ProtectedComponent } from './pages/ProtectedComponent';
+import { Fallback } from './pages/fallback';
 
 interface AppProps extends DefaultPayload {}
 
 export function App(props: AppProps) {
-
-  console.log('props.getToken', props.getToken());
-
   return (
     <React.StrictMode>
       <AppProvider {...props}>
-        <BrowserRouter
-          basename={
-            process.env.REACT_APP_STANDALONE ? '' : 'netex-validation-reports'
-          }
-        >
-          <div className="ninsar-app">
-            <div className="ninsar-app-content">
-              <Switch>
-                <Route path="/line-statistics/:providerCode" component={StatisticsForProvider} />
-              </Switch>
-            </div>
+        <div className="ninsar-app">
+          <div className="ninsar-app-content">
+            <Routes>
+              <Route
+                path="line-statistics"
+                element={<ProtectedComponent component={LineStatistics} />}
+              />
+              <Route
+                path="line-statistics/:providerId"
+                element={
+                  <ProtectedComponent component={LineStatisticsForProvider} />
+                }
+              />
+              {process.env.REACT_APP_STANDALONE && (
+                <Route
+                  path="*"
+                  element={<ProtectedComponent component={Fallback} />}
+                />
+              )}
+            </Routes>
           </div>
-        </BrowserRouter>
+        </div>
       </AppProvider>
     </React.StrictMode>
   );

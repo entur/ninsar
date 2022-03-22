@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../AppProvider';
 import { ValidationReport } from '../model/ValidationReport';
-import {useAuth0} from "@auth0/auth0-react";
+import { useAuth0 } from '@auth0/auth0-react';
 
 export type ValidationReportFetchError = {
   status: number;
@@ -9,18 +9,18 @@ export type ValidationReportFetchError = {
 };
 
 export interface Props {
-  providerId: String
+  providerId: string;
 }
 
-export const useLineStatistics = (providerId: String) => {
+export const useLineStatistics = (providerId: string | undefined) => {
   const { getToken } = useAuth();
   const { isAuthenticated, loginWithRedirect } = useAuth0();
 
-//  const [report, setReport] = useState<ValidationReport | undefined>();
-//  const [error, setError] = useState<ValidationReportFetchError | undefined>();
+  //  const [report, setReport] = useState<ValidationReport | undefined>();
+  //  const [error, setError] = useState<ValidationReportFetchError | undefined>();
 
   useEffect(() => {
-    console.log("inside useEffect");
+    console.log('inside useEffect');
     const fetchReport = async () => {
       const accessToken = getToken ? await getToken() : '';
 
@@ -35,19 +35,19 @@ export const useLineStatistics = (providerId: String) => {
       if (response.ok) {
         const lineStatistics = await response.json();
         console.log('lineStatistics', lineStatistics);
-//        setReport(report);
-//        setError(undefined);
+        //        setReport(report);
+        //        setError(undefined);
       } else {
         console.log('error', response);
-/*        setError({
-          status: response.status,
-          statusText: response.statusText,
-        });
-*/
+        /*        setError({
+                                                  status: response.status,
+                                                  statusText: response.statusText,
+                                                });
+                                        */
       }
     };
     fetchReport();
   }, [getToken, providerId]);
 
-  return { };
+  return {};
 };
