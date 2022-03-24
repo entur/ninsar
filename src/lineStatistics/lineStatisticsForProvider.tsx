@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useLineStatistics } from './hooks/useLineStatistics';
 import { useParams } from 'react-router-dom';
 import { LineStatisticsCard } from './components/lineStatisticsCard/lineStatisticsCard';
+import { useProvider } from './hooks/useProvider';
+import { SmallAlertBox } from '@entur/alert';
 
 type Provider = {
   providerId: string;
@@ -9,7 +11,8 @@ type Provider = {
 
 export const LineStatisticsForProvider = () => {
   const { providerId } = useParams<Provider>();
-  const { lineStatistics, error } = useLineStatistics(providerId);
+  const { lineStatistics, lineStatisticsError } = useLineStatistics(providerId);
+  const { provider, providerError } = useProvider(providerId);
 
   console.log('useLineStatistics(providerId)', lineStatistics);
 
@@ -23,16 +26,24 @@ export const LineStatisticsForProvider = () => {
           display: 'flex',
         }}
       >
-        {lineStatistics && (
+        {lineStatisticsError || providerError ? (
+          <SmallAlertBox variant="error">
+            Kunne ikke laste inn dataene. Prøv igjen senere.
+          </SmallAlertBox>
+        ) : (
+          lineStatistics &&
+          provider && (
             <>
-                <LineStatisticsCard
-                    selectedSegment={selectedSegment}
-                    daysValid={daysValid}
-                    lineStatistics={lineStatistics}
-                    title={'SomeThing'}
-                />
-                <div>Pie Diagram</div>
+              <LineStatisticsCard
+                setSelectedSegment={setSelectedSegment}
+                selectedSegment={selectedSegment}
+                daysValid={daysValid}
+                lineStatistics={lineStatistics}
+                title={provider.name}
+              />
+              <div>Pie Diagram</div>
             </>
+          )
         )}
       </div>
     </>

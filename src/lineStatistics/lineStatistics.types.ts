@@ -1,3 +1,10 @@
+export interface LineStatistics {
+  days: number;
+  publicLines: PublicLine[];
+  startDate: string;
+  validityCategories: ValidityCategory[];
+}
+
 export interface FormattedLineStatistics {
   all: { lineNumbers: string[] };
   days: number;
@@ -5,7 +12,7 @@ export interface FormattedLineStatistics {
   endDate: string;
   expiring: ValidityCategory;
   invalid: ValidityCategory;
-  linesMap: { [key: string]: PublicLineValidity }; //Map<string, PublicLineValidity>;
+  linesMap: { [key: string]: PublicLineValidity };
   minDays: { days: number; validity: Validity };
   startDate: string;
   valid: ValidityCategory;
@@ -14,48 +21,51 @@ export interface FormattedLineStatistics {
   validity: ValidityCategory[];
 }
 
+export interface Provider {
+  id: number;
+  name: string;
+}
+
+export type FetchError = {
+  status: number;
+  statusText: string;
+};
+
 interface PublicLineValidity extends PublicLine {
   daysValid: number;
 }
 
-export interface LineStatistics {
-  days: number;
-  publicLines: PublicLine[];
-  startDate: string;
-  validityCategories: ValidityCategory[];
-}
-
-export interface ValidityCategory {
+interface ValidityCategory {
   numDaysAtLeastValid: number;
   lineNumbers: string[];
   name: Validity;
 }
 
-export enum Validity {
+enum Validity {
   INVALID,
   VALID,
   EXPIRING,
 }
 
-export interface Period {
+interface Period {
   from: string;
   to: string;
 }
 
-export interface Timetable {
+interface Timetable {
   id: number;
   objectId: string;
   periods: Period[];
 }
 
-export interface Line {
+interface Line {
   id: number;
   objectId: string;
   name: string;
   timetables: Timetable[];
 }
 
-export interface PublicLine {
+interface PublicLine {
   lineNumber: string;
   lineNames: string[];
   effectivePeriods: Period[];

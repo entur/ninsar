@@ -16,6 +16,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: #d8d8d8 0 1px 6px, #d8d8d8 0 1px 4px;
+  border-radius: 2px;
+  margin: 20px;
 }
 
 .headerContainer {
@@ -34,7 +37,7 @@
 }
 
 .linesListContainer {
-  height: 100%;
+  height: calc(100vh - 120px);
   overflow-y: auto;
   overflow-x: hidden;
   margin: auto;
@@ -45,15 +48,12 @@
 
 .listItem {
   cursor: pointer;
-  pointer-events: none; // this disable the hover on the .parent
+  pointer-events: none; // this disable the hover on the .listItem
 
   &:hover {
-    background-color: #F2F2F2; // hover applied to .parent but disabled by the previous pointer-events: none;
+    background-color: #F2F2F2; // hover applied to .listItem but disabled by the previous pointer-events: none;
   }
   div {
-    pointer-events: auto; // this enable the pointer again
-    &:hover {
-      color: red; // this hover only for the a
-    }
+    pointer-events: auto; // this enable the pointer on div
   }
 }

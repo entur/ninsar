@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
-import { LineStatistics } from '../lineStatistics.types';
+import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
-
-export type LineStatisticsFetchError = {
-  status: number;
-  statusText: string;
-};
 
 export const useLineStatistics = (providerId: string | undefined) => {
   const { getToken } = useAuth();
@@ -13,7 +8,7 @@ export const useLineStatistics = (providerId: string | undefined) => {
   const [lineStatistics, setLineStatistics] = useState<
     LineStatistics | undefined
   >();
-  const [error, setError] = useState<LineStatisticsFetchError | undefined>();
+  const [lineStatisticsError, setLineStatisticsError] = useState<FetchError | undefined>();
 
   useEffect(() => {
     const fetchReport = async () => {
@@ -27,9 +22,9 @@ export const useLineStatistics = (providerId: string | undefined) => {
       if (response.ok) {
         const lineStatistics = await response.json();
         setLineStatistics(lineStatistics);
-        setError(undefined);
+        setLineStatisticsError(undefined);
       } else {
-        setError({
+        setLineStatisticsError({
           status: response.status,
           statusText: response.statusText,
         });
@@ -38,5 +33,5 @@ export const useLineStatistics = (providerId: string | undefined) => {
     fetchReport();
   }, [getToken, providerId]);
 
-  return { lineStatistics, error };
+  return { lineStatistics, lineStatisticsError };
 };
