@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { AppProvider } from './AppProvider';
-import './App.css';
+import './app.module.scss';
 import { DefaultPayload } from '@entur/micro-frontend';
-import { LineStatisticsForProvider } from './pages/lineStatisticsForProvider';
-import { LineStatistics } from './pages/lineStatistics';
+import { LineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
+import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
 import { ProtectedComponent } from './pages/ProtectedComponent';
 import { Fallback } from './pages/fallback';
+import { AppProvider } from './appProvider';
 
 interface AppProps extends DefaultPayload {}
 
@@ -19,7 +19,11 @@ export function App(props: AppProps) {
             <Routes>
               <Route
                 path="line-statistics"
-                element={<ProtectedComponent component={LineStatistics} />}
+                element={
+                  <ProtectedComponent
+                    component={LineStatisticsForAllProviders}
+                  />
+                }
               />
               <Route
                 path="line-statistics/:providerId"

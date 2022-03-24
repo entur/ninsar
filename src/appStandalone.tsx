@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Auth0Provider,
   Auth0ProviderOptions,
   useAuth0,
 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import { App } from './App';
-import {useAuth} from "./AppProvider";
+import { App } from './app';
 
 const onRedirectCallback =
   (navigate: any) =>
@@ -17,7 +16,7 @@ const onRedirectCallback =
 export interface Props extends Auth0ProviderOptions {}
 
 const AuthedApp = () => {
-  const { getAccessTokenSilently, logout } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   return <App getToken={getAccessTokenSilently} />;
 };

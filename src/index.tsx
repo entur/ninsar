@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { App } from './App';
+import { App } from './app';
 import { registerMicroFrontend, DefaultPayload } from '@entur/micro-frontend';
-import { AppStandalone } from './AppStandalone';
 import { BrowserRouter } from 'react-router-dom';
+import { AppStandalone } from './appStandalone';
 
 registerMicroFrontend<DefaultPayload>({
   microFrontendId: 'ror-ninsar',
