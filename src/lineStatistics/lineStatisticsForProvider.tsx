@@ -67,9 +67,7 @@ export const LineStatisticsForProvider = () => {
               />
               <PieChart
                 handlePieOnClick={handlePieOnClick}
-                handleShowAllClick={() => {
-                  console.log('handleShowAllClick');
-                }}
+                handleShowAllClick={handleShowAll}
                 providerName={provider.name}
                 showHeader={false}
                 formattedLineStatistics={formattedLineStatistics}
