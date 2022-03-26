@@ -1,4 +1,4 @@
-import style from './lineStatisticsCard.module.scss';
+import style from './linesValidity.module.scss';
 import { sortIcon } from 'bogu/utils';
 import React from 'react';
 
@@ -10,7 +10,7 @@ interface Props {
   changeSorting: () => void;
 }
 
-export const LinesListHeader = ({
+export const LinesValidityListHeader = ({
   startDate,
   validFromDate,
   endDate,

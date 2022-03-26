@@ -1,16 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLineStatistics } from './hooks/useLineStatistics';
 import { useParams } from 'react-router-dom';
-import { LineStatisticsCard } from './components/lineStatisticsCard/lineStatisticsCard';
+import { LinesValidity } from './components/linesValidity/linesValidity';
 import { useProvider } from './hooks/useProvider';
 import { SmallAlertBox } from '@entur/alert';
-
-type Provider = {
-  providerId: string;
-};
+import { PieChart } from './components/pieChart/pieChart';
+import { FormattedLineStatistics } from './lineStatistics.types';
+import { formatLineStats } from 'bogu/utils';
+import { segmentName2Key } from 'bogu/utils';
+import style from './lineStatistics.module.scss';
 
 export const LineStatisticsForProvider = () => {
-  const { providerId } = useParams<Provider>();
+  const { providerId } = useParams<{
+    providerId: string;
+  }>();
   const { lineStatistics, lineStatisticsError } = useLineStatistics(providerId);
   const { provider, providerError } = useProvider(providerId);
 
@@ -18,6 +21,27 @@ export const LineStatisticsForProvider = () => {
 
   const [daysValid, setDaysValid] = useState<number>(180);
   const [selectedSegment, setSelectedSegment] = useState<string>('all');
+
+  const [formattedLineStatistics, setFormattedLineStatistics] =
+    useState<FormattedLineStatistics>();
+
+  useEffect(() => {
+    if (!!lineStatistics) {
+      const formatted = formatLineStats(lineStatistics);
+      setFormattedLineStatistics(formatted);
+    }
+  }, [lineStatistics, setFormattedLineStatistics]);
+
+  const handlePieOnClick = (label: string | undefined) => {
+    let selected = segmentName2Key(label);
+    setSelectedSegment(selected.segment);
+    setDaysValid(selected.daysValid);
+  };
+
+  const handleShowAll = () => {
+    setSelectedSegment('all');
+    setDaysValid(180);
+  };
 
   return (
     <>
@@ -31,18 +55,26 @@ export const LineStatisticsForProvider = () => {
             Kunne ikke laste inn dataene. Prøv igjen senere.
           </SmallAlertBox>
         ) : (
-          lineStatistics &&
+          formattedLineStatistics &&
           provider && (
-            <>
-              <LineStatisticsCard
+            <div className={style.linesStatisticsContainer}>
+              <LinesValidity
                 setSelectedSegment={setSelectedSegment}
                 selectedSegment={selectedSegment}
                 daysValid={daysValid}
-                lineStatistics={lineStatistics}
-                title={provider.name}
+                formattedLineStatistics={formattedLineStatistics}
+                providerName={provider.name}
               />
-              <div>Pie Diagram</div>
-            </>
+              <PieChart
+                handlePieOnClick={handlePieOnClick}
+                handleShowAllClick={() => {
+                  console.log('handleShowAllClick');
+                }}
+                providerName={provider.name}
+                showHeader={false}
+                formattedLineStatistics={formattedLineStatistics}
+              />
+            </div>
           )
         )}
       </div>

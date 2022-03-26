@@ -12,13 +12,10 @@
   margin-left: 10px;
 }
 
-.containerCard {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.linesValidity {
+  flex: 4;
   box-shadow: #d8d8d8 0 1px 6px, #d8d8d8 0 1px 4px;
   border-radius: 2px;
-  margin: 20px;
 }
 
 .headerContainer {

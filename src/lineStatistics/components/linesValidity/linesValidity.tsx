@@ -14,41 +14,30 @@
  *
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { sortLines } from 'bogu/utils';
-import {
-  FormattedLineStatistics,
-  LineStatistics,
-} from '../../lineStatistics.types';
-import style from './lineStatisticsCard.module.scss';
-import { formatLineStats } from 'bogu/utils';
+import { FormattedLineStatistics } from '../../lineStatistics.types';
+import style from './linesValidity.module.scss';
 import { Heading3 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
-import { LinesListHeader } from './linesListHeader';
-import { LinesList } from './linesList';
+import { LinesValidityListHeader } from './linesValidityListHeader';
+import { LinesValidityList } from './linesValidityList';
 
 interface Props {
   selectedSegment: string;
   setSelectedSegment: (selectedSegment: string) => void;
   daysValid: number;
-  lineStatistics: LineStatistics;
-  title: string;
+  formattedLineStatistics: FormattedLineStatistics;
+  providerName: string;
 }
 
-export const LineStatisticsCard = ({
-  lineStatistics,
-  title,
+export const LinesValidity = ({
+  formattedLineStatistics,
+  providerName,
   selectedSegment,
   daysValid,
 }: Props) => {
   const [sorting, setSorting] = useState<number>(1);
-  const [formattedLineStatistics, setFormattedLineStatistics] =
-    useState<FormattedLineStatistics>();
-
-  useEffect(() => {
-    const formatted = formatLineStats(lineStatistics);
-    setFormattedLineStatistics(formatted);
-  }, [lineStatistics, setFormattedLineStatistics]);
 
   const changeSorting = () => {
     const states = 5;
@@ -62,16 +51,16 @@ export const LineStatisticsCard = ({
 
   return formattedLineStatistics ? (
     <MuiThemeProvider>
-      <div className={style.containerCard}>
-        <Heading3 className={style.title}>{title}</Heading3>
-        <LinesListHeader
+      <div className={style.linesValidity}>
+        <Heading3 className={style.title}>{providerName}</Heading3>
+        <LinesValidityListHeader
           startDate={formattedLineStatistics.startDate}
           validFromDate={formattedLineStatistics.validFromDate}
           endDate={formattedLineStatistics.endDate}
           sorting={sorting}
           changeSorting={changeSorting}
         />
-        <LinesList
+        <LinesValidityList
           sortedLineNumbers={sortedLineNumbers}
           formattedLineStatistics={formattedLineStatistics}
         />

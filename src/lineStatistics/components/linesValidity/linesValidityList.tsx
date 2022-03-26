@@ -1,4 +1,4 @@
-import style from './lineStatisticsCard.module.scss';
+import style from './linesValidity.module.scss';
 import { List, ListItem } from 'material-ui/List';
 import { HeaderTimeline, Timeline } from 'bogu';
 import React, { useState } from 'react';
@@ -9,7 +9,7 @@ interface Props {
   formattedLineStatistics: FormattedLineStatistics;
 }
 
-export const LinesList = ({
+export const LinesValidityList = ({
   sortedLineNumbers,
   formattedLineStatistics,
 }: Props) => {
