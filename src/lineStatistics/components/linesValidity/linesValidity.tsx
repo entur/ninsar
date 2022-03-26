@@ -52,7 +52,7 @@ export const LinesValidity = ({
   return formattedLineStatistics ? (
     <MuiThemeProvider>
       <div className={style.linesValidity}>
-        <Heading3 className={style.title}>{providerName}</Heading3>
+        <Heading3 className={style.title}>{providerName} - {selectedSegment}</Heading3>
         <LinesValidityListHeader
           startDate={formattedLineStatistics.startDate}
           validFromDate={formattedLineStatistics.validFromDate}

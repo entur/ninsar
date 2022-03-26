@@ -17,8 +17,6 @@ export const LineStatisticsForProvider = () => {
   const { lineStatistics, lineStatisticsError } = useLineStatistics(providerId);
   const { provider, providerError } = useProvider(providerId);
 
-  console.log('useLineStatistics(providerId)', lineStatistics);
-
   const [daysValid, setDaysValid] = useState<number>(180);
   const [selectedSegment, setSelectedSegment] = useState<string>('all');
 
@@ -67,9 +65,7 @@ export const LineStatisticsForProvider = () => {
               />
               <PieChart
                 handlePieOnClick={handlePieOnClick}
-                handleShowAllClick={() => {
-                  console.log('handleShowAllClick');
-                }}
+                handleShowAllClick={handleShowAll}
                 providerName={provider.name}
                 showHeader={false}
                 formattedLineStatistics={formattedLineStatistics}

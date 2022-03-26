@@ -60,7 +60,6 @@ export const PieChart = ({
                 ? chart.data.labels[elements[0].index]
                 : undefined,
             );
-            console.log(event, elements, chart);
           },
         }}
       />
