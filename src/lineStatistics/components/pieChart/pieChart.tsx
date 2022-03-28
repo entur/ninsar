@@ -1,4 +1,4 @@
-import { FormattedLineStatistics } from '../../lineStatistics.types';
+import { LineStatistics } from '../../lineStatistics.types';
 import React from 'react';
 import style from './pieChart.module.scss';
 import { NumberOfLines } from './numberOfLines';
@@ -22,7 +22,7 @@ interface Props {
   handlePieOnClick: (label: string | undefined) => void;
   handleShowAllClick: () => void;
   showHeader: boolean;
-  formattedLineStatistics: FormattedLineStatistics;
+  lineStatistics: LineStatistics;
   providerName: string;
 }
 
@@ -31,13 +31,13 @@ export const PieChart = ({
   handlePieOnClick,
   handleShowAllClick,
   showHeader,
-  formattedLineStatistics,
+  lineStatistics,
 }: Props) => {
   const numberOfLinesType: NumberOfLineType = {
-    totalNumberOfLines: formattedLineStatistics.all.lineNumbers.length,
-    numberOfValidLines: formattedLineStatistics.valid.lineNumbers.length,
-    numberOfInvalidLines: formattedLineStatistics.invalid.lineNumbers.length,
-    numberOfExpiringLines: formattedLineStatistics.expiring.lineNumbers.length,
+    totalNumberOfLines: lineStatistics.all.lineNumbers.length,
+    numberOfValidLines: lineStatistics.valid.lineNumbers.length,
+    numberOfInvalidLines: lineStatistics.invalid.lineNumbers.length,
+    numberOfExpiringLines: lineStatistics.expiring.lineNumbers.length,
   };
 
   return (

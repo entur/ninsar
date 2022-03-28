@@ -2,16 +2,16 @@ import style from './linesValidity.module.scss';
 import { List, ListItem } from 'material-ui/List';
 import { HeaderTimeline, Timeline } from 'bogu';
 import React, { useState } from 'react';
-import { FormattedLineStatistics } from '../../lineStatistics.types';
+import { LineStatistics } from '../../lineStatistics.types';
 
 interface Props {
   sortedLineNumbers: string[];
-  formattedLineStatistics: FormattedLineStatistics;
+  lineStatistics: LineStatistics;
 }
 
 export const LinesValidityList = ({
   sortedLineNumbers,
-  formattedLineStatistics,
+  lineStatistics,
 }: Props) => {
   const [expandedLinesState, setExpandedLinesState] = useState<
     Map<string, boolean>
@@ -38,14 +38,14 @@ export const LinesValidityList = ({
       key={'line-n' + index}
       style={{ padding: '0', marginLeft: '0' }}
     >
-      {formattedLineStatistics.linesMap[lineNumber].lines.map((l, i) => (
+      {lineStatistics.linesMap[lineNumber].lines.map((l, i) => (
         <Timeline
           key={'timelineItem' + index + '-' + i}
           timetables={l.timetables}
           isLast={
-            i === formattedLineStatistics.linesMap[lineNumber].lines.length - 1
+            i === lineStatistics.linesMap[lineNumber].lines.length - 1
           }
-          validDaysOffset={formattedLineStatistics.validDaysOffset}
+          validDaysOffset={lineStatistics.validDaysOffset}
           index={i}
         />
       ))}
@@ -67,15 +67,15 @@ export const LinesValidityList = ({
     >
       <HeaderTimeline
         line={lineNumber}
-        hoverText={formattedLineStatistics.linesMap[lineNumber].lineNames.join(
+        hoverText={lineStatistics.linesMap[lineNumber].lineNames.join(
           ', ',
         )}
         index={index}
         key={'HeaderTimeline' + index}
-        validDaysOffset={formattedLineStatistics.validDaysOffset}
-        validFromDate={formattedLineStatistics.validFromDate}
+        validDaysOffset={lineStatistics.validDaysOffset}
+        validFromDate={lineStatistics.validFromDate}
         effectivePeriods={
-          formattedLineStatistics.linesMap[lineNumber].effectivePeriods
+          lineStatistics.linesMap[lineNumber].effectivePeriods
         }
       />
     </div>

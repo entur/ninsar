@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react';
 import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
+import { formatLineStats } from 'bogu/utils';
 
-export const useLineStatistics = (providerId: string | undefined) => {
+export const useLineStatisticsForProvider = (
+  providerId: string | undefined,
+) => {
   const { getToken } = useAuth();
 
   const [lineStatistics, setLineStatistics] = useState<
     LineStatistics | undefined
   >();
-  const [lineStatisticsError, setLineStatisticsError] = useState<FetchError | undefined>();
+  const [lineStatisticsError, setLineStatisticsError] = useState<
+    FetchError | undefined
+  >();
 
   useEffect(() => {
-    const fetchReport = async () => {
+    const fetchLineStatisticsForProvider = async () => {
       const accessToken = getToken ? await getToken() : '';
       const response = await fetch(
         `${process.env.REACT_APP_TIMETABLE_ADMIN_BASE_URL}/${providerId}/line_statistics`,
@@ -20,8 +25,8 @@ export const useLineStatistics = (providerId: string | undefined) => {
         },
       );
       if (response.ok) {
-        const lineStatistics = await response.json();
-        setLineStatistics(lineStatistics);
+        const lineStatisticsResponse = await response.json();
+        setLineStatistics(formatLineStats(lineStatisticsResponse));
         setLineStatisticsError(undefined);
       } else {
         setLineStatisticsError({
@@ -30,7 +35,7 @@ export const useLineStatistics = (providerId: string | undefined) => {
         });
       }
     };
-    fetchReport();
+    fetchLineStatisticsForProvider();
   }, [getToken, providerId]);
 
   return { lineStatistics, lineStatisticsError };

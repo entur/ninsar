@@ -16,7 +16,7 @@
 
 import React, { useState } from 'react';
 import { sortLines } from 'bogu/utils';
-import { FormattedLineStatistics } from '../../lineStatistics.types';
+import { LineStatistics } from '../../lineStatistics.types';
 import style from './linesValidity.module.scss';
 import { Heading3 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
@@ -27,12 +27,12 @@ interface Props {
   selectedSegment: string;
   setSelectedSegment: (selectedSegment: string) => void;
   daysValid: number;
-  formattedLineStatistics: FormattedLineStatistics;
+  lineStatistics: LineStatistics;
   providerName: string;
 }
 
-export const LinesValidity = ({
-  formattedLineStatistics,
+export const LinesValidityProgress = ({
+  lineStatistics,
   providerName,
   selectedSegment,
   daysValid,
@@ -46,23 +46,23 @@ export const LinesValidity = ({
   };
 
   const sortedLineNumbers: string[] =
-    formattedLineStatistics &&
-    sortLines(sorting, formattedLineStatistics, selectedSegment, daysValid);
+    lineStatistics &&
+    sortLines(sorting, lineStatistics, selectedSegment, daysValid);
 
-  return formattedLineStatistics ? (
+  return lineStatistics ? (
     <MuiThemeProvider>
       <div className={style.linesValidity}>
         <Heading3 className={style.title}>{providerName} - {selectedSegment}</Heading3>
         <LinesValidityListHeader
-          startDate={formattedLineStatistics.startDate}
-          validFromDate={formattedLineStatistics.validFromDate}
-          endDate={formattedLineStatistics.endDate}
+          startDate={lineStatistics.startDate}
+          validFromDate={lineStatistics.validFromDate}
+          endDate={lineStatistics.endDate}
           sorting={sorting}
           changeSorting={changeSorting}
         />
         <LinesValidityList
           sortedLineNumbers={sortedLineNumbers}
-          formattedLineStatistics={formattedLineStatistics}
+          lineStatistics={lineStatistics}
         />
       </div>
     </MuiThemeProvider>

@@ -9,7 +9,7 @@ export const useProvider = (providerId: string | undefined) => {
   const [providerError, setProviderError] = useState<FetchError | undefined>();
 
   useEffect(() => {
-    const fetchReport = async () => {
+    const fetchProvider = async () => {
       const accessToken = getToken ? await getToken() : '';
       const response = await fetch(
         `${process.env.REACT_APP_PROVIDERS_BASE_URL}/${providerId}`,
@@ -28,7 +28,7 @@ export const useProvider = (providerId: string | undefined) => {
         });
       }
     };
-    fetchReport();
+    fetchProvider();
   }, [getToken, providerId]);
 
   return { provider, providerError };

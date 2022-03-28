@@ -30,5 +30,4 @@ export const pieChartOptions = {
   responsive: true,
   tooltipTemplate: '<%= label %> - <%= value %>',
   cursor: 'pointer',
-  maintainAspectRatio: false,
 };

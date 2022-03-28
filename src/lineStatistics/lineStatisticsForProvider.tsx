@@ -1,34 +1,21 @@
-import { useEffect, useState } from 'react';
-import { useLineStatistics } from './hooks/useLineStatistics';
+import { useState } from 'react';
+import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
 import { useParams } from 'react-router-dom';
-import { LinesValidity } from './components/linesValidity/linesValidity';
-import { useProvider } from './hooks/useProvider';
+import { LinesValidityProgress } from './components/linesValidity/linesValidityProgress';
+import { useProvider } from './apiHooks/useProvider';
 import { SmallAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
-import { FormattedLineStatistics } from './lineStatistics.types';
-import { formatLineStats } from 'bogu/utils';
 import { segmentName2Key } from 'bogu/utils';
 import style from './lineStatistics.module.scss';
 
 export const LineStatisticsForProvider = () => {
-  const { providerId } = useParams<{
-    providerId: string;
-  }>();
-  const { lineStatistics, lineStatisticsError } = useLineStatistics(providerId);
+  const { providerId } = useParams<{ providerId: string }>();
+  const { lineStatistics, lineStatisticsError } =
+    useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);
 
   const [daysValid, setDaysValid] = useState<number>(180);
   const [selectedSegment, setSelectedSegment] = useState<string>('all');
-
-  const [formattedLineStatistics, setFormattedLineStatistics] =
-    useState<FormattedLineStatistics>();
-
-  useEffect(() => {
-    if (!!lineStatistics) {
-      const formatted = formatLineStats(lineStatistics);
-      setFormattedLineStatistics(formatted);
-    }
-  }, [lineStatistics, setFormattedLineStatistics]);
 
   const handlePieOnClick = (label: string | undefined) => {
     let selected = segmentName2Key(label);
@@ -43,24 +30,20 @@ export const LineStatisticsForProvider = () => {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-        }}
-      >
+      <div className={style.linesStatisticsForProvider}>
         {lineStatisticsError || providerError ? (
           <SmallAlertBox variant="error">
             Kunne ikke laste inn dataene. Prøv igjen senere.
           </SmallAlertBox>
         ) : (
-          formattedLineStatistics &&
+          lineStatistics &&
           provider && (
             <div className={style.linesStatisticsContainer}>
-              <LinesValidity
+              <LinesValidityProgress
                 setSelectedSegment={setSelectedSegment}
                 selectedSegment={selectedSegment}
                 daysValid={daysValid}
-                formattedLineStatistics={formattedLineStatistics}
+                lineStatistics={lineStatistics}
                 providerName={provider.name}
               />
               <PieChart
@@ -68,7 +51,7 @@ export const LineStatisticsForProvider = () => {
                 handleShowAllClick={handleShowAll}
                 providerName={provider.name}
                 showHeader={false}
-                formattedLineStatistics={formattedLineStatistics}
+                lineStatistics={lineStatistics}
               />
             </div>
           )

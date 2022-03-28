@@ -1,18 +1,11 @@
 export interface LineStatistics {
-  days: number;
-  publicLines: PublicLine[];
-  startDate: string;
-  validityCategories: ValidityCategory[];
-}
-
-export interface FormattedLineStatistics {
   all: { lineNumbers: string[] };
   days: number;
   daysValid: { lineNumber: string; days: number }[];
   endDate: string;
   expiring: ValidityCategory;
   invalid: ValidityCategory;
-  linesMap: { [key: string]: PublicLineValidity };
+  linesMap: { [lineNumber: string]: PublicLineValidity };
   minDays: { days: number; validity: Validity };
   startDate: string;
   valid: ValidityCategory;
