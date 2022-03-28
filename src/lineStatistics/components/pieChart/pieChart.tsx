@@ -24,6 +24,7 @@ interface Props {
   showHeader: boolean;
   lineStatistics: LineStatistics;
   providerName: string;
+  maintainAspectRatio?: boolean;
 }
 
 export const PieChart = ({
@@ -32,6 +33,7 @@ export const PieChart = ({
   handleShowAllClick,
   showHeader,
   lineStatistics,
+  maintainAspectRatio = false,
 }: Props) => {
   const numberOfLinesType: NumberOfLineType = {
     totalNumberOfLines: lineStatistics.all.lineNumbers.length,
@@ -50,6 +52,7 @@ export const PieChart = ({
         height={100}
         options={{
           ...pieChartOptions,
+          maintainAspectRatio: maintainAspectRatio,
           onClick(
             event: ChartEvent,
             elements: ActiveElement[],
