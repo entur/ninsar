@@ -10,8 +10,11 @@ registerMicroFrontend<DefaultPayload>({
   microFrontendId: 'ror-ninsar',
   mount: (mountPoint, payload) => {
     ReactDOM.render(
-      <BrowserRouter basename="netex-validation-reports">
-        <App {...payload} />
+      <BrowserRouter basename="line-statistics">
+          <>
+              Vi er inne Ninsar.
+              <App {...payload} />
+          </>
       </BrowserRouter>,
       mountPoint,
     );
