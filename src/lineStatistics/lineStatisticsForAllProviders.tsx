@@ -2,11 +2,17 @@ import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
 import { PieChart } from './components/pieChart/pieChart';
 import { segmentName2Key } from 'bogu/utils';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import style from './lineStatistics.module.scss';
 import { SmallAlertBox } from '@entur/alert';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
-export const LineStatisticsForAllProviders = () => {
+export const ProtectedLineStatisticsForAllProviders = () => {
+  const Cp = withAuthenticationRequired(LineStatisticsForAllProviders);
+  return <Cp />;
+};
+
+const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();
   const { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError } =
     useLineStatisticsForAllProviders();

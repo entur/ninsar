@@ -1,43 +1,23 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 import './app.module.scss';
-import { DefaultPayload } from '@entur/micro-frontend';
-import { LineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
-import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
-import { ProtectedComponent } from './pages/ProtectedComponent';
-import { Fallback } from './pages/fallback';
+import { ProtectedLineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
+import { ProtectedLineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
 import { AppProvider } from './appProvider';
+import { NinsarPayload } from './index';
 
-interface AppProps extends DefaultPayload {}
-
-export function App(props: AppProps) {
+export function App(props: NinsarPayload) {
   return (
     <React.StrictMode>
       <AppProvider {...props}>
         <div className="ninsar-app">
           <div className="ninsar-app-content">
-            <Routes>
-              <Route
-                path="line-statistics"
-                element={
-                  <ProtectedComponent
-                    component={LineStatisticsForAllProviders}
-                  />
-                }
+            {props.providerId ? (
+              <ProtectedLineStatisticsForProvider
+                providerId={props.providerId}
               />
-              <Route
-                path="line-statistics/:providerId"
-                element={
-                  <ProtectedComponent component={LineStatisticsForProvider} />
-                }
-              />
-              {process.env.REACT_APP_STANDALONE && (
-                <Route
-                  path="*"
-                  element={<ProtectedComponent component={Fallback} />}
-                />
-              )}
-            </Routes>
+            ) : (
+              <ProtectedLineStatisticsForAllProviders />
+            )}
           </div>
         </div>
       </AppProvider>

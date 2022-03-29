@@ -6,16 +6,18 @@ import { registerMicroFrontend, DefaultPayload } from '@entur/micro-frontend';
 import { BrowserRouter } from 'react-router-dom';
 import { AppStandalone } from './appStandalone';
 
-registerMicroFrontend<DefaultPayload>({
+export interface NinsarPayload extends DefaultPayload {
+  providerId?: string;
+}
+
+registerMicroFrontend<NinsarPayload>({
   microFrontendId: 'ror-ninsar',
   mount: (mountPoint, payload) => {
     ReactDOM.render(
-      <BrowserRouter basename="line-statistics">
-          <>
-              Vi er inne Ninsar.
-              <App {...payload} />
-          </>
-      </BrowserRouter>,
+      <>
+        Vi er inne Ninsar.
+        <App {...payload} />
+      </>,
       mountPoint,
     );
   },

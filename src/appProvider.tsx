@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useContext } from 'react';
-import { DefaultPayload } from '@entur/micro-frontend';
+import { NinsarPayload } from './index';
 
-export const AppContext = React.createContext<DefaultPayload | undefined>(
+export const AppContext = React.createContext<NinsarPayload | undefined>(
   undefined,
 );
 
@@ -13,7 +13,7 @@ export const useAuth = () => {
   };
 };
 
-interface AppProviderProps extends DefaultPayload {
+interface AppProviderProps extends NinsarPayload {
   children: ReactNode;
 }
 

@@ -18,6 +18,8 @@ export interface Props extends Auth0ProviderOptions {}
 const AuthedApp = () => {
   const { getAccessTokenSilently } = useAuth0();
 
+  console.log('getAccessTokenSilently', getAccessTokenSilently);
+
   return <App getToken={getAccessTokenSilently} />;
 };
 
