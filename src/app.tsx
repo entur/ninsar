@@ -6,11 +6,14 @@ import { AppProvider } from './appProvider';
 import { NinsarPayload } from './index';
 
 export function App(props: NinsarPayload) {
+  console.log('props', props);
+
   return (
     <React.StrictMode>
       <AppProvider {...props}>
         <div className="ninsar-app">
           <div className="ninsar-app-content">
+              Disse er contents
             {props.providerId ? (
               <ProtectedLineStatisticsForProvider
                 providerId={props.providerId}
