@@ -20,7 +20,7 @@
     "bogu": "https://github.com/entur/bogu.git#v1.3.2",
     "halogenium": "2.3.0",
     "husky": "7.0.4",
-    "lint-staged": "12.3.6",
+    "lint-staged": "12.3.7",
     "material-ui": "0.20.0",
     "node-sass": "7.0.1",
     "react": "17.0.2",
