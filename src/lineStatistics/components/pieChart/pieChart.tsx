@@ -60,6 +60,7 @@ export const PieChart = ({
           ) {
             chart.data.labels &&
               chart.data.labels.length > 0 &&
+              elements.length > 0 &&
               handlePieOnClick(chart.data.labels[elements[0].index]);
           },
         }}

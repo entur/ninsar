@@ -18,6 +18,18 @@
   border-radius: 2px;
 }
 
+.linesValidityTitleHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 20px;
+  align-items: baseline;
+
+  button {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 .headerContainer {
   display: flex;
   justify-content: space-between;
@@ -50,6 +62,7 @@
   &:hover {
     background-color: #F2F2F2; // hover applied to .listItem but disabled by the previous pointer-events: none;
   }
+
   div {
     pointer-events: auto; // this enable the pointer on div
   }

@@ -22,6 +22,9 @@ import { Heading3 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityListHeader } from './linesValidityListHeader';
 import { LinesValidityList } from './linesValidityList';
+import { IconButton } from '@entur/button';
+import { Tooltip } from '@entur/tooltip';
+import { CloseIcon } from '@entur/icons';
 
 interface Props {
   selectedSegment: string;
@@ -29,6 +32,7 @@ interface Props {
   daysValid: number;
   lineStatistics: LineStatistics;
   providerName: string;
+  handleClose?: () => void;
 }
 
 export const LinesValidityProgress = ({
@@ -36,6 +40,7 @@ export const LinesValidityProgress = ({
   providerName,
   selectedSegment,
   daysValid,
+  handleClose,
 }: Props) => {
   const [sorting, setSorting] = useState<number>(1);
 
@@ -52,9 +57,19 @@ export const LinesValidityProgress = ({
   return lineStatistics ? (
     <MuiThemeProvider>
       <div className={style.linesValidity}>
-        <Heading3 className={style.title}>
-          {providerName} - {selectedSegment}
-        </Heading3>
+        <div className={style.linesValidityTitleHeader}>
+          <Heading3 className={style.title}>
+            {providerName} - {selectedSegment}
+          </Heading3>
+          {handleClose && (
+            <Tooltip placement="bottom" content="Lukk">
+              <IconButton onClick={handleClose}>
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
+
         <LinesValidityListHeader
           startDate={lineStatistics.startDate}
           validFromDate={lineStatistics.validFromDate}
