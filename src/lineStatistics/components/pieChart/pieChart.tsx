@@ -19,7 +19,7 @@ import {
 Chart.register([ArcElement, Tooltip, Legend]);
 
 interface Props {
-  handlePieOnClick: (label: string | undefined) => void;
+  handlePieOnClick: (label: string) => void;
   handleShowAllClick: () => void;
   showHeader: boolean;
   lineStatistics: LineStatistics;
@@ -58,11 +58,9 @@ export const PieChart = ({
             elements: ActiveElement[],
             chart: Chart<ChartType, DefaultDataPoint<ChartType>, string>,
           ) {
-            handlePieOnClick(
-              chart.data.labels
-                ? chart.data.labels[elements[0].index]
-                : undefined,
-            );
+            chart.data.labels &&
+              chart.data.labels.length > 0 &&
+              handlePieOnClick(chart.data.labels[elements[0].index]);
           },
         }}
       />

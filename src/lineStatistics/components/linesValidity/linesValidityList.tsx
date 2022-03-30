@@ -33,18 +33,12 @@ export const LinesValidityList = ({
     index: number;
     lineNumber: string;
   }) => (
-    <ListItem
-      disabled
-      key={'line-n' + index}
-      style={{ padding: '0', marginLeft: '0' }}
-    >
+    <ListItem disabled style={{ padding: '0', marginLeft: '0' }}>
       {lineStatistics.linesMap[lineNumber].lines.map((l, i) => (
         <Timeline
-          key={'timelineItem' + index + '-' + i}
+          key={'Timeline' + index + lineNumber}
           timetables={l.timetables}
-          isLast={
-            i === lineStatistics.linesMap[lineNumber].lines.length - 1
-          }
+          isLast={i === lineStatistics.linesMap[lineNumber].lines.length - 1}
           validDaysOffset={lineStatistics.validDaysOffset}
           index={i}
         />
@@ -60,23 +54,15 @@ export const LinesValidityList = ({
     lineNumber: string;
   }) => (
     <div
-      key={'ht-wrapper' + index}
-      onClick={() => {
-        toggleLineOpen(lineNumber);
-      }}
+      onClick={() => toggleLineOpen(lineNumber)}
     >
       <HeaderTimeline
         line={lineNumber}
-        hoverText={lineStatistics.linesMap[lineNumber].lineNames.join(
-          ', ',
-        )}
+        hoverText={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
         index={index}
-        key={'HeaderTimeline' + index}
         validDaysOffset={lineStatistics.validDaysOffset}
         validFromDate={lineStatistics.validFromDate}
-        effectivePeriods={
-          lineStatistics.linesMap[lineNumber].effectivePeriods
-        }
+        effectivePeriods={lineStatistics.linesMap[lineNumber].effectivePeriods}
       />
     </div>
   );
@@ -86,7 +72,7 @@ export const LinesValidityList = ({
       <List>
         {sortedLineNumbers.map((lineNumber, index) => (
           <ListItem
-            key={'line' + index}
+            key={'LineItem' + index + lineNumber}
             disabled
             className={style.listItem}
             style={{
@@ -99,7 +85,11 @@ export const LinesValidityList = ({
             open={isLineOpen(lineNumber)}
             onNestedListToggle={() => toggleLineOpen(lineNumber)}
             nestedItems={[
-              <DayTypesValidity index={index} lineNumber={lineNumber} />,
+              <DayTypesValidity
+                index={index}
+                lineNumber={lineNumber}
+                key={'DayTypesValidity' + lineNumber + index}
+              />,
             ]}
           >
             <LineValidity index={index} lineNumber={lineNumber} />

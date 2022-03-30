@@ -6,6 +6,7 @@ import { SmallAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
 import { segmentName2Key } from 'bogu/utils';
 import style from './lineStatistics.module.scss';
+import { Loader } from '@entur/loader';
 
 interface Props {
   providerId: string;
@@ -33,7 +34,11 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
   return (
     <>
       <div className={style.linesStatisticsForProvider}>
-        {lineStatisticsError || providerError ? (
+        {(!provider || !lineStatistics) &&
+        !providerError &&
+        !lineStatisticsError ? (
+          <Loader style={{ width: '100%' }}>Laster</Loader>
+        ) : lineStatisticsError || providerError ? (
           <SmallAlertBox variant="error">
             Kunne ikke laste inn dataene. Prøv igjen senere.
           </SmallAlertBox>
