@@ -16,7 +16,6 @@ export const useLineStatisticsForProvider = (
   >();
 
   useEffect(() => {
-    console.log('useLineStatisticsForProvider');
     const fetchLineStatisticsForProvider = async () => {
       const accessToken = getToken ? await getToken() : '';
       const response = await fetch(
@@ -25,7 +24,6 @@ export const useLineStatisticsForProvider = (
           headers: { Authorization: `Bearer ${accessToken}` },
         },
       );
-      console.log('fetchLineStatisticsForProvider', response);
       if (response.ok) {
         const lineStatisticsResponse = await response.json();
         setLineStatistics(formatLineStats(lineStatisticsResponse));

@@ -6,18 +6,12 @@ import { SmallAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
 import { segmentName2Key } from 'bogu/utils';
 import style from './lineStatistics.module.scss';
-import { withAuthenticationRequired } from '@auth0/auth0-react';
 
 interface Props {
   providerId: string;
 }
 
-export const ProtectedLineStatisticsForProvider = (props: Props) => {
-  const Cp = withAuthenticationRequired(LineStatisticsForProvider);
-  return <Cp {...props} />;
-};
-
-const LineStatisticsForProvider = ({ providerId }: Props) => {
+export const LineStatisticsForProvider = ({ providerId }: Props) => {
   const { lineStatistics, lineStatisticsError } =
     useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);

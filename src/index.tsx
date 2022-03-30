@@ -13,16 +13,10 @@ export interface NinsarPayload extends DefaultPayload {
 registerMicroFrontend<NinsarPayload>({
   microFrontendId: 'ror-ninsar',
   mount: (mountPoint, payload) => {
-    ReactDOM.render(
-      <>
-        Vi er inne Ninsar with mount point {mountPoint}
-        <App {...payload} />
-      </>,
-      mountPoint,
-    );
+    mountPoint && ReactDOM.render(<App {...payload} />, mountPoint);
   },
   unmount: (mountPoint) => {
-    ReactDOM.unmountComponentAtNode(mountPoint);
+    mountPoint && ReactDOM.unmountComponentAtNode(mountPoint);
   },
 });
 

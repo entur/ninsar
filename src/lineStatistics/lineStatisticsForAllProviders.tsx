@@ -5,14 +5,8 @@ import { segmentName2Key } from 'bogu/utils';
 import React, { useState } from 'react';
 import style from './lineStatistics.module.scss';
 import { SmallAlertBox } from '@entur/alert';
-import { withAuthenticationRequired } from '@auth0/auth0-react';
 
-export const ProtectedLineStatisticsForAllProviders = () => {
-  const Cp = withAuthenticationRequired(LineStatisticsForAllProviders);
-  return <Cp />;
-};
-
-const LineStatisticsForAllProviders = () => {
+export const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();
   const { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError } =
     useLineStatisticsForAllProviders();
@@ -31,7 +25,7 @@ const LineStatisticsForAllProviders = () => {
     setDaysValid(180);
   };
 
-  const PieChartsForProvider = () => (
+  const PieChartsForProviders = () => (
     <>
       {allProviders &&
         lineStatisticsForAllProviders &&
@@ -56,7 +50,7 @@ const LineStatisticsForAllProviders = () => {
           Kunne ikke laste inn dataene. Prøv igjen senere.
         </SmallAlertBox>
       ) : (
-        <PieChartsForProvider />
+        <PieChartsForProviders />
       )}
     </div>
   );

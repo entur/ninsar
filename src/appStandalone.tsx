@@ -3,6 +3,7 @@ import {
   Auth0Provider,
   Auth0ProviderOptions,
   useAuth0,
+  withAuthenticationRequired,
 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { App } from './app';
@@ -15,11 +16,13 @@ const onRedirectCallback =
 
 export interface Props extends Auth0ProviderOptions {}
 
-const AuthedApp = () => {
+const ProtectedApp = () => {
+  const Cp = withAuthenticationRequired(WrappedApp);
+  return <Cp />;
+};
+
+const WrappedApp = () => {
   const { getAccessTokenSilently } = useAuth0();
-
-  console.log('getAccessTokenSilently', getAccessTokenSilently);
-
   return <App getToken={getAccessTokenSilently} />;
 };
 
@@ -32,7 +35,7 @@ export const AppStandalone = (props: Props) => {
       useRefreshTokens
       onRedirectCallback={onRedirectCallback((v: string) => navigate(v))}
     >
-      <AuthedApp />
+      <ProtectedApp />
     </Auth0Provider>
   );
 };
