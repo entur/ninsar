@@ -15,7 +15,7 @@ registerMicroFrontend<NinsarPayload>({
   mount: (mountPoint, payload) => {
     ReactDOM.render(
       <>
-        Vi er inne Ninsar.
+        Vi er inne Ninsar with mount point {mountPoint}
         <App {...payload} />
       </>,
       mountPoint,
