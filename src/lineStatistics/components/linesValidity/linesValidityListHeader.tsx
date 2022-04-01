@@ -1,6 +1,6 @@
 import style from './linesValidity.module.scss';
-import { sortIcon } from 'bogu/utils';
 import React from 'react';
+import { sortIcon } from '../../sortIcons';
 
 interface Props {
   startDate: string;

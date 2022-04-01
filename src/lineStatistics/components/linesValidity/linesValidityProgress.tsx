@@ -15,7 +15,6 @@
  */
 
 import React, { useState } from 'react';
-import { sortLines } from 'bogu/utils';
 import { LineStatistics } from '../../lineStatistics.types';
 import style from './linesValidity.module.scss';
 import { Heading3 } from '@entur/typography';
@@ -25,11 +24,10 @@ import { LinesValidityList } from './linesValidityList';
 import { IconButton } from '@entur/button';
 import { Tooltip } from '@entur/tooltip';
 import { CloseIcon } from '@entur/icons';
+import { sortLines } from '../../utilities';
 
 interface Props {
-  selectedSegment: string;
-  setSelectedSegment: (selectedSegment: string) => void;
-  daysValid: number;
+  selectedValidityCategory: string;
   lineStatistics: LineStatistics;
   providerName: string;
   handleClose?: () => void;
@@ -38,8 +36,7 @@ interface Props {
 export const LinesValidityProgress = ({
   lineStatistics,
   providerName,
-  selectedSegment,
-  daysValid,
+  selectedValidityCategory,
   handleClose,
 }: Props) => {
   const [sorting, setSorting] = useState<number>(1);
@@ -52,14 +49,14 @@ export const LinesValidityProgress = ({
 
   const sortedLineNumbers: string[] =
     lineStatistics &&
-    sortLines(sorting, lineStatistics, selectedSegment, daysValid);
+    sortLines(sorting, lineStatistics, selectedValidityCategory);
 
   return lineStatistics ? (
     <MuiThemeProvider>
       <div className={style.linesValidity}>
         <div className={style.linesValidityTitleHeader}>
           <Heading3 className={style.title}>
-            {providerName} - {selectedSegment}
+            {providerName} - {selectedValidityCategory}
           </Heading3>
           {handleClose && (
             <Tooltip placement="bottom" content="Lukk">

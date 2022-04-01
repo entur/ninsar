@@ -1,17 +1,31 @@
+export interface LineStatisticsResponse {
+  days: number;
+  publicLines: PublicLine[];
+  startDate: string;
+  validityCategories: ValidityCategory[];
+}
+
 export interface LineStatistics {
   all: { lineNumbers: string[] };
   days: number;
-  daysValid: { lineNumber: string; days: number }[];
+  daysValid: DaysValid[];
   endDate: string;
   expiring: ValidityCategory;
   invalid: ValidityCategory;
-  linesMap: { [lineNumber: string]: PublicLineValidity };
+  linesMap: LinesMap;
   minDays: { days: number; validity: Validity };
   startDate: string;
   valid: ValidityCategory;
   validDaysOffset: number;
   validFromDate: string;
   validity: ValidityCategory[];
+}
+
+export type LinesMap = { [lineNumber: string]: PublicLineValidity };
+
+export interface DaysValid {
+  lineNumber: string;
+  days: number;
 }
 
 export interface Provider {
@@ -24,43 +38,50 @@ export type FetchError = {
   statusText: string;
 };
 
-interface PublicLineValidity extends PublicLine {
+export interface PeriodValidity extends Period {
+  timelineEndPosition: number;
+  timelineStartPosition: number;
+  validationLevel?: Validity;
+}
+
+export interface PublicLineValidity extends PublicLine {
   daysValid: number;
 }
 
-interface ValidityCategory {
+export interface ValidityCategory {
   numDaysAtLeastValid: number;
   lineNumbers: string[];
   name: Validity;
 }
 
-enum Validity {
-  INVALID,
-  VALID,
-  EXPIRING,
+export enum Validity {
+  INVALID = 'Invalid lines',
+  VALID = 'Valid lines',
+  EXPIRING = 'Expiring lines',
+  ALL = 'all',
 }
 
-interface Period {
+export interface Period {
   from: string;
   to: string;
 }
 
-interface Timetable {
+export interface Timetable {
   id: number;
   objectId: string;
-  periods: Period[];
+  periods: Period[] | PeriodValidity[];
 }
 
-interface Line {
+export interface Line {
   id: number;
   objectId: string;
   name: string;
   timetables: Timetable[];
 }
 
-interface PublicLine {
+export interface PublicLine {
   lineNumber: string;
   lineNames: string[];
-  effectivePeriods: Period[];
+  effectivePeriods: Period[] | PeriodValidity[];
   lines: Line[];
 }

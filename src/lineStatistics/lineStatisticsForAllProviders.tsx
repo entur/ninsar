@@ -2,32 +2,31 @@ import React, { useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
 import { PieChart } from './components/pieChart/pieChart';
-import { segmentName2Key } from 'bogu/utils';
 import style from './lineStatistics.module.scss';
 import { SmallAlertBox } from '@entur/alert';
 import { Loader } from '@entur/loader';
-import { Provider } from './lineStatistics.types';
+import { Provider, Validity } from './lineStatistics.types';
 import { LinesValidityProgress } from './components/linesValidity/linesValidityProgress';
+import { getValidityNameFromLabel } from './utilities';
 
 export const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();
   const { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError } =
     useLineStatisticsForAllProviders();
 
-  const [daysValid, setDaysValid] = useState<number>(180);
-  const [selectedSegment, setSelectedSegment] = useState<string>('all');
+  const [selectedValidityCategory, setSelectedValidityCategory] =
+    useState<string>(Validity.ALL);
   const [selectedProvider, setSelectedProvider] = useState<Provider>();
 
   const handlePieOnClick = (label: string, provider: Provider) => {
-    let selected = segmentName2Key(label);
-    setSelectedSegment(selected.segment);
-    setDaysValid(selected.daysValid);
+    setSelectedValidityCategory(
+      getValidityNameFromLabel(label) || Validity.ALL,
+    );
     setSelectedProvider(provider);
   };
 
   const handleShowAll = (provider: Provider) => {
-    setSelectedSegment('all');
-    setDaysValid(180);
+    setSelectedValidityCategory(Validity.ALL);
     setSelectedProvider(provider);
   };
 
@@ -37,9 +36,7 @@ export const LineStatisticsForAllProviders = () => {
         <>
           {lineStatisticsForAllProviders && (
             <LinesValidityProgress
-              setSelectedSegment={setSelectedSegment}
-              selectedSegment={selectedSegment}
-              daysValid={daysValid}
+              selectedValidityCategory={selectedValidityCategory}
               lineStatistics={
                 lineStatisticsForAllProviders[selectedProvider.id]
               }

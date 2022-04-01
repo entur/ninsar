@@ -1,4 +1,3 @@
-import { segmentName } from 'bogu/utils';
 import { color } from 'bogu/styles';
 import { NumberOfLineType } from './pieChart.types';
 
@@ -7,11 +6,7 @@ export const generatePieChartData = ({
   numberOfExpiringLines,
   numberOfInvalidLines,
 }: NumberOfLineType) => ({
-  labels: [
-    segmentName('valid'),
-    segmentName('expiring'),
-    segmentName('invalid'),
-  ],
+  labels: ['Valid lines', 'Expiring lines', 'Invalid lines'],
   datasets: [
     {
       data: [numberOfValidLines, numberOfExpiringLines, numberOfInvalidLines],

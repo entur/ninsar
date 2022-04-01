@@ -4,9 +4,10 @@ import { LinesValidityProgress } from './components/linesValidity/linesValidityP
 import { useProvider } from './apiHooks/useProvider';
 import { SmallAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
-import { segmentName2Key } from 'bogu/utils';
 import style from './lineStatistics.module.scss';
 import { Loader } from '@entur/loader';
+import { Validity } from './lineStatistics.types';
+import { getValidityNameFromLabel } from './utilities';
 
 interface Props {
   providerId: string;
@@ -17,18 +18,17 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
     useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);
 
-  const [daysValid, setDaysValid] = useState<number>(180);
-  const [selectedSegment, setSelectedSegment] = useState<string>('all');
+  const [selectedValidityCategory, setSelectedValidityCategory] =
+    useState<string>(Validity.ALL);
 
-  const handlePieOnClick = (label: string | undefined) => {
-    let selected = segmentName2Key(label);
-    setSelectedSegment(selected.segment);
-    setDaysValid(selected.daysValid);
+  const handlePieOnClick = (label: string) => {
+    setSelectedValidityCategory(
+      getValidityNameFromLabel(label) || Validity.ALL,
+    );
   };
 
   const handleShowAll = () => {
-    setSelectedSegment('all');
-    setDaysValid(180);
+    setSelectedValidityCategory(Validity.ALL);
   };
 
   return (
@@ -47,9 +47,7 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
           provider && (
             <div className={style.linesStatisticsContainer}>
               <LinesValidityProgress
-                setSelectedSegment={setSelectedSegment}
-                selectedSegment={selectedSegment}
-                daysValid={daysValid}
+                selectedValidityCategory={selectedValidityCategory}
                 lineStatistics={lineStatistics}
                 providerName={provider.name}
               />

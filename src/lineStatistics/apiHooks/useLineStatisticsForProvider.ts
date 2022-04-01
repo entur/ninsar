@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
-import { formatLineStats } from 'bogu/utils';
+import { formatLineStats } from '../utilities';
 
 export const useLineStatisticsForProvider = (
   providerId: string | undefined,
