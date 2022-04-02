@@ -1,4 +1,4 @@
-import { LineStatistics } from '../../lineStatistics.types';
+import {LineStatistics, Validity} from '../../lineStatistics.types';
 import React from 'react';
 import style from './pieChart.module.scss';
 import { NumberOfLines } from './numberOfLines';
@@ -19,7 +19,7 @@ import {
 Chart.register([ArcElement, Tooltip, Legend]);
 
 interface Props {
-  handlePieOnClick: (label: string) => void;
+  handlePieOnClick: (label: Validity) => void;
   handleShowAllClick: () => void;
   showHeader: boolean;
   lineStatistics: LineStatistics;
@@ -56,7 +56,7 @@ export const PieChart = ({
           onClick(
             event: ChartEvent,
             elements: ActiveElement[],
-            chart: Chart<ChartType, DefaultDataPoint<ChartType>, string>,
+            chart: Chart<ChartType, DefaultDataPoint<ChartType>, Validity>,
           ) {
             chart.data.labels &&
               chart.data.labels.length > 0 &&

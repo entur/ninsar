@@ -7,7 +7,6 @@ import { PieChart } from './components/pieChart/pieChart';
 import style from './lineStatistics.module.scss';
 import { Loader } from '@entur/loader';
 import { Validity } from './lineStatistics.types';
-import { getValidityNameFromLabel } from './utilities';
 
 interface Props {
   providerId: string;
@@ -19,12 +18,10 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
   const { provider, providerError } = useProvider(providerId);
 
   const [selectedValidityCategory, setSelectedValidityCategory] =
-    useState<string>(Validity.ALL);
+    useState<Validity>(Validity.ALL);
 
-  const handlePieOnClick = (label: string) => {
-    setSelectedValidityCategory(
-      getValidityNameFromLabel(label) || Validity.ALL,
-    );
+  const handlePieOnClick = (selectedValidityCategory: Validity) => {
+    setSelectedValidityCategory(selectedValidityCategory);
   };
 
   const handleShowAll = () => {

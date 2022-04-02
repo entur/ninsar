@@ -15,13 +15,11 @@ export const LineStatisticsForAllProviders = () => {
     useLineStatisticsForAllProviders();
 
   const [selectedValidityCategory, setSelectedValidityCategory] =
-    useState<string>(Validity.ALL);
+    useState<Validity>(Validity.ALL);
   const [selectedProvider, setSelectedProvider] = useState<Provider>();
 
-  const handlePieOnClick = (label: string, provider: Provider) => {
-    setSelectedValidityCategory(
-      getValidityNameFromLabel(label) || Validity.ALL,
-    );
+  const handlePieOnClick = (selectedValidityCategory: Validity, provider: Provider) => {
+    setSelectedValidityCategory(selectedValidityCategory);
     setSelectedProvider(provider);
   };
 
@@ -66,7 +64,7 @@ export const LineStatisticsForAllProviders = () => {
                 key={'provider-pie' + index}
                 providerName={provider.name}
                 handleShowAllClick={() => handleShowAll(provider)}
-                handlePieOnClick={(label: string) =>
+                handlePieOnClick={(label: Validity) =>
                   handlePieOnClick(label, provider)
                 }
                 lineStatistics={lineStatisticsForAllProviders[provider.id]}

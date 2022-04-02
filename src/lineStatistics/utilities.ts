@@ -21,11 +21,11 @@ const sortValidityCategories = (validityCategories: ValidityCategory[]) =>
   );
 
 const findValidityCategoryForGivenValidity = (
-  lineStats: LineStatisticsResponse,
+  lineStatisticsResponse: LineStatisticsResponse,
   validity: Validity,
 ): ValidityCategory => {
   return (
-    lineStats.validityCategories.find(
+    lineStatisticsResponse.validityCategories.find(
       (category) => category.name === getValidityNameFromLabel(validity),
     ) || {
       name: validity,
@@ -215,6 +215,11 @@ export const formatLineStats = (
     const daysValid: DaysValid[] = validDays(linesMap);
 
     return {
+      all: {
+        lineNumbers: sortedValidityCategories.flatMap(
+          (lines) => lines.lineNumbers,
+        ),
+      },
       invalid: findValidityCategoryForGivenValidity(
         lineStats,
         Validity.INVALID,
@@ -225,11 +230,6 @@ export const formatLineStats = (
         Validity.EXPIRING,
       ),
       validity: sortedValidityCategories,
-      all: {
-        lineNumbers: sortedValidityCategories.flatMap(
-          (lines) => lines.lineNumbers,
-        ),
-      },
       startDate: startDateLine.format('YYYY-MM-DD'),
       days: lineStats.days,
       endDate: endDateLine.format('YYYY-MM-DD'),
@@ -248,11 +248,11 @@ export const formatLineStats = (
 
 export const sortLines = (
   sorting: number,
-  lineData: LineStatistics,
+  lineStatistics: LineStatistics,
   selectedValidityCategory: string,
 ) => {
   const linesNumbersForSelectedValidityCategory = filterLines(
-    lineData,
+    lineStatistics,
     selectedValidityCategory,
   );
 
@@ -274,7 +274,7 @@ export const sortLines = (
         });
       });
     case 3:
-      const daysAsc = sortDaysValidInLineStatistics(lineData, true);
+      const daysAsc = sortDaysValidInLineStatistics(lineStatistics, true);
       return daysAsc
         .filter(
           (line) =>
@@ -283,7 +283,7 @@ export const sortLines = (
         )
         .map((line) => line.lineNumber);
     case 4:
-      const daysDesc = sortDaysValidInLineStatistics(lineData, false);
+      const daysDesc = sortDaysValidInLineStatistics(lineStatistics, false);
       return daysDesc
         .filter(
           (line) =>
@@ -295,22 +295,22 @@ export const sortLines = (
 };
 
 export const filterLines = (
-  lineData: LineStatistics,
+  lineStatistics: LineStatistics,
   selectedValidity: string,
 ) => {
-  console.log('selectedValidity', selectedValidity);
-
   return (
-    lineData.validity.find((validity) => validity.name === selectedValidity) ||
-    lineData.all
+    lineStatistics.validity.find(
+      (validity) =>
+        validity.name === getValidityNameFromLabel(selectedValidity),
+    ) || lineStatistics.all
   ).lineNumbers;
 };
 
 export const sortDaysValidInLineStatistics = (
-  lineData: LineStatistics,
+  lineStatistics: LineStatistics,
   ascending = true,
 ): DaysValid[] => {
-  return lineData.daysValid.slice().sort((a, b) => {
+  return lineStatistics.daysValid.slice().sort((a, b) => {
     if (a.days === b.days) {
       return 0;
     } else if (a.days < b.days) {
