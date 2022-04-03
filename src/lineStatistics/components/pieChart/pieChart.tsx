@@ -1,4 +1,4 @@
-import {LineStatistics, Validity} from '../../lineStatistics.types';
+import { LineStatistics, Validity } from '../../lineStatistics.types';
 import React from 'react';
 import style from './pieChart.module.scss';
 import { NumberOfLines } from './numberOfLines';
@@ -6,14 +6,14 @@ import { generatePieChartData, pieChartOptions } from './pieChart.data';
 import { NumberOfLineType } from './pieChart.types';
 import { Pie } from 'react-chartjs-2';
 import {
-  Chart,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartEvent,
   ActiveElement,
+  ArcElement,
+  Chart,
+  ChartEvent,
   ChartType,
   DefaultDataPoint,
+  Legend,
+  Tooltip,
 } from 'chart.js';
 
 Chart.register([ArcElement, Tooltip, Legend]);
@@ -35,11 +35,18 @@ export const PieChart = ({
   lineStatistics,
   maintainAspectRatio = false,
 }: Props) => {
+  const getNumberOfLinesForValidityCategory = (validity: Validity) =>
+    lineStatistics.lineNumbersForValidityCategories.find(
+      (vc) => vc.validity === validity,
+    )?.lineNumbers?.length || 0;
+
   const numberOfLinesType: NumberOfLineType = {
-    totalNumberOfLines: lineStatistics.all.lineNumbers.length,
-    numberOfValidLines: lineStatistics.valid.lineNumbers.length,
-    numberOfInvalidLines: lineStatistics.invalid.lineNumbers.length,
-    numberOfExpiringLines: lineStatistics.expiring.lineNumbers.length,
+    totalNumberOfLines: getNumberOfLinesForValidityCategory(Validity.ALL),
+    numberOfValidLines: getNumberOfLinesForValidityCategory(Validity.VALID),
+    numberOfInvalidLines: getNumberOfLinesForValidityCategory(Validity.INVALID),
+    numberOfExpiringLines: getNumberOfLinesForValidityCategory(
+      Validity.EXPIRING,
+    ),
   };
 
   return (

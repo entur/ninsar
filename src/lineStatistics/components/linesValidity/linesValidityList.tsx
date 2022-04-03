@@ -39,7 +39,7 @@ export const LinesValidityList = ({
           key={'Timeline' + index + lineNumber}
           timetables={l.timetables}
           isLast={i === lineStatistics.linesMap[lineNumber].lines.length - 1}
-          validDaysOffset={lineStatistics.validDaysOffset}
+          validDaysOffset={33}
           index={i}
         />
       ))}
@@ -53,14 +53,12 @@ export const LinesValidityList = ({
     index: number;
     lineNumber: string;
   }) => (
-    <div
-      onClick={() => toggleLineOpen(lineNumber)}
-    >
+    <div onClick={() => toggleLineOpen(lineNumber)}>
       <HeaderTimeline
         line={lineNumber}
         hoverText={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
         index={index}
-        validDaysOffset={lineStatistics.validDaysOffset}
+        validDaysOffset={33}
         validFromDate={lineStatistics.validFromDate}
         effectivePeriods={lineStatistics.linesMap[lineNumber].effectivePeriods}
       />

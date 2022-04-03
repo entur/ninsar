@@ -7,7 +7,6 @@ import { SmallAlertBox } from '@entur/alert';
 import { Loader } from '@entur/loader';
 import { Provider, Validity } from './lineStatistics.types';
 import { LinesValidityProgress } from './components/linesValidity/linesValidityProgress';
-import { getValidityNameFromLabel } from './utilities';
 
 export const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();

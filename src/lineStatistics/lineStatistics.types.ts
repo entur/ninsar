@@ -2,31 +2,28 @@ export interface LineStatisticsResponse {
   days: number;
   publicLines: PublicLine[];
   startDate: string;
-  validityCategories: ValidityCategory[];
+  validityCategories: {
+    numDaysAtLeastValid?: number;
+    lineNumbers: string[];
+    name: Validity;
+  }[];
 }
 
 export interface LineStatistics {
-  all: { lineNumbers: string[] };
-  days: number;
-  daysValid: DaysValid[];
-  endDate: string;
-  expiring: ValidityCategory;
-  invalid: ValidityCategory;
-  linesMap: LinesMap;
-  minDays: { days: number; validity: Validity };
   startDate: string;
-  valid: ValidityCategory;
-  validDaysOffset: number;
+  endDate: string;
   validFromDate: string;
-  validity: ValidityCategory[];
+
+  linesMap: LinesMap;
+  lineNumbersForValidityCategories: LineNumbersForValidityCategory[];
+}
+
+export interface LineNumbersForValidityCategory {
+  lineNumbers: string[];
+  validity: Validity;
 }
 
 export type LinesMap = { [lineNumber: string]: PublicLineValidity };
-
-export interface DaysValid {
-  lineNumber: string;
-  days: number;
-}
 
 export interface Provider {
   id: number;
@@ -48,17 +45,11 @@ export interface PublicLineValidity extends PublicLine {
   daysValid: number;
 }
 
-export interface ValidityCategory {
-  numDaysAtLeastValid: number;
-  lineNumbers: string[];
-  name: Validity;
-}
-
 export enum Validity {
-  INVALID = 'Invalid lines',
-  VALID = 'Valid lines',
-  EXPIRING = 'Expiring lines',
-  ALL = 'all',
+  INVALID = 'INVALID',
+  VALID = 'VALID',
+  EXPIRING = 'EXPIRING',
+  ALL = 'ALL',
 }
 
 export interface Period {

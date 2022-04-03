@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react';
-import { LineStatistics } from '../../lineStatistics.types';
+import { LineStatistics, Validity } from '../../lineStatistics.types';
 import style from './linesValidity.module.scss';
 import { Heading3 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
@@ -27,7 +27,7 @@ import { CloseIcon } from '@entur/icons';
 import { sortLines } from '../../utilities';
 
 interface Props {
-  selectedValidityCategory: string;
+  selectedValidityCategory: Validity;
   lineStatistics: LineStatistics;
   providerName: string;
   handleClose?: () => void;
@@ -47,16 +47,24 @@ export const LinesValidityProgress = ({
     setSorting(sort);
   };
 
-  const sortedLineNumbers: string[] =
+  const labelForValidityCategory = {
+    [Validity.INVALID]: 'Invalid lines',
+    [Validity.VALID]: 'Valid lines',
+    [Validity.EXPIRING]: 'Expiring lines',
+    [Validity.ALL]: 'all',
+  };
+
+  const sortedLineNumbers =
     lineStatistics &&
     sortLines(sorting, lineStatistics, selectedValidityCategory);
 
-  return lineStatistics ? (
+  return sortedLineNumbers ? (
     <MuiThemeProvider>
       <div className={style.linesValidity}>
         <div className={style.linesValidityTitleHeader}>
           <Heading3 className={style.title}>
-            {providerName} - {selectedValidityCategory}
+            {providerName} -{' '}
+            {labelForValidityCategory[selectedValidityCategory]}
           </Heading3>
           {handleClose && (
             <Tooltip placement="bottom" content="Lukk">
