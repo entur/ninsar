@@ -1,4 +1,4 @@
-import style from './linesValidity.module.scss';
+import style from './linesValidityProgress.module.scss';
 import { List, ListItem } from 'material-ui/List';
 import { HeaderTimeline, Timeline } from 'bogu';
 import React, { useState } from 'react';

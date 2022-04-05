@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
-import { formatLineStats } from '../utilities';
+import { formatLineStatistics } from '../utilities';
 
 type LineStatisticsPerProvider = {
   [providerId: string]: LineStatistics;
@@ -28,20 +28,15 @@ export const useLineStatisticsForAllProviders = () => {
       );
       if (response.ok) {
         const lineStatisticsResponse = await response.json();
-
-        console.log('lineStatisticsResponse', lineStatisticsResponse);
         let lineStatisticsResponseFormatted: LineStatisticsPerProvider = {};
         for (const providerId in lineStatisticsResponse) {
-          const formatted = formatLineStats(lineStatisticsResponse[providerId]);
-
-          console.log('formatted', formatted);
-
-          if (formatted) {
-            lineStatisticsResponseFormatted = {
-              ...lineStatisticsResponseFormatted,
-              [providerId]: formatted,
-            };
-          }
+          const formatted = formatLineStatistics(
+            lineStatisticsResponse[providerId],
+          );
+          lineStatisticsResponseFormatted = {
+            ...lineStatisticsResponseFormatted,
+            [providerId]: formatted,
+          };
         }
         setLineStatisticsForAllProviders(lineStatisticsResponseFormatted);
         setLineStatisticsForAllProvidersError(undefined);

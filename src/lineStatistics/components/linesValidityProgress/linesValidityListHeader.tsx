@@ -1,6 +1,6 @@
-import style from './linesValidity.module.scss';
+import style from './linesValidityProgress.module.scss';
 import React from 'react';
-import { sortIcon } from '../../sortIcons';
+import { sortIcon } from './sorting/sortIcons';
 
 interface Props {
   startDate: string;

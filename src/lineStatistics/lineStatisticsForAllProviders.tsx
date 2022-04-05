@@ -6,9 +6,12 @@ import style from './lineStatistics.module.scss';
 import { SmallAlertBox } from '@entur/alert';
 import { Loader } from '@entur/loader';
 import { Provider, Validity } from './lineStatistics.types';
-import { LinesValidityProgress } from './components/linesValidity/linesValidityProgress';
+import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
+import {useUttuLinesStatisticsForProvider} from "./apiHooks/useUttuLinesStatisticsForProvider";
 
 export const LineStatisticsForAllProviders = () => {
+  useUttuLinesStatisticsForProvider('nsb')
+
   const { allProviders, allProvidersError } = useAllProviders();
   const { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError } =
     useLineStatisticsForAllProviders();

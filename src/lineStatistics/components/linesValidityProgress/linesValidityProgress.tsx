@@ -16,7 +16,7 @@
 
 import React, { useState } from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
-import style from './linesValidity.module.scss';
+import style from './linesValidityProgress.module.scss';
 import { Heading3 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityListHeader } from './linesValidityListHeader';
@@ -24,7 +24,7 @@ import { LinesValidityList } from './linesValidityList';
 import { IconButton } from '@entur/button';
 import { Tooltip } from '@entur/tooltip';
 import { CloseIcon } from '@entur/icons';
-import { sortLines } from '../../utilities';
+import { sortLines } from './sorting/sortingUtilities';
 
 interface Props {
   selectedValidityCategory: Validity;

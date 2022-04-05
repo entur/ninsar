@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   Line,
   LinesMap,
@@ -6,7 +7,6 @@ import {
   PeriodValidity,
   Validity,
 } from './lineStatistics.types';
-import moment from 'moment';
 import { Moment } from 'moment/moment';
 
 const findTimeLineStartPositionForEffectivePeriod = (
@@ -84,193 +84,113 @@ const getDaysRange = (
 ): number | undefined =>
   end && moment.isMoment(end) ? end.diff(startDate, 'days') : end;
 
-export const formatLineStats = (
+export const formatLineStatistics = (
   lineStatisticsResponse: LineStatisticsResponse,
-): LineStatistics | undefined => {
-  try {
-    const startDateLine: Moment = moment(
-      lineStatisticsResponse.startDate,
-      'YYYY-MM-DD',
-    );
-    const endDateLine: Moment = moment(startDateLine).add(
-      lineStatisticsResponse.days,
-      'days',
-    );
+): LineStatistics => {
+  const startDateLine: Moment = moment(
+    lineStatisticsResponse.startDate,
+    'YYYY-MM-DD',
+  );
+  const endDateLine: Moment = moment(startDateLine).add(
+    lineStatisticsResponse.days,
+    'days',
+  );
 
-    let linesMap: LinesMap = {};
+  let linesMap: LinesMap = {};
 
-    lineStatisticsResponse.publicLines.forEach((publicLine) => {
-      let publicLineValidPeriod: Moment | undefined = undefined;
+  lineStatisticsResponse.publicLines.forEach((publicLine) => {
+    let publicLineValidPeriod: Moment | undefined = undefined;
 
-      const effectivePeriodsFormatted: PeriodValidity[] =
-        publicLine.effectivePeriods.map((effectivePeriod) => {
-          const effectivePeriodFrom: Moment = moment(
-            effectivePeriod.from,
-            'YYYY-MM-DD',
-          );
-          const effectivePeriodTo: Moment = moment(
-            effectivePeriod.to,
-            'YYYY-MM-DD',
-          );
+    const effectivePeriodsFormatted: PeriodValidity[] =
+      publicLine.effectivePeriods.map((effectivePeriod) => {
+        const effectivePeriodFrom: Moment = moment(
+          effectivePeriod.from,
+          'YYYY-MM-DD',
+        );
+        const effectivePeriodTo: Moment = moment(
+          effectivePeriod.to,
+          'YYYY-MM-DD',
+        );
 
-          const timelineStartPosition: number =
-            findTimeLineStartPositionForEffectivePeriod(
-              effectivePeriodFrom,
-              startDateLine,
-              lineStatisticsResponse.days,
-            );
-
-          const timelineEndPosition = findTimeLineEndPositionForEffectivePeriod(
-            effectivePeriodTo,
-            endDateLine,
+        const timelineStartPosition: number =
+          findTimeLineStartPositionForEffectivePeriod(
+            effectivePeriodFrom,
+            startDateLine,
             lineStatisticsResponse.days,
           );
 
-          let daysForward =
-            (timelineEndPosition / 100) * lineStatisticsResponse.days;
-          const validationLevel = findValidity(daysForward);
+        const timelineEndPosition = findTimeLineEndPositionForEffectivePeriod(
+          effectivePeriodTo,
+          endDateLine,
+          lineStatisticsResponse.days,
+        );
 
-          publicLineValidPeriod = validPeriod(
-            publicLineValidPeriod || startDateLine,
-            effectivePeriodFrom,
-            effectivePeriodTo,
-          );
+        let daysForward =
+          (timelineEndPosition / 100) * lineStatisticsResponse.days;
+        const validationLevel = findValidity(daysForward);
 
-          return {
-            ...effectivePeriod,
-            timelineStartPosition,
-            timelineEndPosition,
-            validationLevel,
-          };
-        });
+        publicLineValidPeriod = validPeriod(
+          publicLineValidPeriod || startDateLine,
+          effectivePeriodFrom,
+          effectivePeriodTo,
+        );
 
-      const daysValid: number =
-        getDaysRange(startDateLine, publicLineValidPeriod) || 0;
+        return {
+          ...effectivePeriod,
+          timelineStartPosition,
+          timelineEndPosition,
+          validationLevel,
+        };
+      });
 
-      const lines: Line[] = publicLine.lines.map((line) => ({
-        ...line,
-        timetables: line.timetables.map((timetable) => ({
-          ...timetable,
-          periods: timetable.periods.map((period) => ({
-            ...period,
-            timelineStartPosition: findTimeLineStartPositionForTimeTable(
-              period.from,
-              startDateLine,
-              lineStatisticsResponse.days,
-            ),
-            timelineEndPosition: findTimeLineEndPositionForTimeTable(
-              period.to,
-              endDateLine,
-              lineStatisticsResponse.days,
-            ),
-          })),
+    const daysValid: number =
+      getDaysRange(startDateLine, publicLineValidPeriod) || 0;
+
+    const lines: Line[] = publicLine.lines.map((line) => ({
+      ...line,
+      timetables: line.timetables.map((timetable) => ({
+        ...timetable,
+        periods: timetable.periods.map((period) => ({
+          ...period,
+          timelineStartPosition: findTimeLineStartPositionForTimeTable(
+            period.from,
+            startDateLine,
+            lineStatisticsResponse.days,
+          ),
+          timelineEndPosition: findTimeLineEndPositionForTimeTable(
+            period.to,
+            endDateLine,
+            lineStatisticsResponse.days,
+          ),
         })),
-      }));
+      })),
+    }));
 
-      linesMap = {
-        ...linesMap,
-        [publicLine.lineNumber]: {
-          ...publicLine,
-          daysValid: daysValid,
-          effectivePeriods: effectivePeriodsFormatted,
-          lines: lines,
-        },
-      };
-    });
-
-    return {
-      lineNumbersForValidityCategories: [
-        ...lineStatisticsResponse.validityCategories.map(
-          (validityCategory) => ({
-            validity: validityCategory.name,
-            lineNumbers: validityCategory.lineNumbers,
-          }),
-        ),
-        {
-          validity: Validity.ALL,
-          lineNumbers: Object.keys(linesMap),
-        },
-      ],
-      startDate: startDateLine.format('YYYY-MM-DD'),
-      endDate: endDateLine.format('YYYY-MM-DD'),
-      linesMap: linesMap,
-      validFromDate: moment(startDateLine)
-        .add(120, 'days')
-        .format('YYYY-MM-DD'),
+    linesMap = {
+      ...linesMap,
+      [publicLine.lineNumber]: {
+        ...publicLine,
+        daysValid: daysValid,
+        effectivePeriods: effectivePeriodsFormatted,
+        lines: lines,
+      },
     };
-  } catch (e) {
-    console.error('error in getLineStats', e);
-  }
-};
+  });
 
-export const sortLines = (
-  sorting: number,
-  lineStatistics: LineStatistics,
-  selectedValidityCategory: Validity,
-) => {
-  const linesNumbersForSelectedValidityCategory =
-    lineStatistics.lineNumbersForValidityCategories.find(
-      (validityCategory) =>
-        validityCategory.validity === selectedValidityCategory,
-    )?.lineNumbers;
-
-  if (linesNumbersForSelectedValidityCategory) {
-    switch (sorting) {
-      default:
-        return linesNumbersForSelectedValidityCategory;
-      case 1:
-        return [...linesNumbersForSelectedValidityCategory].sort((a, b) => {
-          return a.localeCompare(b, 'nb', {
-            numeric: true,
-            sensitivity: 'base',
-          });
-        });
-      case 2:
-        return [...linesNumbersForSelectedValidityCategory].sort((a, b) => {
-          return b.localeCompare(a, 'nb', {
-            numeric: true,
-            sensitivity: 'base',
-          });
-        });
-      case 3:
-        const daysAsc = sortDaysValidInLineStatistics(lineStatistics, true);
-        return daysAsc
-          .filter(
-            (lineNumber) =>
-              linesNumbersForSelectedValidityCategory.indexOf(lineNumber) !==
-              -1,
-          )
-          .map((lineNumber) => lineNumber);
-      case 4:
-        const daysDesc = sortDaysValidInLineStatistics(lineStatistics, false);
-        return daysDesc
-          .filter(
-            (lineNumber) =>
-              linesNumbersForSelectedValidityCategory.indexOf(lineNumber) !==
-              -1,
-          )
-          .map((lineNumber) => lineNumber);
-    }
-  }
-};
-
-export const sortDaysValidInLineStatistics = (
-  lineStatistics: LineStatistics,
-  ascending = true,
-): string[] => {
-  return Object.keys(lineStatistics.linesMap)
-    .map((lineNumber) => ({
-      lineNumber: lineNumber,
-      daysValid: lineStatistics.linesMap[lineNumber].daysValid,
-    }))
-    .sort((a, b) => {
-      if (a.daysValid === b.daysValid) {
-        return 0;
-      } else if (a.daysValid < b.daysValid) {
-        return ascending ? -1 : 1;
-      } else {
-        return ascending ? 1 : -1;
-      }
-    })
-    .map((val) => val.lineNumber);
+  return {
+    lineNumbersForValidityCategories: [
+      ...lineStatisticsResponse.validityCategories.map((validityCategory) => ({
+        validity: validityCategory.name,
+        lineNumbers: validityCategory.lineNumbers,
+      })),
+      {
+        validity: Validity.ALL,
+        lineNumbers: Object.keys(linesMap),
+      },
+    ],
+    startDate: startDateLine.format('YYYY-MM-DD'),
+    endDate: endDateLine.format('YYYY-MM-DD'),
+    linesMap: linesMap,
+    validFromDate: moment(startDateLine).add(120, 'days').format('YYYY-MM-DD'),
+  };
 };

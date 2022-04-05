@@ -1,3 +1,4 @@
+// Response from Marduk
 export interface LineStatisticsResponse {
   days: number;
   publicLines: PublicLine[];
@@ -7,6 +8,22 @@ export interface LineStatisticsResponse {
     lineNumbers: string[];
     name: Validity;
   }[];
+}
+
+// Response from Uttu
+export interface ExportedLineStatisticsResponse {
+  today: string;
+  lineName: string;
+  publicCode: string;
+  operatingPeriodTo: string;
+  operatingPeriodFrom: string;
+  exportedDayTypesStatistics: ExportedDayTypeStatisticsResponse;
+}
+
+export interface ExportedDayTypeStatisticsResponse {
+  operatingPeriodTo: string;
+  operatingPeriodFrom: string;
+  dayTypeNetexId: string;
 }
 
 export interface LineStatistics {

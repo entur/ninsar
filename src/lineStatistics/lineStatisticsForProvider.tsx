@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
-import { LinesValidityProgress } from './components/linesValidity/linesValidityProgress';
+import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { useProvider } from './apiHooks/useProvider';
 import { SmallAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
