@@ -12,12 +12,8 @@ export interface LineStatisticsResponse {
 
 // Response from Uttu
 export interface ExportedLineStatisticsResponse {
-  today: string;
-  lineName: string;
-  publicCode: string;
-  operatingPeriodTo: string;
-  operatingPeriodFrom: string;
-  exportedDayTypesStatistics: ExportedDayTypeStatisticsResponse;
+  startDate: string;
+  lines: ExportedLine[];
 }
 
 export interface ExportedDayTypeStatisticsResponse {
@@ -26,18 +22,24 @@ export interface ExportedDayTypeStatisticsResponse {
   dayTypeNetexId: string;
 }
 
+export interface ExportedLine {
+  lineName: string;
+  publicCode: string;
+  providerCode: string;
+  operatingPeriodTo: string;
+  operatingPeriodFrom: string;
+  exportedDayTypesStatistics: ExportedDayTypeStatisticsResponse[];
+}
+
+export type LineNumbers = string[];
+
 export interface LineStatistics {
   startDate: string;
   endDate: string;
-  validFromDate: string;
+  requiredValidityDate: string;
 
   linesMap: LinesMap;
-  lineNumbersForValidityCategories: LineNumbersForValidityCategory[];
-}
-
-export interface LineNumbersForValidityCategory {
-  lineNumbers: string[];
-  validity: Validity;
+  validityCategories: Map<Validity, LineNumbers>;
 }
 
 export type LinesMap = { [lineNumber: string]: PublicLineValidity };
@@ -55,7 +57,7 @@ export type FetchError = {
 export interface PeriodValidity extends Period {
   timelineEndPosition: number;
   timelineStartPosition: number;
-  validationLevel?: Validity;
+  validationLevel?: Validity; // TODO: Trenger vi det ?
 }
 
 export interface PublicLineValidity extends PublicLine {
@@ -75,15 +77,14 @@ export interface Period {
 }
 
 export interface Timetable {
-  id: number;
+  id: number; // TODO: Trenger vi det
   objectId: string;
   periods: Period[] | PeriodValidity[];
 }
 
 export interface Line {
-  id: number;
-  objectId: string;
-  name: string;
+  id?: number; // TODO: Trenger vi det
+  name?: string; // TODO: Trenger vi det
   timetables: Timetable[];
 }
 

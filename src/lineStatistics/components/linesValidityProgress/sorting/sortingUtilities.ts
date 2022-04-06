@@ -6,10 +6,7 @@ export const sortLines = (
   selectedValidityCategory: Validity,
 ) => {
   const linesNumbersForSelectedValidityCategory =
-    lineStatistics.lineNumbersForValidityCategories.find(
-      (validityCategory) =>
-        validityCategory.validity === selectedValidityCategory,
-    )?.lineNumbers;
+    lineStatistics.validityCategories.get(selectedValidityCategory);
 
   if (linesNumbersForSelectedValidityCategory) {
     switch (sorting) {

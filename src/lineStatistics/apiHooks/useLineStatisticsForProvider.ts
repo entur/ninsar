@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
-import { formatLineStatistics } from '../utilities';
+import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
 
 export const useLineStatisticsForProvider = (
   providerId: string | undefined,
@@ -26,7 +26,7 @@ export const useLineStatisticsForProvider = (
       );
       if (response.ok) {
         const lineStatisticsResponse = await response.json();
-        setLineStatistics(formatLineStatistics(lineStatisticsResponse));
+        setLineStatistics(calculateLineStatistics(lineStatisticsResponse));
         setLineStatisticsError(undefined);
       } else {
         setLineStatisticsError({

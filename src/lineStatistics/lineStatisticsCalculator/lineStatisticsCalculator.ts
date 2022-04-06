@@ -1,90 +1,25 @@
 import moment from 'moment';
 import {
   Line,
+  LineNumbers,
   LinesMap,
   LineStatistics,
   LineStatisticsResponse,
   PeriodValidity,
   Validity,
-} from './lineStatistics.types';
+} from '../lineStatistics.types';
 import { Moment } from 'moment/moment';
+import {
+  findTimeLineEndPositionForEffectivePeriod,
+  findTimeLineEndPositionForTimeTable,
+  findTimeLineStartPositionForEffectivePeriod,
+  findTimeLineStartPositionForTimeTable,
+  findValidity,
+  getDaysRange,
+  validPeriod,
+} from './utilities';
 
-const findTimeLineStartPositionForEffectivePeriod = (
-  effectivePeriodFrom: Moment,
-  startDateLine: Moment,
-  days: number,
-) => {
-  const fromDiff = startDateLine.diff(effectivePeriodFrom, 'days', true);
-  return fromDiff > 0 ? 0 : (Math.abs(fromDiff) / days) * 100;
-};
-
-const findTimeLineEndPositionForEffectivePeriod = (
-  effectivePeriodTo: Moment,
-  endDateLine: Moment,
-  days: number,
-) => {
-  const toDiff = moment(endDateLine, 'YYYY-MM-DD').diff(
-    moment(effectivePeriodTo).add(1, 'days'),
-    'days',
-    true,
-  );
-  return Math.max(toDiff > 0 ? 100 - toDiff / (days / 100) : 100, 0);
-};
-
-const findTimeLineStartPositionForTimeTable = (
-  periodFrom: string,
-  startDateLine: Moment,
-  days: number,
-) => {
-  const fromDiff = startDateLine.diff(
-    moment(periodFrom, 'YYYY-MM-DD'),
-    'days',
-    true,
-  );
-
-  return fromDiff < 0 ? (Math.abs(fromDiff) / days) * 100 : 0;
-};
-
-const findTimeLineEndPositionForTimeTable = (
-  periodTo: string,
-  endDateLine: Moment,
-  days: number,
-) => {
-  const toDiff = moment(endDateLine, 'YYYY-MM-DD').diff(
-    moment(periodTo, 'YYYY-MM-DD').add(1, 'days'),
-    'days',
-    true,
-  );
-  return Math.max(toDiff > 0 ? 100 - toDiff / (days / 100) : 100, 0);
-};
-
-const findValidity = (daysForward: number) => {
-  if (daysForward < 0 || daysForward === Infinity) {
-    return Validity.INVALID;
-  } else if (daysForward >= 120) {
-    return Validity.VALID;
-  }
-  return Validity.EXPIRING;
-};
-
-const validPeriod = (
-  startDate: Moment,
-  effectivePeriodFrom: Moment,
-  effectivePeriodTo: Moment,
-) =>
-  moment(startDate)
-    .add(1, 'days')
-    .isBetween(effectivePeriodFrom, effectivePeriodTo, 'days', '[]')
-    ? effectivePeriodTo
-    : startDate;
-
-const getDaysRange = (
-  startDate: Moment,
-  end: Moment | undefined,
-): number | undefined =>
-  end && moment.isMoment(end) ? end.diff(startDate, 'days') : end;
-
-export const formatLineStatistics = (
+export const calculateLineStatistics = (
   lineStatisticsResponse: LineStatisticsResponse,
 ): LineStatistics => {
   const startDateLine: Moment = moment(
@@ -177,20 +112,29 @@ export const formatLineStatistics = (
     };
   });
 
+  let validityCategories: { [validity: string]: string[] } = {};
+
+  const validityCategoriesMap = new Map<Validity, LineNumbers>();
+
+  lineStatisticsResponse.validityCategories.forEach((category) => {
+    validityCategoriesMap.set(category.name, [
+      ...(validityCategoriesMap.get(category.name) ?? []),
+      ...category.lineNumbers,
+    ]);
+  });
+
+  validityCategoriesMap.set(Validity.ALL, [
+    ...(validityCategoriesMap.get(Validity.ALL) ?? []),
+    ...Object.keys(linesMap),
+  ]);
+
   return {
-    lineNumbersForValidityCategories: [
-      ...lineStatisticsResponse.validityCategories.map((validityCategory) => ({
-        validity: validityCategory.name,
-        lineNumbers: validityCategory.lineNumbers,
-      })),
-      {
-        validity: Validity.ALL,
-        lineNumbers: Object.keys(linesMap),
-      },
-    ],
+    validityCategories: validityCategoriesMap,
     startDate: startDateLine.format('YYYY-MM-DD'),
     endDate: endDateLine.format('YYYY-MM-DD'),
     linesMap: linesMap,
-    validFromDate: moment(startDateLine).add(120, 'days').format('YYYY-MM-DD'),
+    requiredValidityDate: moment(startDateLine)
+      .add(120, 'days')
+      .format('YYYY-MM-DD'),
   };
 };

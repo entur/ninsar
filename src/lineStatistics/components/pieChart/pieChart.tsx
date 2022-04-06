@@ -35,18 +35,15 @@ export const PieChart = ({
   lineStatistics,
   maintainAspectRatio = false,
 }: Props) => {
-  const getNumberOfLinesForValidityCategory = (validity: Validity) =>
-    lineStatistics.lineNumbersForValidityCategories.find(
-      (vc) => vc.validity === validity,
-    )?.lineNumbers?.length || 0;
-
   const numberOfLinesType: NumberOfLineType = {
-    totalNumberOfLines: getNumberOfLinesForValidityCategory(Validity.ALL),
-    numberOfValidLines: getNumberOfLinesForValidityCategory(Validity.VALID),
-    numberOfInvalidLines: getNumberOfLinesForValidityCategory(Validity.INVALID),
-    numberOfExpiringLines: getNumberOfLinesForValidityCategory(
-      Validity.EXPIRING,
-    ),
+    totalNumberOfLines:
+      lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0,
+    numberOfValidLines:
+      lineStatistics.validityCategories.get(Validity.VALID)?.length ?? 0,
+    numberOfInvalidLines:
+      lineStatistics.validityCategories.get(Validity.INVALID)?.length ?? 0,
+    numberOfExpiringLines:
+      lineStatistics.validityCategories.get(Validity.EXPIRING)?.length ?? 0,
   };
 
   return (

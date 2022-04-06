@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
-import { formatLineStatistics } from '../utilities';
+import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
 
 type LineStatisticsPerProvider = {
   [providerId: string]: LineStatistics;
@@ -30,7 +30,7 @@ export const useLineStatisticsForAllProviders = () => {
         const lineStatisticsResponse = await response.json();
         let lineStatisticsResponseFormatted: LineStatisticsPerProvider = {};
         for (const providerId in lineStatisticsResponse) {
-          const formatted = formatLineStatistics(
+          const formatted = calculateLineStatistics(
             lineStatisticsResponse[providerId],
           );
           lineStatisticsResponseFormatted = {

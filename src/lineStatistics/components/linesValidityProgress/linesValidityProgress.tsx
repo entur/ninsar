@@ -77,7 +77,7 @@ export const LinesValidityProgress = ({
 
         <LinesValidityListHeader
           startDate={lineStatistics.startDate}
-          validFromDate={lineStatistics.validFromDate}
+          validFromDate={lineStatistics.requiredValidityDate}
           endDate={lineStatistics.endDate}
           sorting={sorting}
           changeSorting={changeSorting}

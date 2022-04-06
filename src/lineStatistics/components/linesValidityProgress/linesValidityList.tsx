@@ -59,7 +59,7 @@ export const LinesValidityList = ({
         hoverText={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
         index={index}
         validDaysOffset={33}
-        validFromDate={lineStatistics.validFromDate}
+        validFromDate={lineStatistics.requiredValidityDate}
         effectivePeriods={lineStatistics.linesMap[lineNumber].effectivePeriods}
       />
     </div>

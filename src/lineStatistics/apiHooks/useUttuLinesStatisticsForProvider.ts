@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import {ExportedLineStatisticsResponse, FetchError, Provider} from '../lineStatistics.types';
+import {
+  ExportedLineStatisticsResponse,
+  FetchError,
+  Provider,
+} from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
 import { GraphQLClient } from 'graphql-request';
-
-interface Response {
-  lineStatistics: ExportedLineStatisticsResponse[]
-}
+import { calculateExportedLineStatistics } from '../lineStatisticsCalculator/exportedLineStatisticsCalculator';
 
 export const useUttuLinesStatisticsForProvider = (
   providerId: string | undefined,
@@ -18,10 +19,12 @@ export const useUttuLinesStatisticsForProvider = (
   >();
 
   const getLineForProviderQuery = `
-    query GetExportedLineStatistics($providerCode: ID!) {
-      lineStatistics(providerCode: $providerCode) {
-        today,
+  query GetExportedLineStatistics($providerCode: ID!) {
+    lineStatistics(providerCode: $providerCode) {
+      startDate,
+      lines {
         lineName,
+        providerCode
         publicCode,
         operatingPeriodTo,
         operatingPeriodFrom,
@@ -29,9 +32,10 @@ export const useUttuLinesStatisticsForProvider = (
           operatingPeriodTo,
           operatingPeriodFrom,
           dayTypeNetexId
-        }
+        }      
       }
-    }`;
+    }
+  }`;
 
   useEffect(() => {
     const fetchLinesForProvider = async () => {
@@ -41,12 +45,18 @@ export const useUttuLinesStatisticsForProvider = (
       const client = new GraphQLClient(endpoint, {
         headers: { authorization: `Bearer ${accessToken}` },
       });
-      const response = await client.request<ExportedLineStatisticsResponse[]>(getLineForProviderQuery, {
+      const response = await client.request<{
+        lineStatistics: ExportedLineStatisticsResponse;
+      }>(getLineForProviderQuery, {
         providerCode: providerId,
       });
 
       console.log('providerId', providerId);
       console.log('response', response);
+      console.log(
+        'calculateExportedLineStatistics',
+        calculateExportedLineStatistics(response.lineStatistics),
+      );
     };
     fetchLinesForProvider();
   }, [getToken]);
