@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
-import { FetchError, Provider } from '../lineStatistics.types';
+import { Provider } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
-
-interface ProviderWithChouetteInfo extends Provider {
-  chouetteInfo: {
-    migrateDataToProvider: number;
-  };
-}
+import { FetchError, ProviderResponse } from './lineStatistics.response.types';
 
 export const useAllProviders = () => {
   const { getToken } = useAuth();
 
-  const [allProviders, setAllProviders] = useState<Provider[] | undefined>();
+  const [allProviders, setAllProviders] = useState<Provider[]>();
   const [allProvidersError, setAllProvidersError] = useState<
     FetchError | undefined
   >();
@@ -26,12 +21,16 @@ export const useAllProviders = () => {
         },
       );
       if (response.ok) {
-        const providersWithChouetteInfo: ProviderWithChouetteInfo[] =
+        const providersWithChouetteInfo: ProviderResponse[] =
           await response.json();
         setAllProviders(
           providersWithChouetteInfo
             .filter((provider) => !!provider.chouetteInfo.migrateDataToProvider)
-            .map((provider) => ({ id: provider.id, name: provider.name })),
+            .map((provider) => ({
+              id: provider.id,
+              name: provider.name,
+              code: provider.chouetteInfo.referential,
+            })),
         );
         setAllProvidersError(undefined);
       } else {

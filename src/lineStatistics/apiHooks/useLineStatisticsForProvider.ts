@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FetchError, LineStatistics } from '../lineStatistics.types';
+import { LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
 import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
+import { FetchError } from './lineStatistics.response.types';
 
 export const useLineStatisticsForProvider = (
   providerId: string | undefined,

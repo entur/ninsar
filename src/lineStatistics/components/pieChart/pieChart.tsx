@@ -35,6 +35,7 @@ export const PieChart = ({
   lineStatistics,
   maintainAspectRatio = false,
 }: Props) => {
+
   const numberOfLinesType: NumberOfLineType = {
     totalNumberOfLines:
       lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0,

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Moment } from 'moment/moment';
 import {
-  ExportedLineStatisticsResponse, LineNumbers,
+  LineNumbers,
   LinesMap,
   LineStatistics,
   PeriodValidity,
@@ -17,6 +17,7 @@ import {
   getDaysRange,
   validPeriod,
 } from './utilities';
+import { ExportedLineStatisticsResponse } from '../apiHooks/lineStatistics.response.types';
 
 export const calculateExportedLineStatistics = (
   exportedLineStatisticsResponse: ExportedLineStatisticsResponse,
@@ -36,97 +37,103 @@ export const calculateExportedLineStatistics = (
 
   const validityCategoryMap = new Map<Validity, LineNumbers>();
 
-  exportedLineStatisticsResponse.lines.map((line, lineIndex) => {
-    const effectivePeriodFrom: Moment = moment(
-      line.operatingPeriodFrom,
-      'YYYY-MM-DD',
-    );
-    const effectivePeriodTo: Moment = moment(
-      line.operatingPeriodTo,
-      'YYYY-MM-DD',
-    );
+  exportedLineStatisticsResponse.publicLines.map(
+    (publicLine, publicLineIndex) => {
+      const effectivePeriodFrom: Moment = moment(
+        publicLine.operatingPeriodFrom,
+        'YYYY-MM-DD',
+      );
+      const effectivePeriodTo: Moment = moment(
+        publicLine.operatingPeriodTo,
+        'YYYY-MM-DD',
+      );
 
-    const timelineStartPosition: number =
-      findTimeLineStartPositionForEffectivePeriod(
-        effectivePeriodFrom,
+      const timelineStartPosition: number =
+        findTimeLineStartPositionForEffectivePeriod(
+          effectivePeriodFrom,
+          startDateLine,
+          180,
+        );
+
+      const timelineEndPosition: number =
+        findTimeLineEndPositionForEffectivePeriod(
+          effectivePeriodTo,
+          endDateLine,
+          180,
+        );
+
+      let daysForward = (timelineEndPosition / 100) * 180;
+      const validationLevel: Validity = findValidity(daysForward);
+
+      const effectivePeriodFormatted: PeriodValidity = {
+        from: publicLine.operatingPeriodFrom,
+        to: publicLine.operatingPeriodTo,
+        timelineStartPosition,
+        timelineEndPosition,
+        validationLevel,
+      };
+
+      validityCategoryMap.set(validationLevel, [
+        ...(validityCategoryMap.get(validationLevel) ?? []),
+        publicLine.publicCode,
+      ]);
+      validityCategoryMap.set(Validity.ALL, [
+        ...(validityCategoryMap.get(Validity.ALL) ?? []),
+        publicLine.publicCode,
+      ]);
+
+      const publicLineValidPeriod = validPeriod(
         startDateLine,
-        180,
-      );
-
-    const timelineEndPosition: number =
-      findTimeLineEndPositionForEffectivePeriod(
+        effectivePeriodFrom,
         effectivePeriodTo,
-        endDateLine,
-        180,
       );
 
-    let daysForward = (timelineEndPosition / 100) * 180;
-    const validationLevel: Validity = findValidity(daysForward);
+      const daysValid: number =
+        getDaysRange(startDateLine, publicLineValidPeriod) || 0;
 
-    const effectivePeriodFormatted: PeriodValidity = {
-      from: line.operatingPeriodFrom,
-      to: line.operatingPeriodTo,
-      timelineStartPosition,
-      timelineEndPosition,
-      validationLevel,
-    };
+      const timetables: Timetable[] = publicLine.lines.flatMap(
+        (line, lineIndex) => {
+          return line.exportedDayTypesStatistics.map(
+            (dayType, dayTypeIndex) => ({
+              id: dayTypeIndex,
+              objectId: dayType.dayTypeNetexId,
+              periods: [
+                {
+                  to: dayType.operatingPeriodTo,
+                  from: dayType.operatingPeriodFrom,
+                  timelineStartPosition: findTimeLineStartPositionForTimeTable(
+                    dayType.operatingPeriodFrom,
+                    startDateLine,
+                    180,
+                  ),
+                  timelineEndPosition: findTimeLineEndPositionForTimeTable(
+                    dayType.operatingPeriodTo,
+                    endDateLine,
+                    180,
+                  ),
+                },
+              ],
+            }),
+          );
+        },
+      );
 
-    validityCategoryMap.set(validationLevel, [
-      ...(validityCategoryMap.get(validationLevel) ?? []),
-      line.publicCode,
-    ]);
-    validityCategoryMap.set(Validity.ALL, [
-      ...(validityCategoryMap.get(Validity.ALL) ?? []),
-      line.publicCode,
-    ]);
-
-    const publicLineValidPeriod = validPeriod(
-      startDateLine,
-      effectivePeriodFrom,
-      effectivePeriodTo,
-    );
-
-    const daysValid: number =
-      getDaysRange(startDateLine, publicLineValidPeriod) || 0;
-
-    const timetables: Timetable[] = line.exportedDayTypesStatistics.map(
-      (dayType, dayTypeIndex) => ({
-        id: dayTypeIndex,
-        objectId: dayType.dayTypeNetexId,
-        periods: [
-          {
-            to: dayType.operatingPeriodTo,
-            from: dayType.operatingPeriodFrom,
-            timelineStartPosition: findTimeLineStartPositionForTimeTable(
-              dayType.operatingPeriodFrom,
-              startDateLine,
-              180,
-            ),
-            timelineEndPosition: findTimeLineEndPositionForTimeTable(
-              dayType.operatingPeriodTo,
-              endDateLine,
-              180,
-            ),
-          },
-        ],
-      }),
-    );
-
-    linesMap = {
-      ...linesMap,
-      [line.publicCode]: {
-        lineNumber: line.publicCode,
-        lineNames: [line.lineName],
-        effectivePeriods: [effectivePeriodFormatted],
-        lines: [
-          {
-            timetables: timetables,
-          },
-        ],
-        daysValid: daysValid,
-      },
-    };
-  });
+      linesMap = {
+        ...linesMap,
+        [publicLine.publicCode]: {
+          lineNumber: publicLine.publicCode,
+          lineNames: publicLine.lines.map((line) => line.lineName),
+          effectivePeriods: [effectivePeriodFormatted],
+          lines: [
+            {
+              timetables,
+            },
+          ],
+          daysValid: daysValid,
+        },
+      };
+    },
+  );
 
   return {
     validityCategories: validityCategoryMap,

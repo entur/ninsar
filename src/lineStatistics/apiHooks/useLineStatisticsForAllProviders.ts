@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import { FetchError, LineStatistics } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
 import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
-
-type LineStatisticsPerProvider = {
-  [providerId: string]: LineStatistics;
-};
+import {FetchError, LineStatisticsPerProviderId} from './lineStatistics.response.types';
 
 export const useLineStatisticsForAllProviders = () => {
   const { getToken } = useAuth();
 
   const [lineStatisticsForAllProviders, setLineStatisticsForAllProviders] =
-    useState<LineStatisticsPerProvider | undefined>();
+    useState<LineStatisticsPerProviderId | undefined>();
   const [
     lineStatisticsForAllProvidersError,
     setLineStatisticsForAllProvidersError,
@@ -28,17 +24,17 @@ export const useLineStatisticsForAllProviders = () => {
       );
       if (response.ok) {
         const lineStatisticsResponse = await response.json();
-        let lineStatisticsResponseFormatted: LineStatisticsPerProvider = {};
+        let lineStatisticsPerProviderId: LineStatisticsPerProviderId = {};
         for (const providerId in lineStatisticsResponse) {
           const formatted = calculateLineStatistics(
             lineStatisticsResponse[providerId],
           );
-          lineStatisticsResponseFormatted = {
-            ...lineStatisticsResponseFormatted,
+          lineStatisticsPerProviderId = {
+            ...lineStatisticsPerProviderId,
             [providerId]: formatted,
           };
         }
-        setLineStatisticsForAllProviders(lineStatisticsResponseFormatted);
+        setLineStatisticsForAllProviders(lineStatisticsPerProviderId);
         setLineStatisticsForAllProvidersError(undefined);
       } else {
         setLineStatisticsForAllProvidersError({

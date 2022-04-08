@@ -1,45 +1,54 @@
 import React, { useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
-import { PieChart } from './components/pieChart/pieChart';
-import style from './lineStatistics.module.scss';
-import { SmallAlertBox } from '@entur/alert';
-import { Loader } from '@entur/loader';
+import { useUttuLinesStatisticsForAllProviders } from './apiHooks/useUttuLinesStatisticsForAllProviders';
 import { Provider, Validity } from './lineStatistics.types';
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
-import {useUttuLinesStatisticsForProvider} from "./apiHooks/useUttuLinesStatisticsForProvider";
+import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
+import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
 
 export const LineStatisticsForAllProviders = () => {
-  useUttuLinesStatisticsForProvider('nsb')
-
   const { allProviders, allProvidersError } = useAllProviders();
   const { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError } =
     useLineStatisticsForAllProviders();
+  const {
+    exportedLineStatisticsForAllProviders,
+    exportedLineStatisticsForAllProvidersError,
+  } = useUttuLinesStatisticsForAllProviders(allProviders);
 
   const [selectedValidityCategory, setSelectedValidityCategory] =
     useState<Validity>(Validity.ALL);
   const [selectedProvider, setSelectedProvider] = useState<Provider>();
+  const [selectedLineStatistics, setSelectedLineStatistics] =
+    useState<LineStatisticsPerProviderId>();
 
-  const handlePieOnClick = (selectedValidityCategory: Validity, provider: Provider) => {
+  const handlePieOnClick = (
+    selectedValidityCategory: Validity,
+    selectedProvider: Provider,
+    selectedLineStatistics?: LineStatisticsPerProviderId,
+  ) => {
     setSelectedValidityCategory(selectedValidityCategory);
-    setSelectedProvider(provider);
+    setSelectedProvider(selectedProvider);
+    setSelectedLineStatistics(selectedLineStatistics);
   };
 
-  const handleShowAll = (provider: Provider) => {
+  const handleShowAll = (
+    provider: Provider,
+    selectedLineStatistics?: LineStatisticsPerProviderId,
+  ) => {
     setSelectedValidityCategory(Validity.ALL);
     setSelectedProvider(provider);
+    setSelectedLineStatistics(selectedLineStatistics);
   };
 
   return (
     <>
       {selectedProvider ? (
         <>
-          {lineStatisticsForAllProviders && (
+          {selectedLineStatistics && (
             <LinesValidityProgress
               selectedValidityCategory={selectedValidityCategory}
-              lineStatistics={
-                lineStatisticsForAllProviders[selectedProvider.id]
-              }
+              lineStatistics={selectedLineStatistics[selectedProvider.id]}
               providerName={selectedProvider.name}
               handleClose={() => {
                 setSelectedProvider(undefined);
@@ -48,33 +57,49 @@ export const LineStatisticsForAllProviders = () => {
           )}
         </>
       ) : (
-        <div className={style.linesStatisticsForAllProviders}>
-          {(!allProviders || !lineStatisticsForAllProviders) &&
-          !allProvidersError &&
-          !lineStatisticsForAllProvidersError ? (
-            <Loader style={{ width: '100%' }}>Laster</Loader>
-          ) : allProvidersError || lineStatisticsForAllProvidersError ? (
-            <SmallAlertBox variant="error">
-              Kunne ikke laste inn dataene. Prøv igjen senere.
-            </SmallAlertBox>
-          ) : (
-            allProviders &&
-            lineStatisticsForAllProviders &&
-            allProviders.map((provider, index) => (
-              <PieChart
-                showHeader={true}
-                key={'provider-pie' + index}
-                providerName={provider.name}
-                handleShowAllClick={() => handleShowAll(provider)}
-                handlePieOnClick={(label: Validity) =>
-                  handlePieOnClick(label, provider)
-                }
-                lineStatistics={lineStatisticsForAllProviders[provider.id]}
-                maintainAspectRatio={true}
-              />
-            ))
-          )}
-        </div>
+        <>
+          <PieStatisticsForAllProviders
+            lineStatistics={exportedLineStatisticsForAllProviders}
+            lineStatisticsError={exportedLineStatisticsForAllProvidersError}
+            providers={allProviders}
+            providersError={allProvidersError}
+            handlePieOnClick={(
+              selectedValidityCategory: Validity,
+              selectedProvider: Provider,
+            ) =>
+              handlePieOnClick(
+                selectedValidityCategory,
+                selectedProvider,
+                exportedLineStatisticsForAllProviders,
+              )
+            }
+            handleShowAll={(selectedProvider: Provider) => {
+              handleShowAll(
+                selectedProvider,
+                exportedLineStatisticsForAllProviders,
+              );
+            }}
+          />
+          <PieStatisticsForAllProviders
+            lineStatistics={lineStatisticsForAllProviders}
+            lineStatisticsError={lineStatisticsForAllProvidersError}
+            providers={allProviders}
+            providersError={allProvidersError}
+            handlePieOnClick={(
+              selectedValidityCategory: Validity,
+              selectedProvider: Provider,
+            ) =>
+              handlePieOnClick(
+                selectedValidityCategory,
+                selectedProvider,
+                lineStatisticsForAllProviders,
+              )
+            }
+            handleShowAll={(selectedProvider: Provider) => {
+              handleShowAll(selectedProvider, lineStatisticsForAllProviders);
+            }}
+          />
+        </>
       )}
     </>
   );

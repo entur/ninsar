@@ -1,36 +1,3 @@
-// Response from Marduk
-export interface LineStatisticsResponse {
-  days: number;
-  publicLines: PublicLine[];
-  startDate: string;
-  validityCategories: {
-    numDaysAtLeastValid?: number;
-    lineNumbers: string[];
-    name: Validity;
-  }[];
-}
-
-// Response from Uttu
-export interface ExportedLineStatisticsResponse {
-  startDate: string;
-  lines: ExportedLine[];
-}
-
-export interface ExportedDayTypeStatisticsResponse {
-  operatingPeriodTo: string;
-  operatingPeriodFrom: string;
-  dayTypeNetexId: string;
-}
-
-export interface ExportedLine {
-  lineName: string;
-  publicCode: string;
-  providerCode: string;
-  operatingPeriodTo: string;
-  operatingPeriodFrom: string;
-  exportedDayTypesStatistics: ExportedDayTypeStatisticsResponse[];
-}
-
 export type LineNumbers = string[];
 
 export interface LineStatistics {
@@ -46,22 +13,14 @@ export type LinesMap = { [lineNumber: string]: PublicLineValidity };
 
 export interface Provider {
   id: number;
+  code: string;
   name: string;
 }
-
-export type FetchError = {
-  status: number;
-  statusText: string;
-};
 
 export interface PeriodValidity extends Period {
   timelineEndPosition: number;
   timelineStartPosition: number;
   validationLevel?: Validity; // TODO: Trenger vi det ?
-}
-
-export interface PublicLineValidity extends PublicLine {
-  daysValid: number;
 }
 
 export enum Validity {
@@ -93,4 +52,8 @@ export interface PublicLine {
   lineNames: string[];
   effectivePeriods: Period[] | PeriodValidity[];
   lines: Line[];
+}
+
+export interface PublicLineValidity extends PublicLine {
+  daysValid: number;
 }

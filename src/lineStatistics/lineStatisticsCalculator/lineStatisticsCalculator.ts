@@ -4,7 +4,6 @@ import {
   LineNumbers,
   LinesMap,
   LineStatistics,
-  LineStatisticsResponse,
   PeriodValidity,
   Validity,
 } from '../lineStatistics.types';
@@ -18,6 +17,7 @@ import {
   getDaysRange,
   validPeriod,
 } from './utilities';
+import { LineStatisticsResponse } from '../apiHooks/lineStatistics.response.types';
 
 export const calculateLineStatistics = (
   lineStatisticsResponse: LineStatisticsResponse,

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { FetchError, Provider } from '../lineStatistics.types';
+import { Provider } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
+import { FetchError, ProviderResponse } from './lineStatistics.response.types';
 
 export const useProvider = (providerId: string | undefined) => {
   const { getToken } = useAuth();
@@ -18,8 +19,12 @@ export const useProvider = (providerId: string | undefined) => {
         },
       );
       if (response.ok) {
-        const provider = await response.json();
-        setProvider(provider);
+        const provider: ProviderResponse = await response.json();
+        setProvider({
+          id: provider.id,
+          name: provider.name,
+          code: provider.chouetteInfo.referential,
+        });
         setProviderError(undefined);
       } else {
         setProviderError({
