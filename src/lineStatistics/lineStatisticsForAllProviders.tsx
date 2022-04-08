@@ -6,6 +6,8 @@ import { Provider, Validity } from './lineStatistics.types';
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
 import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
+import { Heading1 } from '@entur/typography';
+import style from './lineStatistics.module.scss';
 
 export const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();
@@ -58,6 +60,9 @@ export const LineStatisticsForAllProviders = () => {
         </>
       ) : (
         <>
+          <Heading1 className={style.heading}>
+            Line statistics from NPlan
+          </Heading1>
           <PieStatisticsForAllProviders
             lineStatistics={exportedLineStatisticsForAllProviders}
             lineStatisticsError={exportedLineStatisticsForAllProvidersError}
@@ -80,6 +85,9 @@ export const LineStatisticsForAllProviders = () => {
               );
             }}
           />
+          <Heading1 className={style.heading}>
+            Line statistics from Chouette
+          </Heading1>
           <PieStatisticsForAllProviders
             lineStatistics={lineStatisticsForAllProviders}
             lineStatisticsError={lineStatisticsForAllProvidersError}
