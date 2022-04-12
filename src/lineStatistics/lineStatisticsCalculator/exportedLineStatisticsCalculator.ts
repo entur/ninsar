@@ -33,7 +33,6 @@ export const calculateExportedLineStatistics = (
     .format('YYYY-MM-DD');
 
   let linesMap: LinesMap = {};
-  let validityCategories: { [validity: string]: string[] } = {};
 
   const validityCategoryMap = new Map<Validity, LineNumbers>();
 

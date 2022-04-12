@@ -23,7 +23,8 @@ interface Props {
   handlePieOnClick: (label: Validity) => void;
   handleShowAllClick: () => void;
   showHeader: boolean;
-  lineStatistics: LineStatistics;
+  lineStatistics?: LineStatistics;
+  exportedLineStatistics?: LineStatistics;
   providerName: string;
   maintainAspectRatio?: boolean;
 }
@@ -34,17 +35,18 @@ export const PieChart = ({
   handleShowAllClick,
   showHeader,
   lineStatistics,
+  exportedLineStatistics,
   maintainAspectRatio = false,
 }: Props) => {
+  const numberOfLinesForValidityCategory = (validity: Validity) =>
+    (lineStatistics?.validityCategories.get(validity)?.length ?? 0) +
+    (exportedLineStatistics?.validityCategories.get(validity)?.length ?? 0);
+
   const numberOfLinesType: NumberOfLineType = {
-    totalNumberOfLines:
-      lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0,
-    numberOfValidLines:
-      lineStatistics.validityCategories.get(Validity.VALID)?.length ?? 0,
-    numberOfInvalidLines:
-      lineStatistics.validityCategories.get(Validity.INVALID)?.length ?? 0,
-    numberOfExpiringLines:
-      lineStatistics.validityCategories.get(Validity.EXPIRING)?.length ?? 0,
+    totalNumberOfLines: numberOfLinesForValidityCategory(Validity.ALL),
+    numberOfValidLines: numberOfLinesForValidityCategory(Validity.VALID),
+    numberOfInvalidLines: numberOfLinesForValidityCategory(Validity.INVALID),
+    numberOfExpiringLines: numberOfLinesForValidityCategory(Validity.EXPIRING),
   };
 
   return (

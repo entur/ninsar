@@ -1,25 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Provider } from '../lineStatistics.types';
+import { LineStatistics, Provider } from '../lineStatistics.types';
 import { useAuth } from '../../appProvider';
 import { GraphQLClient } from 'graphql-request';
 import { calculateExportedLineStatistics } from '../lineStatisticsCalculator/exportedLineStatisticsCalculator';
 import {
   ExportedLineStatisticsResponse,
   FetchError,
-  LineStatisticsPerProviderId,
 } from './lineStatistics.response.types';
 
-export const useExportedLineStatisticsProvider = (provider?: Provider) => {
+export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
   const { getToken } = useAuth();
 
-  const [
-    exportedLineStatisticsForAllProviders,
-    setExportedLineStatisticsForAllProviders,
-  ] = useState<LineStatisticsPerProviderId>();
-  const [
-    exportedLineStatisticsForAllProvidersError,
-    setExportedLineStatisticsForAllProvidersError,
-  ] = useState<FetchError | undefined>();
+  const [exportedLineStatistics, setExportedLineStatistics] =
+    useState<LineStatistics>();
+  const [exportedLineStatisticsError, setExportedLineStatisticsError] =
+    useState<FetchError | undefined>();
 
   const getLineForProviderQuery = `
   query GetExportedLineStatistics($providerCode: ID!) {
@@ -58,15 +53,14 @@ export const useExportedLineStatisticsProvider = (provider?: Provider) => {
             lineStatistics: ExportedLineStatisticsResponse;
           }>(getLineForProviderQuery, { providerCode: provider.code });
 
-          setExportedLineStatisticsForAllProviders({
-            [provider.id]: calculateExportedLineStatistics(
-              response.lineStatistics,
-            ),
-          });
-          setExportedLineStatisticsForAllProvidersError(undefined);
+          setExportedLineStatistics(
+            calculateExportedLineStatistics(response.lineStatistics),
+          );
+          setExportedLineStatisticsError(undefined);
         }
       } catch (error: any) {
-        setExportedLineStatisticsForAllProvidersError({
+        console.log('error', error);
+        setExportedLineStatisticsError({
           status: error.status,
           statusText: error.error,
         });
@@ -78,7 +72,7 @@ export const useExportedLineStatisticsProvider = (provider?: Provider) => {
   }, [getToken, provider]);
 
   return {
-    exportedLineStatisticsForAllProviders,
-    exportedLineStatisticsForAllProvidersError,
+    exportedLineStatistics,
+    exportedLineStatisticsError,
   };
 };

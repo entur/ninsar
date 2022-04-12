@@ -1,21 +1,26 @@
 import style from './linesValidityProgress.module.scss';
 import { List, ListItem } from 'material-ui/List';
 import { HeaderTimeline, Timeline } from 'bogu';
-import React, { useState } from 'react';
-import { LineStatistics } from '../../lineStatistics.types';
+import React, { useEffect, useState } from 'react';
+import { LineStatistics, Validity } from '../../lineStatistics.types';
+import { sortLines } from './sorting/sortingUtilities';
+import { LinesValidityListHeader } from './linesValidityListHeader';
 
 interface Props {
-  sortedLineNumbers: string[];
+  selectedValidityCategory: Validity;
   lineStatistics: LineStatistics;
 }
 
 export const LinesValidityList = ({
-  sortedLineNumbers,
+  selectedValidityCategory,
   lineStatistics,
 }: Props) => {
   const [expandedLinesState, setExpandedLinesState] = useState<
     Map<string, boolean>
   >(new Map<string, boolean>());
+
+  const [sortedLineNumbers, setSortedLineNumbers] = useState<string[]>();
+
   const toggleLineOpen = (lineNumber: string) => {
     const expandedLinesStateCopy = new Map<string, boolean>(expandedLinesState);
     expandedLinesStateCopy.set(lineNumber, !isLineOpen(lineNumber));
@@ -25,6 +30,21 @@ export const LinesValidityList = ({
   const isLineOpen = (lineNumber: string) => {
     return !!expandedLinesState.get(lineNumber);
   };
+
+  const [sorting, setSorting] = useState<number>(1);
+
+  const changeSorting = () => {
+    const states = 5;
+    const sort = (sorting + 1) % states;
+    setSorting(sort);
+  };
+
+  useEffect(() => {
+    lineStatistics &&
+      setSortedLineNumbers(
+        sortLines(sorting, lineStatistics, selectedValidityCategory),
+      );
+  }, [lineStatistics, selectedValidityCategory, sorting]);
 
   const DayTypesValidity = ({
     index,
@@ -66,34 +86,49 @@ export const LinesValidityList = ({
   );
 
   return (
-    <div className={style.linesListContainer}>
-      <List>
-        {sortedLineNumbers.map((lineNumber, index) => (
-          <ListItem
-            key={'LineItem' + index + lineNumber}
-            disabled
-            className={style.listItem}
-            style={{
-              paddingTop: '0',
-              paddingLeft: '0',
-              paddingRight: '0',
-              lineHeight: '0',
-              paddingBottom: '1px',
-            }}
-            open={isLineOpen(lineNumber)}
-            onNestedListToggle={() => toggleLineOpen(lineNumber)}
-            nestedItems={[
-              <DayTypesValidity
-                index={index}
-                lineNumber={lineNumber}
-                key={'DayTypesValidity' + lineNumber + index}
-              />,
-            ]}
-          >
-            <LineValidity index={index} lineNumber={lineNumber} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
+    <>
+      <LinesValidityListHeader
+        startDate={lineStatistics.startDate}
+        validFromDate={lineStatistics.requiredValidityDate}
+        endDate={lineStatistics.endDate}
+        sorting={sorting}
+        changeSorting={changeSorting}
+      />
+      {!sortedLineNumbers || sortedLineNumbers.length === 0 ? (
+        <div style={{ marginLeft: '20px' }}>
+          {selectedValidityCategory === Validity.ALL
+            ? 'Fant ingen linjer'
+            : `Fant ingen ${selectedValidityCategory} linjer`}
+        </div>
+      ) : (
+        <List>
+          {sortedLineNumbers.map((lineNumber, index) => (
+            <ListItem
+              key={'LineItem' + index + lineNumber}
+              disabled
+              className={style.listItem}
+              style={{
+                paddingTop: '0',
+                paddingLeft: '0',
+                paddingRight: '0',
+                lineHeight: '0',
+                paddingBottom: '1px',
+              }}
+              open={isLineOpen(lineNumber)}
+              onNestedListToggle={() => toggleLineOpen(lineNumber)}
+              nestedItems={[
+                <DayTypesValidity
+                  index={index}
+                  lineNumber={lineNumber}
+                  key={'DayTypesValidity' + lineNumber + index}
+                />,
+              ]}
+            >
+              <LineValidity index={index} lineNumber={lineNumber} />
+            </ListItem>
+          ))}
+        </List>
+      )}
+    </>
   );
 };

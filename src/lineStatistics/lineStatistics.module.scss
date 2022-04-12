@@ -20,6 +20,12 @@ div.linesStatisticsContainer > div {
   padding: 20px;
 }
 
+.lineStatisticsErrorContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .heading {
   text-align: center;
   margin: 25px;
