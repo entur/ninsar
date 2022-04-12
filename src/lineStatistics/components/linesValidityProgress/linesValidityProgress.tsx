@@ -14,7 +14,7 @@
  *
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import style from './linesValidityProgress.module.scss';
 import { Heading3 } from '@entur/typography';
@@ -40,6 +40,14 @@ export const LinesValidityProgress = ({
   handleClose,
 }: Props) => {
   const [sorting, setSorting] = useState<number>(1);
+  const [sortedLineNumbers, setSortedLineNumbers] = useState<string[]>();
+
+  useEffect(() => {
+    lineStatistics &&
+      setSortedLineNumbers(
+        sortLines(sorting, lineStatistics, selectedValidityCategory),
+      );
+  }, [lineStatistics, selectedValidityCategory, sorting]);
 
   const changeSorting = () => {
     const states = 5;
@@ -53,10 +61,6 @@ export const LinesValidityProgress = ({
     [Validity.EXPIRING]: 'Expiring lines',
     [Validity.ALL]: 'all',
   };
-
-  const sortedLineNumbers =
-    lineStatistics &&
-    sortLines(sorting, lineStatistics, selectedValidityCategory);
 
   return sortedLineNumbers ? (
     <MuiThemeProvider>

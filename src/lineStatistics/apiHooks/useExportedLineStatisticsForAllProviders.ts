@@ -10,7 +10,7 @@ import {
   LineStatisticsPerProviderId,
 } from './lineStatistics.response.types';
 
-export const useUttuLinesStatisticsForAllProviders = (
+export const useExportedLineStatisticsForAllProviders = (
   providers?: Provider[],
 ) => {
   const { getToken } = useAuth();

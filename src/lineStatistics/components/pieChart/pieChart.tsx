@@ -15,6 +15,7 @@ import {
   Legend,
   Tooltip,
 } from 'chart.js';
+import { TertiaryButton } from '@entur/button';
 
 Chart.register([ArcElement, Tooltip, Legend]);
 
@@ -35,7 +36,6 @@ export const PieChart = ({
   lineStatistics,
   maintainAspectRatio = false,
 }: Props) => {
-
   const numberOfLinesType: NumberOfLineType = {
     totalNumberOfLines:
       lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0,
@@ -73,9 +73,12 @@ export const PieChart = ({
 
       <NumberOfLines {...numberOfLinesType} />
 
-      <div onClick={() => handleShowAllClick()} className={style.showAll}>
+      <TertiaryButton
+        style={{ paddingTop: '7px' }}
+        onClick={handleShowAllClick}
+      >
         Show all
-      </div>
+      </TertiaryButton>
     </div>
   );
 };

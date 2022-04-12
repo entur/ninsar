@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
-import { useUttuLinesStatisticsForAllProviders } from './apiHooks/useUttuLinesStatisticsForAllProviders';
 import { Provider, Validity } from './lineStatistics.types';
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
 import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
 import { Heading1 } from '@entur/typography';
 import style from './lineStatistics.module.scss';
+import { useExportedLineStatisticsForAllProviders } from './apiHooks/useExportedLineStatisticsForAllProviders';
 
 export const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();
@@ -16,7 +16,7 @@ export const LineStatisticsForAllProviders = () => {
   const {
     exportedLineStatisticsForAllProviders,
     exportedLineStatisticsForAllProvidersError,
-  } = useUttuLinesStatisticsForAllProviders(allProviders);
+  } = useExportedLineStatisticsForAllProviders(allProviders);
 
   const [selectedValidityCategory, setSelectedValidityCategory] =
     useState<Validity>(Validity.ALL);
