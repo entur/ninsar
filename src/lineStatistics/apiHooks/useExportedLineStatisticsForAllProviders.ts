@@ -24,7 +24,7 @@ export const useExportedLineStatisticsForAllProviders = (
     setExportedLineStatisticsForAllProvidersError,
   ] = useState<FetchError | undefined>();
 
-  const getLineForProviderQuery = `
+  const getLinesForAllProvidersQuery = `
   query GetExportedLineStatistics {
     lineStatistics {
       startDate
@@ -58,7 +58,7 @@ export const useExportedLineStatisticsForAllProviders = (
         });
         const response = await client.request<{
           lineStatistics: ExportedLineStatisticsResponse;
-        }>(getLineForProviderQuery);
+        }>(getLinesForAllProvidersQuery);
 
         const publicLinesPerProviderCode =
           response.lineStatistics.publicLines.reduce(
@@ -98,7 +98,7 @@ export const useExportedLineStatisticsForAllProviders = (
     if (providers) {
       fetchLinesForProvider();
     }
-  }, [getToken, providers]);
+  }, [getToken, providers, getLinesForAllProvidersQuery]);
 
   return {
     exportedLineStatisticsForAllProviders,

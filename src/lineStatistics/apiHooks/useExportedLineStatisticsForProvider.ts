@@ -59,7 +59,6 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
           setExportedLineStatisticsError(undefined);
         }
       } catch (error: any) {
-        console.log('error', error);
         setExportedLineStatisticsError({
           status: error.status,
           statusText: error.error,
@@ -69,7 +68,7 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
     if (provider) {
       fetchLinesForProvider();
     }
-  }, [getToken, provider]);
+  }, [getToken, provider, getLineForProviderQuery]);
 
   return {
     exportedLineStatistics,

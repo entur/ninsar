@@ -27,11 +27,11 @@ export const PieStatisticsForAllProviders = ({
             (provider) =>
               (lineStatistics &&
                 Object.keys(lineStatistics).some(
-                  (key) => key == String(provider.id),
+                  (key) => key === String(provider.id),
                 )) ||
               (exportedLineStatistics &&
                 Object.keys(exportedLineStatistics).some(
-                  (key) => key == String(provider.id),
+                  (key) => key === String(provider.id),
                 )),
           )
           .map((provider, index) => (

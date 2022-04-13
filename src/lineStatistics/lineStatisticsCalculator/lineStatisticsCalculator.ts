@@ -31,88 +31,85 @@ export const calculateLineStatistics = (
     'days',
   );
 
-  let linesMap: LinesMap = {};
+  const linesMap: LinesMap = lineStatisticsResponse.publicLines
+    .map((publicLine) => {
+      let publicLineValidPeriod: Moment | undefined = undefined;
 
-  lineStatisticsResponse.publicLines.forEach((publicLine) => {
-    let publicLineValidPeriod: Moment | undefined = undefined;
+      const effectivePeriodsFormatted: PeriodValidity[] =
+        publicLine.effectivePeriods.map((effectivePeriod) => {
+          const effectivePeriodFrom: Moment = moment(
+            effectivePeriod.from,
+            'YYYY-MM-DD',
+          );
+          const effectivePeriodTo: Moment = moment(
+            effectivePeriod.to,
+            'YYYY-MM-DD',
+          );
 
-    const effectivePeriodsFormatted: PeriodValidity[] =
-      publicLine.effectivePeriods.map((effectivePeriod) => {
-        const effectivePeriodFrom: Moment = moment(
-          effectivePeriod.from,
-          'YYYY-MM-DD',
-        );
-        const effectivePeriodTo: Moment = moment(
-          effectivePeriod.to,
-          'YYYY-MM-DD',
-        );
+          const timelineStartPosition: number =
+            findTimeLineStartPositionForEffectivePeriod(
+              effectivePeriodFrom,
+              startDateLine,
+              lineStatisticsResponse.days,
+            );
 
-        const timelineStartPosition: number =
-          findTimeLineStartPositionForEffectivePeriod(
-            effectivePeriodFrom,
-            startDateLine,
+          const timelineEndPosition = findTimeLineEndPositionForEffectivePeriod(
+            effectivePeriodTo,
+            endDateLine,
             lineStatisticsResponse.days,
           );
 
-        const timelineEndPosition = findTimeLineEndPositionForEffectivePeriod(
-          effectivePeriodTo,
-          endDateLine,
-          lineStatisticsResponse.days,
-        );
+          let daysForward =
+            (timelineEndPosition / 100) * lineStatisticsResponse.days;
+          const validationLevel = findValidity(daysForward);
 
-        let daysForward =
-          (timelineEndPosition / 100) * lineStatisticsResponse.days;
-        const validationLevel = findValidity(daysForward);
+          publicLineValidPeriod = validPeriod(
+            publicLineValidPeriod || startDateLine,
+            effectivePeriodFrom,
+            effectivePeriodTo,
+          );
 
-        publicLineValidPeriod = validPeriod(
-          publicLineValidPeriod || startDateLine,
-          effectivePeriodFrom,
-          effectivePeriodTo,
-        );
+          return {
+            ...effectivePeriod,
+            timelineStartPosition,
+            timelineEndPosition,
+            validationLevel,
+          };
+        });
 
-        return {
-          ...effectivePeriod,
-          timelineStartPosition,
-          timelineEndPosition,
-          validationLevel,
-        };
-      });
+      const daysValid: number =
+        getDaysRange(startDateLine, publicLineValidPeriod) || 0;
 
-    const daysValid: number =
-      getDaysRange(startDateLine, publicLineValidPeriod) || 0;
-
-    const lines: Line[] = publicLine.lines.map((line) => ({
-      ...line,
-      timetables: line.timetables.map((timetable) => ({
-        ...timetable,
-        periods: timetable.periods.map((period) => ({
-          ...period,
-          timelineStartPosition: findTimeLineStartPositionForTimeTable(
-            period.from,
-            startDateLine,
-            lineStatisticsResponse.days,
-          ),
-          timelineEndPosition: findTimeLineEndPositionForTimeTable(
-            period.to,
-            endDateLine,
-            lineStatisticsResponse.days,
-          ),
+      const lines: Line[] = publicLine.lines.map((line) => ({
+        ...line,
+        timetables: line.timetables.map((timetable) => ({
+          ...timetable,
+          periods: timetable.periods.map((period) => ({
+            ...period,
+            timelineStartPosition: findTimeLineStartPositionForTimeTable(
+              period.from,
+              startDateLine,
+              lineStatisticsResponse.days,
+            ),
+            timelineEndPosition: findTimeLineEndPositionForTimeTable(
+              period.to,
+              endDateLine,
+              lineStatisticsResponse.days,
+            ),
+          })),
         })),
-      })),
-    }));
+      }));
 
-    linesMap = {
-      ...linesMap,
-      [publicLine.lineNumber]: {
-        ...publicLine,
-        daysValid: daysValid,
-        effectivePeriods: effectivePeriodsFormatted,
-        lines: lines,
-      },
-    };
-  });
-
-  let validityCategories: { [validity: string]: string[] } = {};
+      return {
+        [publicLine.lineNumber]: {
+          ...publicLine,
+          daysValid: daysValid,
+          effectivePeriods: effectivePeriodsFormatted,
+          lines: lines,
+        },
+      };
+    })
+    .reduce((result, obj) => ({ ...result, ...obj }), {});
 
   const validityCategoriesMap = new Map<Validity, LineNumbers>();
 

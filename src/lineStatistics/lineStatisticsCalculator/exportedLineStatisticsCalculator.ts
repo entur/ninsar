@@ -32,12 +32,10 @@ export const calculateExportedLineStatistics = (
     .add(120, 'days')
     .format('YYYY-MM-DD');
 
-  let linesMap: LinesMap = {};
-
   const validityCategoryMap = new Map<Validity, LineNumbers>();
 
-  exportedLineStatisticsResponse.publicLines.map(
-    (publicLine, publicLineIndex) => {
+  const linesMap: LinesMap = exportedLineStatisticsResponse.publicLines
+    .map((publicLine) => {
       const effectivePeriodFrom: Moment = moment(
         publicLine.operatingPeriodFrom,
         'YYYY-MM-DD',
@@ -117,8 +115,7 @@ export const calculateExportedLineStatistics = (
         },
       );
 
-      linesMap = {
-        ...linesMap,
+      return {
         [publicLine.publicCode]: {
           lineNumber: publicLine.publicCode,
           lineNames: publicLine.lines.map((line) => line.lineName),
@@ -131,8 +128,8 @@ export const calculateExportedLineStatistics = (
           daysValid: daysValid,
         },
       };
-    },
-  );
+    })
+    .reduce((result, obj) => ({ ...result, ...obj }), {});
 
   return {
     validityCategories: validityCategoryMap,
