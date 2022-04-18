@@ -13,7 +13,7 @@ jobs:
       REACT_APP_AUTH0_RELATIVE_CALLBACK_URL: /
       REACT_APP_TIMETABLE_ADMIN_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/timetable
       REACT_APP_PROVIDERS_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/providers
-      REACT_APP_EVENTS_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/events/
+      REACT_APP_UTTU_API_URL: https://api.dev.entur.io/timetable-admin/v1/flexible-lines/exportedLineStatistics/graphql
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
