@@ -1,8 +1,8 @@
 {
   "projects": {
     "dev": "ent-ninsar-dev",
-    "staging": "ent-ninsar-test",
-    "production": "ent-ninsar-prod",
+    "staging": "ent-ninsar-tst",
+    "production": "ent-ninsar-prd",
     "default": "ent-ninsar-dev"
   }
 }
