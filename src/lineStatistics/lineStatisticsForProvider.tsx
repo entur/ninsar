@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { useProvider } from './apiHooks/useProvider';
-import { BannerAlertBox, SmallAlertBox } from '@entur/alert';
+import { BannerAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
 import style from './lineStatistics.module.scss';
 import { LineStatistics, Validity } from './lineStatistics.types';

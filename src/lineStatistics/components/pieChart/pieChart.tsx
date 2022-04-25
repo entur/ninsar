@@ -84,7 +84,7 @@ export const PieChart = ({
 
       <NumberOfLines {...numberOfLinesType} />
 
-      <TertiaryButton className={style.showAllButton} onClick={handleShowAllClick}>Vis alle</TertiaryButton>
+      <TertiaryButton onClick={handleShowAllClick}>Vis alle</TertiaryButton>
     </div>
   );
 };

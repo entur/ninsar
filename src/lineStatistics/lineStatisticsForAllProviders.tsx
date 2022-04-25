@@ -53,7 +53,6 @@ export const LineStatisticsForAllProviders = () => {
             exportedLineStatisticsForAllProviders &&
             exportedLineStatisticsForAllProviders[selectedProvider.id]
           }
-          providerName={selectedProvider.name}
           handleClose={() => {
             setSelectedProvider(undefined);
           }}

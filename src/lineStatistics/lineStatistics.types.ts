@@ -4,7 +4,6 @@ export interface LineStatistics {
   startDate: string;
   endDate: string;
   requiredValidityDate: string;
-
   linesMap: LinesMap;
   validityCategories: Map<Validity, LineNumbers>;
 }

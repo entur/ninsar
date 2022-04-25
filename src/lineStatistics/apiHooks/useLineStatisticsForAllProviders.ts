@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../appProvider';
 import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
-import {FetchError, LineStatisticsPerProviderId} from './lineStatistics.response.types';
+import {
+  FetchError,
+  LineStatisticsPerProviderId,
+} from './lineStatistics.response.types';
 
 export const useLineStatisticsForAllProviders = () => {
   const { getToken } = useAuth();
@@ -26,13 +29,17 @@ export const useLineStatisticsForAllProviders = () => {
         const lineStatisticsResponse = await response.json();
         let lineStatisticsPerProviderId: LineStatisticsPerProviderId = {};
         for (const providerId in lineStatisticsResponse) {
-          const formatted = calculateLineStatistics(
-            lineStatisticsResponse[providerId],
-          );
-          lineStatisticsPerProviderId = {
-            ...lineStatisticsPerProviderId,
-            [providerId]: formatted,
-          };
+          let lineStatisticsResponseForProvider =
+            lineStatisticsResponse[providerId];
+          if (lineStatisticsResponseForProvider) {
+            const formatted = calculateLineStatistics(
+              lineStatisticsResponseForProvider,
+            );
+            lineStatisticsPerProviderId = {
+              ...lineStatisticsPerProviderId,
+              [providerId]: formatted,
+            };
+          }
         }
         setLineStatisticsForAllProviders(lineStatisticsPerProviderId);
         setLineStatisticsForAllProvidersError(undefined);

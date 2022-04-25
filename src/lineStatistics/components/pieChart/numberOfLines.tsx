@@ -1,7 +1,8 @@
 import { color } from 'bogu/styles';
-import React, { useState } from 'react';
+import React from 'react';
 import style from './pieChart.module.scss';
 import { NumberOfLineType } from './pieChart.types';
+import { ExpandableText } from '@entur/expand';
 
 export const NumberOfLines = ({
   numberOfInvalidLines,
@@ -9,24 +10,15 @@ export const NumberOfLines = ({
   numberOfExpiringLines,
   totalNumberOfLines,
 }: NumberOfLineType) => {
-  const [showTotal, setShowTotal] = useState<boolean>(true);
-
   return (
-    <div
-      onClick={() => setShowTotal(!showTotal)}
-      style={{ color: color.font.info2 }}
-      className={style.numberOfLines}
-    >
-      <span style={{ marginRight: 5 }}>Antall linjer:</span>
-      {showTotal ? (
-        totalNumberOfLines
-      ) : (
-        <div>
-          <span style={{ color: color.invalid }}>{numberOfInvalidLines}</span> /
-          <span style={{ color: color.valid }}>{numberOfValidLines}</span> /
+    <div className={style.numberOfLines}>
+      <ExpandableText title={`Antall linjer: ${totalNumberOfLines}`}>
+        <div className={style.numberOfLinesPerCategory}>
+          <span style={{ color: color.invalid }}>{numberOfInvalidLines}</span> /{' '}
+          <span style={{ color: color.valid }}>{numberOfValidLines}</span> /{' '}
           <span style={{ color: color.expiring }}>{numberOfExpiringLines}</span>
         </div>
-      )}
+      </ExpandableText>
     </div>
   );
 };

@@ -28,7 +28,6 @@ interface Props {
   selectedValidityCategory: Validity;
   lineStatistics?: LineStatistics;
   exportedLineStatistics?: LineStatistics;
-  providerName?: string; //TODO: Remove
   handleClose?: () => void;
 }
 
@@ -38,6 +37,9 @@ export const LinesValidityProgress = ({
   selectedValidityCategory,
   handleClose,
 }: Props) => {
+  const hasLines = (lineStatistics: LineStatistics) =>
+    lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0 > 0;
+
   return (
     <MuiThemeProvider>
       <>
@@ -52,7 +54,7 @@ export const LinesValidityProgress = ({
         )}
 
         <div className={style.linesListContainer}>
-          {exportedLineStatistics && (
+          {exportedLineStatistics && hasLines(exportedLineStatistics) && (
             <>
               <Heading4>Linjestatus fra NPlan</Heading4>
               <LinesValidityList
@@ -62,7 +64,7 @@ export const LinesValidityProgress = ({
             </>
           )}
 
-          {lineStatistics && (
+          {lineStatistics && hasLines(lineStatistics) && (
             <>
               <Heading4>Linjestatus fra Chouette</Heading4>
               <LinesValidityList

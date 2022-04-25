@@ -19,10 +19,23 @@
 }
 
 .numberOfLines {
-  font-weight: 400;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 60px;
+
+  :global {
+    .eds-expandable-text__trigger {
+      padding-bottom: 0 !important;
+    }
+    .eds-expandable-text__content {
+      padding-left: 0 !important;
+    }
+  }
+}
+
+.numberOfLines > button:focus {
+  box-shadow: none;
 }
 
 .headerContainer {
@@ -35,4 +48,8 @@
 
 .header {
   margin: 0;
+}
+
+.showAllButton {
+  justify-self: flex-end;
 }

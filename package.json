@@ -8,6 +8,7 @@
     "@entur/alert": "0.10.2",
     "@entur/button": "2.8.0",
     "@entur/dropdown": "2.3.0",
+    "@entur/expand": "^3.3.10",
     "@entur/form": "5.3.0",
     "@entur/icons": "3.5.0",
     "@entur/layout": "2.1.4",
