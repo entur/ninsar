@@ -20,39 +20,24 @@ import style from './linesValidityProgress.module.scss';
 import { Heading4 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityList } from './linesValidityList';
-import { IconButton } from '@entur/button';
-import { Tooltip } from '@entur/tooltip';
-import { CloseIcon } from '@entur/icons';
 
 interface Props {
   selectedValidityCategory: Validity;
   lineStatistics?: LineStatistics;
   exportedLineStatistics?: LineStatistics;
-  handleClose?: () => void;
 }
 
 export const LinesValidityProgress = ({
   lineStatistics,
   exportedLineStatistics,
   selectedValidityCategory,
-  handleClose,
 }: Props) => {
   const hasLines = (lineStatistics: LineStatistics) =>
-    lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0 > 0;
+    (lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0) > 0;
 
   return (
     <MuiThemeProvider>
       <>
-        {handleClose && (
-          <div className={style.linesValidityTitleHeader}>
-            <Tooltip placement="bottom" content="Lukk">
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-        )}
-
         <div className={style.linesListContainer}>
           {exportedLineStatistics && hasLines(exportedLineStatistics) && (
             <>

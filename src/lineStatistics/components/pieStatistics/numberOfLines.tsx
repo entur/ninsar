@@ -1,8 +1,8 @@
 import { color } from 'bogu/styles';
 import React from 'react';
-import style from './pieChart.module.scss';
-import { NumberOfLineType } from './pieChart.types';
+import style from './pieStatistics.module.scss';
 import { ExpandableText } from '@entur/expand';
+import { NumberOfLineType } from './pieStatistics.types';
 
 export const NumberOfLines = ({
   numberOfInvalidLines,

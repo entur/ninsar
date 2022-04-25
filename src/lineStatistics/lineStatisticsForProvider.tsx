@@ -3,7 +3,7 @@ import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForPro
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { useProvider } from './apiHooks/useProvider';
 import { BannerAlertBox } from '@entur/alert';
-import { PieChart } from './components/pieChart/pieChart';
+import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import style from './lineStatistics.module.scss';
 import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
@@ -11,6 +11,7 @@ import { Heading3, Heading2 } from '@entur/typography';
 import { validityCategoryLabel } from './lineStatistics.constants';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
+import { Card } from './components/card/card';
 
 interface Props {
   providerId: string;
@@ -63,21 +64,18 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
               {hasLineStatistics(lineStatistics) ||
               hasLineStatistics(exportedLineStatistics) ? (
                 <div className={style.linesStatisticsContainer}>
-                  <div
+                  <Card
                     className={style.lineStatisticsCard}
-                    style={{ flex: '4' }}
+                    subTitle={validityCategoryLabel[selectedValidityCategory]}
                   >
-                    <Heading3>
-                      {validityCategoryLabel[selectedValidityCategory]}
-                    </Heading3>
                     <LinesValidityProgress
                       selectedValidityCategory={selectedValidityCategory}
                       lineStatistics={lineStatistics}
                       exportedLineStatistics={exportedLineStatistics}
                     />
-                  </div>
-                  <div className={style.lineStatisticsCard}>
-                    <PieChart
+                  </Card>
+                  <Card>
+                    <PieStatistics
                       handlePieOnClick={handlePieOnClick}
                       handleShowAllClick={handleShowAll}
                       providerName={provider.name}
@@ -87,7 +85,7 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                       pieWidth={200}
                       pieHeight={300}
                     />
-                  </div>
+                  </Card>
                 </div>
               ) : (
                 <BannerAlertBox title="Fant ingen linjer" variant="info">

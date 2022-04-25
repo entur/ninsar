@@ -4,30 +4,27 @@
   flex-direction: column;
 }
 
+.lineStatisticsForAllProviders {
+  margin: 10px;
+}
+
 .pieStatisticsForAllProviders {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-.pieStatisticsForAllProviders > div{
+.pieStatisticsForAllProviders > div {
   margin: 5px;
   padding: 10px;
 }
 
 .lineStatisticsCard {
-  box-shadow: #d8d8d8 0 1px 6px, #d8d8d8 0 1px 4px;
-  border-radius: 2px;
-  height: fit-content;
+  flex: 4;
 }
 
 .linesStatisticsContainer {
   display: flex;
-}
-
-.linesStatisticsContainer > * {
-  margin: 0 0 10px 10px;
-  padding: 15px;
 }
 
 .heading {

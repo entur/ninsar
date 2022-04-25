@@ -1,5 +1,5 @@
 import React from 'react';
-import { PieChart } from './components/pieChart/pieChart';
+import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import style from './lineStatistics.module.scss';
 import { Provider, Validity } from './lineStatistics.types';
 import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
@@ -35,7 +35,7 @@ export const PieStatisticsForAllProviders = ({
                 )),
           )
           .map((provider, index) => (
-            <PieChart
+            <PieStatistics
               showHeader={true}
               key={'provider-pie' + index}
               providerName={provider.name}

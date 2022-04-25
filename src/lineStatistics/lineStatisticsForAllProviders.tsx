@@ -7,6 +7,9 @@ import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
 import { useExportedLineStatisticsForAllProviders } from './apiHooks/useExportedLineStatisticsForAllProviders';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
+import { Card } from './components/card/card';
+import { validityCategoryLabel } from './lineStatistics.constants';
+import style from './lineStatistics.module.scss';
 
 export const LineStatisticsForAllProviders = () => {
   const { allProviders, allProvidersError } = useAllProviders();
@@ -41,22 +44,25 @@ export const LineStatisticsForAllProviders = () => {
       !exportedLineStatisticsForAllProvidersError);
 
   return (
-    <>
+    <div className={style.lineStatisticsForAllProviders}>
       {selectedProvider ? (
-        <LinesValidityProgress
-          selectedValidityCategory={selectedValidityCategory}
-          lineStatistics={
-            lineStatisticsForAllProviders &&
-            lineStatisticsForAllProviders[selectedProvider.id]
-          }
-          exportedLineStatistics={
-            exportedLineStatisticsForAllProviders &&
-            exportedLineStatisticsForAllProviders[selectedProvider.id]
-          }
-          handleClose={() => {
-            setSelectedProvider(undefined);
-          }}
-        />
+        <Card
+          handleClose={() => setSelectedProvider(undefined)}
+          title={selectedProvider.name}
+          subTitle={validityCategoryLabel[selectedValidityCategory]}
+        >
+          <LinesValidityProgress
+            selectedValidityCategory={selectedValidityCategory}
+            lineStatistics={
+              lineStatisticsForAllProviders &&
+              lineStatisticsForAllProviders[selectedProvider.id]
+            }
+            exportedLineStatistics={
+              exportedLineStatisticsForAllProviders &&
+              exportedLineStatisticsForAllProviders[selectedProvider.id]
+            }
+          />
+        </Card>
       ) : (
         <LoadingLineStatistics
           isLoading={isLoading}
@@ -87,6 +93,6 @@ export const LineStatisticsForAllProviders = () => {
           </div>
         </LoadingLineStatistics>
       )}
-    </>
+    </div>
   );
 };

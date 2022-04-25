@@ -1,9 +1,9 @@
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import React from 'react';
-import style from './pieChart.module.scss';
+import style from './pieStatistics.module.scss';
 import { NumberOfLines } from './numberOfLines';
-import { generatePieChartData, pieChartOptions } from './pieChart.data';
-import { NumberOfLineType } from './pieChart.types';
+import { generatePieChartData, pieChartOptions } from './pieStatistics.data';
+import { NumberOfLineType } from './pieStatistics.types';
 import { Pie } from 'react-chartjs-2';
 import {
   ActiveElement,
@@ -15,7 +15,7 @@ import {
   Legend,
   Tooltip,
 } from 'chart.js';
-import { TertiaryButton } from '@entur/button';
+import { Button } from '@entur/button';
 import { Heading6 } from '@entur/typography';
 
 Chart.register([ArcElement, Tooltip, Legend]);
@@ -31,7 +31,7 @@ interface Props {
   pieHeight: number;
 }
 
-export const PieChart = ({
+export const PieStatistics = ({
   providerName,
   handlePieOnClick,
   handleShowAllClick,
@@ -84,7 +84,14 @@ export const PieChart = ({
 
       <NumberOfLines {...numberOfLinesType} />
 
-      <TertiaryButton onClick={handleShowAllClick}>Vis alle</TertiaryButton>
+      <Button
+        width="fluid"
+        variant="tertiary"
+        size="medium"
+        onClick={handleShowAllClick}
+      >
+        Vis alle
+      </Button>
     </div>
   );
 };

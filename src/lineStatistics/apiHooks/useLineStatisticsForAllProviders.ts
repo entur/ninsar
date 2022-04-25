@@ -4,6 +4,7 @@ import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatist
 import {
   FetchError,
   LineStatisticsPerProviderId,
+  LineStatisticsResponse,
 } from './lineStatistics.response.types';
 
 export const useLineStatisticsForAllProviders = () => {
@@ -29,9 +30,12 @@ export const useLineStatisticsForAllProviders = () => {
         const lineStatisticsResponse = await response.json();
         let lineStatisticsPerProviderId: LineStatisticsPerProviderId = {};
         for (const providerId in lineStatisticsResponse) {
-          let lineStatisticsResponseForProvider =
+          const lineStatisticsResponseForProvider: LineStatisticsResponse =
             lineStatisticsResponse[providerId];
-          if (lineStatisticsResponseForProvider) {
+          if (
+            lineStatisticsResponseForProvider &&
+            lineStatisticsResponseForProvider.publicLines.length > 0
+          ) {
             const formatted = calculateLineStatistics(
               lineStatisticsResponseForProvider,
             );

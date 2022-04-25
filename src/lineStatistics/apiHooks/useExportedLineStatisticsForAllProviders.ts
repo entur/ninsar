@@ -76,15 +76,19 @@ export const useExportedLineStatisticsForAllProviders = (
 
         let lineStatisticsPerProviderId: LineStatisticsPerProviderId = {};
         for (const providerCode in publicLinesPerProviderCode) {
-          const formatted = calculateExportedLineStatistics({
-            ...response.lineStatistics,
-            publicLines: publicLinesPerProviderCode[providerCode],
-          });
-          lineStatisticsPerProviderId = {
-            ...lineStatisticsPerProviderId,
-            [providers?.find((provider) => provider.code === providerCode)
-              ?.id ?? providerCode]: formatted,
-          };
+          const publicLinesForProvider =
+            publicLinesPerProviderCode[providerCode];
+          if (publicLinesForProvider.length > 0) {
+            const formatted = calculateExportedLineStatistics({
+              ...response.lineStatistics,
+              publicLines: publicLinesForProvider,
+            });
+            lineStatisticsPerProviderId = {
+              ...lineStatisticsPerProviderId,
+              [providers?.find((provider) => provider.code === providerCode)
+                ?.id ?? providerCode]: formatted,
+            };
+          }
         }
         setExportedLineStatisticsForAllProviders(lineStatisticsPerProviderId);
         setExportedLineStatisticsForAllProvidersError(undefined);

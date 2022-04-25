@@ -1,5 +1,5 @@
 import { color } from 'bogu/styles';
-import { NumberOfLineType } from './pieChart.types';
+import { NumberOfLineType } from './pieStatistics.types';
 import { Validity } from '../../lineStatistics.types';
 
 export const generatePieChartData = ({
