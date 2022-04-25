@@ -7,7 +7,7 @@ import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import style from './lineStatistics.module.scss';
 import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
-import { Heading3, Heading2 } from '@entur/typography';
+import { Heading2 } from '@entur/typography';
 import { validityCategoryLabel } from './lineStatistics.constants';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
