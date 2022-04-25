@@ -16,6 +16,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import { TertiaryButton } from '@entur/button';
+import { Heading6 } from '@entur/typography';
 
 Chart.register([ArcElement, Tooltip, Legend]);
 
@@ -26,7 +27,8 @@ interface Props {
   lineStatistics?: LineStatistics;
   exportedLineStatistics?: LineStatistics;
   providerName: string;
-  maintainAspectRatio?: boolean;
+  pieWidth: number;
+  pieHeight: number;
 }
 
 export const PieChart = ({
@@ -36,7 +38,8 @@ export const PieChart = ({
   showHeader,
   lineStatistics,
   exportedLineStatistics,
-  maintainAspectRatio = false,
+  pieHeight,
+  pieWidth,
 }: Props) => {
   const numberOfLinesForValidityCategory = (validity: Validity) =>
     (lineStatistics?.validityCategories.get(validity)?.length ?? 0) +
@@ -51,36 +54,37 @@ export const PieChart = ({
 
   return (
     <div className={style.pieChartContainer}>
-      {showHeader && <div className={style.header}>{providerName}</div>}
-      <Pie
-        style={{ marginTop: 0 }}
-        data={generatePieChartData(numberOfLinesType)}
-        width={100}
-        height={100}
-        options={{
-          ...pieChartOptions,
-          maintainAspectRatio: maintainAspectRatio,
-          onClick(
-            event: ChartEvent,
-            elements: ActiveElement[],
-            chart: Chart<ChartType, DefaultDataPoint<ChartType>, Validity>,
-          ) {
-            chart.data.labels &&
-              chart.data.labels.length > 0 &&
-              elements.length > 0 &&
-              handlePieOnClick(chart.data.labels[elements[0].index]);
-          },
-        }}
-      />
+      {showHeader && (
+        <div className={style.headerContainer}>
+          <Heading6 className={style.header}>{providerName}</Heading6>
+        </div>
+      )}
+      <div style={{ width: `${pieWidth}px`, height: `${pieHeight}px` }}>
+        <Pie
+          style={{ marginTop: 0 }}
+          data={generatePieChartData(numberOfLinesType)}
+          width={100}
+          height={100}
+          options={{
+            ...pieChartOptions,
+            maintainAspectRatio: false,
+            onClick(
+              event: ChartEvent,
+              elements: ActiveElement[],
+              chart: Chart<ChartType, DefaultDataPoint<ChartType>, Validity>,
+            ) {
+              chart.data.labels &&
+                chart.data.labels.length > 0 &&
+                elements.length > 0 &&
+                handlePieOnClick(chart.data.labels[elements[0].index]);
+            },
+          }}
+        />
+      </div>
 
       <NumberOfLines {...numberOfLinesType} />
 
-      <TertiaryButton
-        style={{ paddingTop: '7px' }}
-        onClick={handleShowAllClick}
-      >
-        Show all
-      </TertiaryButton>
+      <TertiaryButton className={style.showAllButton} onClick={handleShowAllClick}>Vis alle</TertiaryButton>
     </div>
   );
 };

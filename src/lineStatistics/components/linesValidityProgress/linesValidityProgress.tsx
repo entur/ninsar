@@ -17,7 +17,7 @@
 import React from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import style from './linesValidityProgress.module.scss';
-import { Heading3, Heading4 } from '@entur/typography';
+import { Heading4 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityList } from './linesValidityList';
 import { IconButton } from '@entur/button';
@@ -28,47 +28,33 @@ interface Props {
   selectedValidityCategory: Validity;
   lineStatistics?: LineStatistics;
   exportedLineStatistics?: LineStatistics;
-  providerName: string;
+  providerName?: string; //TODO: Remove
   handleClose?: () => void;
 }
 
 export const LinesValidityProgress = ({
   lineStatistics,
   exportedLineStatistics,
-  providerName,
   selectedValidityCategory,
   handleClose,
 }: Props) => {
-  const labelForValidityCategory = {
-    [Validity.INVALID]: 'Invalid lines',
-    [Validity.VALID]: 'Valid lines',
-    [Validity.EXPIRING]: 'Expiring lines',
-    [Validity.ALL]: 'all',
-  };
-
   return (
     <MuiThemeProvider>
-      <div className={style.linesValidity}>
-        <div className={style.linesValidityTitleHeader}>
-          <Heading3 className={style.providerTitle}>
-            {providerName} -{' '}
-            {labelForValidityCategory[selectedValidityCategory]}
-          </Heading3>
-          {handleClose && (
+      <>
+        {handleClose && (
+          <div className={style.linesValidityTitleHeader}>
             <Tooltip placement="bottom" content="Lukk">
               <IconButton onClick={handleClose}>
                 <CloseIcon />
               </IconButton>
             </Tooltip>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className={style.linesListContainer}>
           {exportedLineStatistics && (
             <>
-              <Heading4 className={style.statisticsTitle}>
-                Line Statistics from NPlan
-              </Heading4>
+              <Heading4>Linjestatus fra NPlan</Heading4>
               <LinesValidityList
                 lineStatistics={exportedLineStatistics}
                 selectedValidityCategory={selectedValidityCategory}
@@ -78,9 +64,7 @@ export const LinesValidityProgress = ({
 
           {lineStatistics && (
             <>
-              <Heading4 className={style.statisticsTitle}>
-                Line Statistics from Chouette
-              </Heading4>
+              <Heading4>Linjestatus fra Chouette</Heading4>
               <LinesValidityList
                 lineStatistics={lineStatistics}
                 selectedValidityCategory={selectedValidityCategory}
@@ -88,7 +72,7 @@ export const LinesValidityProgress = ({
             </>
           )}
         </div>
-      </div>
+      </>
     </MuiThemeProvider>
   );
 };

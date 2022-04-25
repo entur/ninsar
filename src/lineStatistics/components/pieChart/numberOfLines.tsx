@@ -17,7 +17,7 @@ export const NumberOfLines = ({
       style={{ color: color.font.info2 }}
       className={style.numberOfLines}
     >
-      <span style={{ marginRight: 5 }}>Number of lines:</span>
+      <span style={{ marginRight: 5 }}>Antall linjer:</span>
       {showTotal ? (
         totalNumberOfLines
       ) : (

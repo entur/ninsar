@@ -20,7 +20,7 @@ export const PieStatisticsForAllProviders = ({
   handlePieOnClick,
 }: Props) => {
   return (
-    <div className={style.linesStatisticsForAllProviders}>
+    <div className={style.pieStatisticsForAllProviders}>
       {(lineStatistics || exportedLineStatistics) &&
         providers
           .filter(
@@ -47,7 +47,8 @@ export const PieStatisticsForAllProviders = ({
               exportedLineStatistics={
                 exportedLineStatistics && exportedLineStatistics[provider.id]
               }
-              maintainAspectRatio={true}
+              pieWidth={150}
+              pieHeight={250}
             />
           ))}
     </div>

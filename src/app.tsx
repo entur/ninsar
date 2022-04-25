@@ -1,9 +1,9 @@
 import React from 'react';
 import './app.module.scss';
 import { LineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
-import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
 import { AppProvider } from './appProvider';
 import { NinsarPayload } from './index';
+import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
 
 export function App(props: NinsarPayload) {
   return (

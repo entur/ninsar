@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { useProvider } from './apiHooks/useProvider';
-import { SmallAlertBox } from '@entur/alert';
+import { BannerAlertBox, SmallAlertBox } from '@entur/alert';
 import { PieChart } from './components/pieChart/pieChart';
 import style from './lineStatistics.module.scss';
-import { Loader } from '@entur/loader';
-import { Validity } from './lineStatistics.types';
+import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
+import { Heading3, Heading2 } from '@entur/typography';
+import { validityCategoryLabel } from './lineStatistics.constants';
+import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
+import { LoadingLineStatistics } from './components/loadingLineStatistics';
 
 interface Props {
   providerId: string;
@@ -36,51 +39,66 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
     (!lineStatistics && !lineStatisticsError) ||
     (!exportedLineStatistics && !exportedLineStatisticsError);
 
+  const hasLineStatistics = (lineStatistics?: LineStatistics): boolean =>
+    !!(lineStatistics && lineStatistics.linesMap[providerId]);
+
   return (
-    <>
-      <div className={style.linesStatisticsForProvider}>
-        {isLoading ? (
-          <Loader style={{ width: '100%' }}>Laster</Loader>
-        ) : providerError ||
-          (lineStatisticsError && exportedLineStatisticsError) ? (
-          <SmallAlertBox variant="error">
-            Kunne ikke laste inn dataene. Prøv igjen senere.
-          </SmallAlertBox>
-        ) : (
-          <div className={style.lineStatisticsErrorContainer}>
-            {(lineStatisticsError && !exportedLineStatisticsError && (
-              <SmallAlertBox variant="error">
-                Kunne ikke laste inn linjestatistikk for Operatørpotalen. Viser
-                kun linjestatistikk for Nplan.
-              </SmallAlertBox>
-            )) ||
-              (!lineStatisticsError && exportedLineStatisticsError && (
-                <SmallAlertBox variant="error">
-                  Kunne ikke laste inn linjestatistikk for Nplan. Viser kun
-                  linjestatistikk for Operatørpotalen.
-                </SmallAlertBox>
-              ))}
-            {lineStatistics && provider && (
-              <div className={style.linesStatisticsContainer}>
-                <LinesValidityProgress
-                  selectedValidityCategory={selectedValidityCategory}
-                  lineStatistics={lineStatistics}
-                  exportedLineStatistics={exportedLineStatistics}
-                  providerName={provider.name}
-                />
-                <PieChart
-                  handlePieOnClick={handlePieOnClick}
-                  handleShowAllClick={handleShowAll}
-                  providerName={provider.name}
-                  showHeader={false}
-                  lineStatistics={lineStatistics}
-                  exportedLineStatistics={exportedLineStatistics}
-                />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </>
+    <div className={style.linesStatisticsForProvider}>
+      <LoadingLineStatistics
+        isLoading={isLoading}
+        lineStatisticsError={lineStatisticsError}
+        exportedLineStatisticsError={exportedLineStatisticsError}
+        providerError={providerError}
+      >
+        <>
+          {provider && (
+            <>
+              <IncompleteLineStatisticsError
+                lineStatisticsError={lineStatisticsError}
+                exportedLineStatisticsError={exportedLineStatisticsError}
+              />
+              <Heading2 className={style.providerTitle}>
+                {provider.name}
+              </Heading2>
+              {hasLineStatistics(lineStatistics) ||
+              hasLineStatistics(exportedLineStatistics) ? (
+                <div className={style.linesStatisticsContainer}>
+                  <div
+                    className={style.lineStatisticsCard}
+                    style={{ flex: '4' }}
+                  >
+                    <Heading3>
+                      {validityCategoryLabel[selectedValidityCategory]}
+                    </Heading3>
+                    <LinesValidityProgress
+                      selectedValidityCategory={selectedValidityCategory}
+                      lineStatistics={lineStatistics}
+                      exportedLineStatistics={exportedLineStatistics}
+                    />
+                  </div>
+                  <div className={style.lineStatisticsCard}>
+                    <PieChart
+                      handlePieOnClick={handlePieOnClick}
+                      handleShowAllClick={handleShowAll}
+                      providerName={provider.name}
+                      showHeader={false}
+                      lineStatistics={lineStatistics}
+                      exportedLineStatistics={exportedLineStatistics}
+                      pieWidth={200}
+                      pieHeight={300}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <BannerAlertBox title="Fant ingen linjer" variant="info">
+                  Last opp nytt datasett i Operatørportalen eller opprett linjer
+                  i Nplan.
+                </BannerAlertBox>
+              )}
+            </>
+          )}
+        </>
+      </LoadingLineStatistics>
+    </div>
   );
 };

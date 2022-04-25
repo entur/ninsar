@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import { sortLines } from './sorting/sortingUtilities';
 import { LinesValidityListHeader } from './linesValidityListHeader';
+import { validityCategoryLabel } from '../../lineStatistics.constants';
 
 interface Props {
   selectedValidityCategory: Validity;
@@ -86,7 +87,7 @@ export const LinesValidityList = ({
   );
 
   return (
-    <>
+    <div className={style.linesValidityListContainer}>
       <LinesValidityListHeader
         startDate={lineStatistics.startDate}
         validFromDate={lineStatistics.requiredValidityDate}
@@ -98,7 +99,7 @@ export const LinesValidityList = ({
         <div style={{ marginLeft: '20px' }}>
           {selectedValidityCategory === Validity.ALL
             ? 'Fant ingen linjer'
-            : `Fant ingen ${selectedValidityCategory} linjer`}
+            : `Fant ingen ${validityCategoryLabel[selectedValidityCategory]}`}
         </div>
       ) : (
         <List>
@@ -129,6 +130,6 @@ export const LinesValidityList = ({
           ))}
         </List>
       )}
-    </>
+    </div>
   );
 };

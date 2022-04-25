@@ -1,29 +1,33 @@
 .linesStatisticsForProvider {
   display: flex;
+  margin: 10px;
+  flex-direction: column;
 }
 
-.linesStatisticsForAllProviders {
+.pieStatisticsForAllProviders {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
+.pieStatisticsForAllProviders > div{
+  margin: 5px;
+  padding: 10px;
+}
+
+.lineStatisticsCard {
+  box-shadow: #d8d8d8 0 1px 6px, #d8d8d8 0 1px 4px;
+  border-radius: 2px;
+  height: fit-content;
+}
+
 .linesStatisticsContainer {
-  width: 100%;
   display: flex;
-  flex-direction: row;
-  margin: 20px;
 }
 
-div.linesStatisticsContainer > div {
-  margin: 10px;
-  padding: 20px;
-}
-
-.lineStatisticsErrorContainer {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.linesStatisticsContainer > * {
+  margin: 0 0 10px 10px;
+  padding: 15px;
 }
 
 .heading {
