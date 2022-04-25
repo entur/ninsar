@@ -41,7 +41,10 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
     (!exportedLineStatistics && !exportedLineStatisticsError);
 
   const hasLineStatistics = (lineStatistics?: LineStatistics): boolean =>
-    !!(lineStatistics && lineStatistics.linesMap[providerId]);
+    !!(
+      lineStatistics &&
+      (lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0) > 0
+    );
 
   return (
     <div className={style.linesStatisticsForProvider}>
