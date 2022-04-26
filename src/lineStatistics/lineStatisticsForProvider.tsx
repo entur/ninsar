@@ -13,7 +13,8 @@ import { IncompleteLineStatisticsError } from './components/incompleteLineStatis
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { useLocale } from '../appProvider';
-import {useLatestDeliveryDate} from "./apiHooks/useLatestDeliveryDate";
+import { useLatestDeliveryDate } from './apiHooks/useLatestDeliveryDate';
+import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
 
 interface Props {
   providerId: string;
@@ -83,18 +84,21 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                       exportedLineStatistics={exportedLineStatistics}
                     />
                   </Card>
-                  <Card>
-                    <PieStatistics
-                      handlePieOnClick={handlePieOnClick}
-                      handleShowAllClick={handleShowAll}
-                      providerName={provider.name}
-                      showHeader={false}
-                      lineStatistics={lineStatistics}
-                      exportedLineStatistics={exportedLineStatistics}
-                      pieWidth={200}
-                      pieHeight={300}
-                    />
-                  </Card>
+                  <div className={style.rightPanel}>
+                    <Card>
+                      <PieStatistics
+                        handlePieOnClick={handlePieOnClick}
+                        handleShowAllClick={handleShowAll}
+                        providerName={provider.name}
+                        showHeader={false}
+                        lineStatistics={lineStatistics}
+                        exportedLineStatistics={exportedLineStatistics}
+                        pieWidth={200}
+                        pieHeight={300}
+                      />
+                    </Card>
+                    <LatestDeliveryDate providerId={providerId} />
+                  </div>
                 </div>
               ) : (
                 <BannerAlertBox title="Fant ingen linjer" variant="info">

@@ -25,7 +25,7 @@ export const Card = ({
     <>
       {handleClose && (
         <div className={style.closeable}>
-          <Heading2>{title}</Heading2>
+          {title && <Heading2>{title}</Heading2>}
           <Tooltip placement="bottom" content="Lukk">
             <IconButton onClick={handleClose}>
               <CloseIcon />
@@ -34,7 +34,7 @@ export const Card = ({
         </div>
       )}
       <div className={classnames(style.card, className)}>
-        <Heading3>{subTitle}</Heading3>
+        {subTitle && <Heading3>{subTitle}</Heading3>}
         {children}
       </div>
     </>

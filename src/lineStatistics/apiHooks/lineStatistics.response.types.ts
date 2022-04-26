@@ -57,3 +57,9 @@ export interface ProviderResponse {
     referential: string;
   };
 }
+
+export interface LatestDeliveryDateResponse {
+  state: string;
+  date: number;
+  fileName: string;
+}

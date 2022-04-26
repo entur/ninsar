@@ -1,9 +1,8 @@
-import { FetchError } from '../apiHooks/lineStatistics.response.types';
-import { Loader } from '@entur/loader';
-import { SmallAlertBox } from '@entur/alert';
 import React, { ReactElement } from 'react';
+import { FetchError } from '../apiHooks/lineStatistics.response.types';
 import { useLocale } from '../../appProvider';
 import { errorText } from '../lineStatistics.constants';
+import { LoadingOrFailed } from './LoadingOrFailed';
 
 interface Props {
   providerError?: FetchError;
@@ -22,17 +21,14 @@ export const LoadingLineStatistics = ({
 }: Props) => {
   const locale = useLocale();
   return (
-    <>
-      {isLoading ? (
-        <Loader style={{ width: '100%' }}>Laster</Loader>
-      ) : providerError ||
-        (lineStatisticsError && exportedLineStatisticsError) ? (
-        <SmallAlertBox variant="error">
-          {errorText(locale).failedToLoadData}
-        </SmallAlertBox>
-      ) : (
-        children
-      )}
-    </>
+    <LoadingOrFailed
+      errorText={errorText(locale).failedToLoadData}
+      isLoading={isLoading}
+      error={
+        providerError || (lineStatisticsError && exportedLineStatisticsError)
+      }
+    >
+      {children}
+    </LoadingOrFailed>
   );
 };

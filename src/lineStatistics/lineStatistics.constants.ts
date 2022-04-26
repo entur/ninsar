@@ -28,6 +28,11 @@ export const errorText = (locale?: Locale) => ({
     'Could not load data. Try again later.',
     locale,
   ),
+  failedToLoadLatestDate: textForLocale(
+    'Oops!! Noen gikk galt.',
+    'Oops!! Something went wrong.',
+    locale,
+  ),
 });
 
 export const infoText = (locale?: Locale) => ({
@@ -51,7 +56,11 @@ export const titleText = (locale?: Locale) => ({
     locale,
   ),
   numberOfLines: textForLocale('Antall linjer', 'Number of lines', locale),
-  showAll: textForLocale('Vis alle', 'Show all', locale)
+  showAll: textForLocale('Vis alle', 'Show all', locale),
+  latestDeliveryDate: textForLocale(
+    'Dato for siste leveranse',
+    'Last Delivery date',
+  ),
 });
 
 const textForLocale = (
