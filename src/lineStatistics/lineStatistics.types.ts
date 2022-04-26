@@ -19,7 +19,6 @@ export interface Provider {
 export interface PeriodValidity extends Period {
   timelineEndPosition: number;
   timelineStartPosition: number;
-  validationLevel?: Validity; // TODO: Trenger vi det ?
 }
 
 export enum Validity {
@@ -35,14 +34,11 @@ export interface Period {
 }
 
 export interface Timetable {
-  id: number; // TODO: Trenger vi det
   objectId: string;
   periods: Period[] | PeriodValidity[];
 }
 
 export interface Line {
-  id?: number; // TODO: Trenger vi det
-  name?: string; // TODO: Trenger vi det
   timetables: Timetable[];
 }
 
@@ -55,4 +51,9 @@ export interface PublicLine {
 
 export interface PublicLineValidity extends PublicLine {
   daysValid: number;
+}
+
+export enum Locale {
+  NO = 'NO',
+  EN = 'EN',
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
 import { Provider, Validity } from './lineStatistics.types';
@@ -10,8 +10,10 @@ import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { validityCategoryLabel } from './lineStatistics.constants';
 import style from './lineStatistics.module.scss';
+import { useLocale } from '../appProvider';
 
 export const LineStatisticsForAllProviders = () => {
+  const locale = useLocale();
   const { allProviders, allProvidersError } = useAllProviders();
   const { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError } =
     useLineStatisticsForAllProviders();
@@ -49,7 +51,7 @@ export const LineStatisticsForAllProviders = () => {
         <Card
           handleClose={() => setSelectedProvider(undefined)}
           title={selectedProvider.name}
-          subTitle={validityCategoryLabel[selectedValidityCategory]}
+          subTitle={validityCategoryLabel(locale)[selectedValidityCategory]}
         >
           <LinesValidityProgress
             selectedValidityCategory={selectedValidityCategory}

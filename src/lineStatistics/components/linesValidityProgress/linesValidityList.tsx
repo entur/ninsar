@@ -1,7 +1,7 @@
+import React, { useEffect, useState } from 'react';
 import style from './linesValidityProgress.module.scss';
 import { List, ListItem } from 'material-ui/List';
 import { HeaderTimeline, Timeline } from 'bogu';
-import React, { useEffect, useState } from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import { sortLines } from './sorting/sortingUtilities';
 import { LinesValidityListHeader } from './linesValidityListHeader';
@@ -99,7 +99,7 @@ export const LinesValidityList = ({
         <div style={{ marginLeft: '20px' }}>
           {selectedValidityCategory === Validity.ALL
             ? 'Fant ingen linjer'
-            : `Fant ingen ${validityCategoryLabel[selectedValidityCategory]}`}
+            : `Fant ingen ${validityCategoryLabel()[selectedValidityCategory]}`}
         </div>
       ) : (
         <List>

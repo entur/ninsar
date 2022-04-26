@@ -67,7 +67,6 @@ export const calculateExportedLineStatistics = (
         to: publicLine.operatingPeriodTo,
         timelineStartPosition,
         timelineEndPosition,
-        validationLevel,
       };
 
       validityCategoryMap.set(validationLevel, [

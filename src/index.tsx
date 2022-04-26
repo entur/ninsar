@@ -5,9 +5,11 @@ import { App } from './app';
 import { registerMicroFrontend, DefaultPayload } from '@entur/micro-frontend';
 import { BrowserRouter } from 'react-router-dom';
 import { AppStandalone } from './appStandalone';
+import { Locale } from './lineStatistics/lineStatistics.types';
 
 export interface NinsarPayload extends DefaultPayload {
   providerId?: string;
+  locale?: Locale;
 }
 
 registerMicroFrontend<NinsarPayload>({

@@ -5,19 +5,23 @@ import { useProvider } from './apiHooks/useProvider';
 import { BannerAlertBox } from '@entur/alert';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import style from './lineStatistics.module.scss';
-import { LineStatistics, Validity } from './lineStatistics.types';
+import { LineStatistics, Locale, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
 import { Heading2 } from '@entur/typography';
-import { validityCategoryLabel } from './lineStatistics.constants';
+import { infoText, validityCategoryLabel } from './lineStatistics.constants';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
+import { useLocale } from '../appProvider';
+import {useLatestDeliveryDate} from "./apiHooks/useLatestDeliveryDate";
 
 interface Props {
   providerId: string;
 }
 
 export const LineStatisticsForProvider = ({ providerId }: Props) => {
+  useLatestDeliveryDate(providerId);
+  const locale = useLocale();
   const { lineStatistics, lineStatisticsError } =
     useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);
@@ -69,7 +73,9 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 <div className={style.linesStatisticsContainer}>
                   <Card
                     className={style.lineStatisticsCard}
-                    subTitle={validityCategoryLabel[selectedValidityCategory]}
+                    subTitle={
+                      validityCategoryLabel(locale)[selectedValidityCategory]
+                    }
                   >
                     <LinesValidityProgress
                       selectedValidityCategory={selectedValidityCategory}
@@ -92,8 +98,7 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 </div>
               ) : (
                 <BannerAlertBox title="Fant ingen linjer" variant="info">
-                  Last opp nytt datasett i Operatørportalen eller opprett linjer
-                  i Nplan.
+                  {infoText(locale).noLinesFound}
                 </BannerAlertBox>
               )}
             </>

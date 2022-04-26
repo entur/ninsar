@@ -1,7 +1,9 @@
+import React from 'react';
 import { FetchError } from '../../apiHooks/lineStatistics.response.types';
 import style from './incompleteLineStatisticsError.module.scss';
 import { SmallAlertBox } from '@entur/alert';
-import React from 'react';
+import { errorText } from '../../lineStatistics.constants';
+import { useLocale } from '../../../appProvider';
 
 interface Props {
   lineStatisticsError?: FetchError;
@@ -11,24 +13,25 @@ interface Props {
 export const IncompleteLineStatisticsError = ({
   lineStatisticsError,
   exportedLineStatisticsError,
-}: Props) => (
-  <>
-    {lineStatisticsError ||
-      (exportedLineStatisticsError && (
-        <div className={style.lineStatisticsErrorContainer}>
-          {(lineStatisticsError && !exportedLineStatisticsError && (
-            <SmallAlertBox variant="error">
-              Kunne ikke laste inn linjestatistikk for Operatørpotalen. Viser
-              kun linjestatistikk for Nplan.
-            </SmallAlertBox>
-          )) ||
-            (!lineStatisticsError && exportedLineStatisticsError && (
+}: Props) => {
+  const locale = useLocale();
+  return (
+    <>
+      {lineStatisticsError ||
+        (exportedLineStatisticsError && (
+          <div className={style.lineStatisticsErrorContainer}>
+            {(lineStatisticsError && !exportedLineStatisticsError && (
               <SmallAlertBox variant="error">
-                Kunne ikke laste inn linjestatistikk for Nplan. Viser kun
-                linjestatistikk for Operatørpotalen.
+                {errorText(locale).missingLineStatisticsFromOperatorPortal}
               </SmallAlertBox>
-            ))}
-        </div>
-      ))}
-  </>
-);
+            )) ||
+              (!lineStatisticsError && exportedLineStatisticsError && (
+                <SmallAlertBox variant="error">
+                  {errorText(locale).missingLineStatisticsFromNplan}
+                </SmallAlertBox>
+              ))}
+          </div>
+        ))}
+    </>
+  );
+};

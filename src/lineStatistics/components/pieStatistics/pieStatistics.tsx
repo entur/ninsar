@@ -17,6 +17,8 @@ import {
 } from 'chart.js';
 import { Button } from '@entur/button';
 import { Heading6 } from '@entur/typography';
+import { titleText } from '../../lineStatistics.constants';
+import { useLocale } from '../../../appProvider';
 
 Chart.register([ArcElement, Tooltip, Legend]);
 
@@ -41,6 +43,7 @@ export const PieStatistics = ({
   pieHeight,
   pieWidth,
 }: Props) => {
+  const locale = useLocale();
   const numberOfLinesForValidityCategory = (validity: Validity) =>
     (lineStatistics?.validityCategories.get(validity)?.length ?? 0) +
     (exportedLineStatistics?.validityCategories.get(validity)?.length ?? 0);
@@ -90,7 +93,7 @@ export const PieStatistics = ({
         size="medium"
         onClick={handleShowAllClick}
       >
-        Vis alle
+        {titleText(locale).showAll}
       </Button>
     </div>
   );

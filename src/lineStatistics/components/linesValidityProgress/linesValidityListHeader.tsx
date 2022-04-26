@@ -1,6 +1,8 @@
 import style from './linesValidityProgress.module.scss';
 import React from 'react';
 import { sortIcon } from './sorting/sortIcons';
+import { titleText } from '../../lineStatistics.constants';
+import { useLocale } from '../../../appProvider';
 
 interface Props {
   startDate: string;
@@ -17,12 +19,13 @@ export const LinesValidityListHeader = ({
   sorting,
   changeSorting,
 }: Props) => {
+  const locale = useLocale();
   return (
     <div className={style.headerContainer}>
       <div
         className={style.sortIconStyle}
         onClick={changeSorting}
-        title="Sort lines"
+        title={titleText(locale).sortLines}
       >
         {sortIcon(sorting)}
       </div>

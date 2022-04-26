@@ -20,6 +20,8 @@ import style from './linesValidityProgress.module.scss';
 import { Heading4 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityList } from './linesValidityList';
+import { useLocale } from '../../../appProvider';
+import { titleText } from '../../lineStatistics.constants';
 
 interface Props {
   selectedValidityCategory: Validity;
@@ -32,34 +34,33 @@ export const LinesValidityProgress = ({
   exportedLineStatistics,
   selectedValidityCategory,
 }: Props) => {
+  const locale = useLocale();
   const hasLines = (lineStatistics: LineStatistics) =>
     (lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0) > 0;
 
   return (
     <MuiThemeProvider>
-      <>
-        <div className={style.linesListContainer}>
-          {exportedLineStatistics && hasLines(exportedLineStatistics) && (
-            <>
-              <Heading4>Linjestatus fra NPlan</Heading4>
-              <LinesValidityList
-                lineStatistics={exportedLineStatistics}
-                selectedValidityCategory={selectedValidityCategory}
-              />
-            </>
-          )}
+      <div className={style.linesListContainer}>
+        {exportedLineStatistics && hasLines(exportedLineStatistics) && (
+          <>
+            <Heading4>{titleText(locale).lineStatisticsFromNplan}</Heading4>
+            <LinesValidityList
+              lineStatistics={exportedLineStatistics}
+              selectedValidityCategory={selectedValidityCategory}
+            />
+          </>
+        )}
 
-          {lineStatistics && hasLines(lineStatistics) && (
-            <>
-              <Heading4>Linjestatus fra Chouette</Heading4>
-              <LinesValidityList
-                lineStatistics={lineStatistics}
-                selectedValidityCategory={selectedValidityCategory}
-              />
-            </>
-          )}
-        </div>
-      </>
+        {lineStatistics && hasLines(lineStatistics) && (
+          <>
+            <Heading4>{titleText(locale).lineStatisticsFromChouette}</Heading4>
+            <LinesValidityList
+              lineStatistics={lineStatistics}
+              selectedValidityCategory={selectedValidityCategory}
+            />
+          </>
+        )}
+      </div>
     </MuiThemeProvider>
   );
 };
