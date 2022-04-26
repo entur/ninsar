@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
 import { Provider, Validity } from './lineStatistics.types';

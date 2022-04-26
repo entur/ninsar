@@ -1,5 +1,4 @@
 import { Locale, Validity } from './lineStatistics.types';
-import { locale } from 'moment';
 
 export const validityCategoryLabel = (locale?: Locale) => ({
   [Validity.INVALID]: textForLocale('Utgåtte linjer', 'Invalid lines', locale),

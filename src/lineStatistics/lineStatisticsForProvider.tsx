@@ -4,8 +4,7 @@ import { LinesValidityProgress } from './components/linesValidityProgress/linesV
 import { useProvider } from './apiHooks/useProvider';
 import { BannerAlertBox } from '@entur/alert';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
-import style from './lineStatistics.module.scss';
-import { LineStatistics, Locale, Validity } from './lineStatistics.types';
+import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
 import { Heading2 } from '@entur/typography';
 import { infoText, validityCategoryLabel } from './lineStatistics.constants';
@@ -15,6 +14,7 @@ import { Card } from './components/card/card';
 import { useLocale } from '../appProvider';
 import { useLatestDeliveryDate } from './apiHooks/useLatestDeliveryDate';
 import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
+import style from './lineStatistics.module.scss';
 
 interface Props {
   providerId: string;
