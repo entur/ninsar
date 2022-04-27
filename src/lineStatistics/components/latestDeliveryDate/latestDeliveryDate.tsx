@@ -20,7 +20,7 @@ export const LatestDeliveryDate = ({ providerId }: Props) => {
       <LoadingOrFailed
         errorText={errorText(locale).failedToLoadLatestDate}
         isLoading={!latestDeliveryDate && !latestDeliveryDateError}
-        error={latestDeliveryDateError}
+        error={!!latestDeliveryDateError}
       >
         <Heading3>{latestDeliveryDate}</Heading3>
       </LoadingOrFailed>

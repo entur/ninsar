@@ -41,6 +41,7 @@ export const useExportedLineStatisticsForAllProviders = (
             dayTypeNetexId
             operatingPeriodTo
             operatingPeriodFrom
+            serviceJourneyName
           }
         }
       }

@@ -58,7 +58,11 @@ export const titleText = (locale?: Locale) => ({
   showAll: textForLocale('Vis alle', 'Show all', locale),
   latestDeliveryDate: textForLocale(
     'Dato for siste leveranse',
-    'Last Delivery date',
+    'Latest Delivery date',
+  ),
+  daysToFirstExpiringLine: textForLocale(
+    'Dager til første utgående linje',
+    'Days to first outgoing line',
   ),
 });
 

@@ -4,7 +4,7 @@ import { SmallAlertBox } from '@entur/alert';
 import React, { ReactElement } from 'react';
 
 interface Props {
-  error?: FetchError;
+  error: boolean;
   errorText: string;
   children: ReactElement | ReactElement[];
   isLoading: boolean;

@@ -33,6 +33,7 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
             dayTypeNetexId,
             operatingPeriodTo,
             operatingPeriodFrom
+            serviceJourneyName
           }
         }
       }

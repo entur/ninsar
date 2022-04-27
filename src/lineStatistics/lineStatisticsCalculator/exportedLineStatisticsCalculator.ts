@@ -92,7 +92,7 @@ export const calculateExportedLineStatistics = (
           return line.exportedDayTypesStatistics.map(
             (dayType, dayTypeIndex) => ({
               id: dayTypeIndex,
-              objectId: dayType.dayTypeNetexId,
+              objectId: `${dayType.dayTypeNetexId}  (${dayType.serviceJourneyName})`,
               periods: [
                 {
                   to: dayType.operatingPeriodTo,

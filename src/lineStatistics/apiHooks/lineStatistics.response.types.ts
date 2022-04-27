@@ -39,6 +39,7 @@ export interface ExportedDayTypeStatisticsResponse {
   operatingPeriodTo: string;
   operatingPeriodFrom: string;
   dayTypeNetexId: string;
+  serviceJourneyName: string;
 }
 
 export interface ExportedLine {

@@ -25,8 +25,6 @@ export const useLatestDeliveryDate = (providerId: string | undefined) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         },
       );
-      console.log(response);
-
       if (response.ok) {
         const latestDeliveryDateResponse: LatestDeliveryDateResponse =
           await response.json();

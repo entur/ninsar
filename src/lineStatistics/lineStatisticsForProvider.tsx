@@ -12,16 +12,15 @@ import { IncompleteLineStatisticsError } from './components/incompleteLineStatis
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { useLocale } from '../appProvider';
-import { useLatestDeliveryDate } from './apiHooks/useLatestDeliveryDate';
 import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
 import style from './lineStatistics.module.scss';
+import { DaysToFirstExpiringLine } from './components/daysInFirstLineExpiration/daysToFirstExpiringLine';
 
 interface Props {
   providerId: string;
 }
 
 export const LineStatisticsForProvider = ({ providerId }: Props) => {
-  useLatestDeliveryDate(providerId);
   const locale = useLocale();
   const { lineStatistics, lineStatisticsError } =
     useLineStatisticsForProvider(providerId);
@@ -98,6 +97,11 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                       />
                     </Card>
                     <LatestDeliveryDate providerId={providerId} />
+                    {lineStatistics && (
+                      <DaysToFirstExpiringLine
+                        lineStatistics={lineStatistics}
+                      />
+                    )}
                   </div>
                 </div>
               ) : (

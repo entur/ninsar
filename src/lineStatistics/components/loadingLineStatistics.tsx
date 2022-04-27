@@ -25,7 +25,10 @@ export const LoadingLineStatistics = ({
       errorText={errorText(locale).failedToLoadData}
       isLoading={isLoading}
       error={
-        providerError || (lineStatisticsError && exportedLineStatisticsError)
+        !!(
+          providerError ||
+          (lineStatisticsError && exportedLineStatisticsError)
+        )
       }
     >
       {children}
