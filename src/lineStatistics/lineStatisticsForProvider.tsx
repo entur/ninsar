@@ -104,18 +104,16 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                         pieHeight={300}
                       />
                     </Card>
-                    {lineStatistics && exportedLineStatistics && (
-                      <>
-                        {appConfig.showNumberOfLinesCard && (
-                          <NumberOfLines numberOfLines={numberOfLines} />
-                        )}
-                        {appConfig.showExpiringDaysCard && (
-                          <DaysToFirstExpiringLine
-                            lineStatistics={lineStatistics}
-                          />
-                        )}
-                      </>
+                    {appConfig.showNumberOfLinesCard && (
+                      <NumberOfLines numberOfLines={numberOfLines} />
                     )}
+                    {appConfig.showExpiringDaysCard &&
+                      (exportedLineStatistics || lineStatistics) && (
+                        <DaysToFirstExpiringLine
+                          lineStatistics={lineStatistics}
+                          exportedLineStatistics={exportedLineStatistics}
+                        />
+                      )}
                     {appConfig.showDeliveryDateCard && (
                       <LatestDeliveryDate providerId={providerId} />
                     )}

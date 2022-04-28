@@ -8,23 +8,36 @@ import { color } from 'bogu/styles';
 import { useLocale } from '../../../appContext';
 
 interface Props {
-  lineStatistics: LineStatistics;
+  lineStatistics?: LineStatistics;
+  exportedLineStatistics?: LineStatistics;
 }
 
-export const DaysToFirstExpiringLine = ({ lineStatistics }: Props) => {
+export const DaysToFirstExpiringLine = ({
+  lineStatistics,
+  exportedLineStatistics,
+}: Props) => {
   const locale = useLocale();
 
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
 
   useEffect(() => {
-    setNumberOfDays(
-      Math.min(
-        ...Object.values(lineStatistics.linesMap).map(
-          (lineStats) => lineStats.daysValid,
-        ),
-      ),
-    );
-  }, [lineStatistics]);
+    const minLineStatistics = lineStatistics
+      ? Math.min(
+          ...Object.values(lineStatistics.linesMap).map(
+            (lineStats) => lineStats.daysValid,
+          ),
+        )
+      : 0;
+
+    const minExportedLineStatistics = exportedLineStatistics
+      ? Math.min(
+          ...Object.values(exportedLineStatistics.linesMap).map(
+            (lineStats) => lineStats.daysValid,
+          ),
+        )
+      : 0;
+    setNumberOfDays(Math.min(minLineStatistics, minExportedLineStatistics));
+  }, [lineStatistics, exportedLineStatistics]);
 
   return (
     <Card className={style.daysInFirstLineExpiration}>
