@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import { FetchError } from '../apiHooks/lineStatistics.response.types';
-import { useLocale } from '../../appProvider';
 import { errorText } from '../lineStatistics.constants';
 import { LoadingOrFailed } from './LoadingOrFailed';
+import { useLocale } from '../../appContext';
 
 interface Props {
   providerError?: FetchError;

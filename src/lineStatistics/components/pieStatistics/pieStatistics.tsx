@@ -1,9 +1,9 @@
-import { LineStatistics, Validity } from '../../lineStatistics.types';
+import { Validity } from '../../lineStatistics.types';
 import React from 'react';
 import style from './pieStatistics.module.scss';
-import { NumberOfLines } from './numberOfLines';
+import { ExpandableNumberOfLines } from './expandableNumberOfLines';
 import { generatePieChartData, pieChartOptions } from './pieStatistics.data';
-import { NumberOfLineType } from './pieStatistics.types';
+import { NumberOfLinesType } from './pieStatistics.types';
 import { Pie } from 'react-chartjs-2';
 import {
   ActiveElement,
@@ -18,7 +18,7 @@ import {
 import { Button } from '@entur/button';
 import { Heading6 } from '@entur/typography';
 import { titleText } from '../../lineStatistics.constants';
-import { useLocale } from '../../../appProvider';
+import { useLocale } from '../../../appContext';
 
 Chart.register([ArcElement, Tooltip, Legend]);
 
@@ -26,11 +26,10 @@ interface Props {
   handlePieOnClick: (label: Validity) => void;
   handleShowAllClick: () => void;
   showHeader: boolean;
-  lineStatistics?: LineStatistics;
-  exportedLineStatistics?: LineStatistics;
   providerName: string;
   pieWidth: number;
   pieHeight: number;
+  numberOfLines: NumberOfLinesType;
 }
 
 export const PieStatistics = ({
@@ -38,23 +37,11 @@ export const PieStatistics = ({
   handlePieOnClick,
   handleShowAllClick,
   showHeader,
-  lineStatistics,
-  exportedLineStatistics,
   pieHeight,
   pieWidth,
+  numberOfLines,
 }: Props) => {
   const locale = useLocale();
-  const numberOfLinesForValidityCategory = (validity: Validity) =>
-    (lineStatistics?.validityCategories.get(validity)?.length ?? 0) +
-    (exportedLineStatistics?.validityCategories.get(validity)?.length ?? 0);
-
-  const numberOfLinesType: NumberOfLineType = {
-    totalNumberOfLines: numberOfLinesForValidityCategory(Validity.ALL),
-    numberOfValidLines: numberOfLinesForValidityCategory(Validity.VALID),
-    numberOfInvalidLines: numberOfLinesForValidityCategory(Validity.INVALID),
-    numberOfExpiringLines: numberOfLinesForValidityCategory(Validity.EXPIRING),
-  };
-
   return (
     <div className={style.pieChartContainer}>
       {showHeader && (
@@ -65,7 +52,7 @@ export const PieStatistics = ({
       <div style={{ width: `${pieWidth}px`, height: `${pieHeight}px` }}>
         <Pie
           style={{ marginTop: 0 }}
-          data={generatePieChartData(numberOfLinesType)}
+          data={generatePieChartData(numberOfLines)}
           width={100}
           height={100}
           options={{
@@ -85,7 +72,7 @@ export const PieStatistics = ({
         />
       </div>
 
-      <NumberOfLines {...numberOfLinesType} />
+      <ExpandableNumberOfLines {...numberOfLines} />
 
       <Button
         width="fluid"

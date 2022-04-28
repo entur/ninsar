@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Provider } from '../lineStatistics.types';
-import { useAuth } from '../../appProvider';
 import { GraphQLClient } from 'graphql-request';
 import { calculateExportedLineStatistics } from '../lineStatisticsCalculator/exportedLineStatisticsCalculator';
 import {
@@ -9,6 +8,7 @@ import {
   FetchError,
   LineStatisticsPerProviderId,
 } from './lineStatistics.response.types';
+import { useAuth } from '../../appContext';
 
 export const useExportedLineStatisticsForAllProviders = (
   providers?: Provider[],

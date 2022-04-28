@@ -2,7 +2,7 @@ import style from './linesValidityProgress.module.scss';
 import React from 'react';
 import { sortIcon } from './sorting/sortIcons';
 import { titleText } from '../../lineStatistics.constants';
-import { useLocale } from '../../../appProvider';
+import { useLocale } from '../../../appContext';
 
 interface Props {
   startDate: string;

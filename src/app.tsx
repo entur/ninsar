@@ -3,7 +3,6 @@ import './app.module.scss';
 import { LineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
 import { AppProvider } from './appProvider';
 import { NinsarPayload } from './index';
-import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
 
 export function App(props: NinsarPayload) {
   return (
@@ -14,7 +13,7 @@ export function App(props: NinsarPayload) {
             {props.providerId ? (
               <LineStatisticsForProvider providerId={props.providerId} />
             ) : (
-              <LineStatisticsForAllProviders />
+              <LineStatisticsForProvider providerId={'2'} />
             )}
           </div>
         </div>

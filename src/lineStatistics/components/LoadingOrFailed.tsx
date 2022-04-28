@@ -1,4 +1,3 @@
-import { FetchError } from '../apiHooks/lineStatistics.response.types';
 import { Loader } from '@entur/loader';
 import { SmallAlertBox } from '@entur/alert';
 import React, { ReactElement } from 'react';

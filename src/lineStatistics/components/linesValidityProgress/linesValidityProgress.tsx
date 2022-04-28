@@ -20,7 +20,7 @@ import style from './linesValidityProgress.module.scss';
 import { Heading4 } from '@entur/typography';
 import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityList } from './linesValidityList';
-import { useLocale } from '../../../appProvider';
+import { useLocale } from '../../../appContext';
 import { titleText } from '../../lineStatistics.constants';
 
 interface Props {

@@ -1,12 +1,12 @@
 import { color } from 'bogu/styles';
-import { NumberOfLineType } from './pieStatistics.types';
+import { NumberOfLinesType } from './pieStatistics.types';
 import { Validity } from '../../lineStatistics.types';
 
 export const generatePieChartData = ({
   numberOfValidLines,
   numberOfExpiringLines,
   numberOfInvalidLines,
-}: NumberOfLineType) => ({
+}: NumberOfLinesType) => ({
   labels: [Validity.VALID, Validity.EXPIRING, Validity.INVALID],
   datasets: [
     {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LineStatistics } from '../lineStatistics.types';
-import { useAuth } from '../../appProvider';
+import { useAuth } from '../../appContext';
 import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
 import { FetchError } from './lineStatistics.response.types';
 

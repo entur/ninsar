@@ -10,6 +10,9 @@ import { Locale } from './lineStatistics/lineStatistics.types';
 export interface NinsarPayload extends DefaultPayload {
   providerId?: string;
   locale?: Locale;
+  showNumberOfLinesCard?: boolean;
+  showDeliveryDateCard?: boolean;
+  showExpiringDaysCard?: boolean;
 }
 
 registerMicroFrontend<NinsarPayload>({

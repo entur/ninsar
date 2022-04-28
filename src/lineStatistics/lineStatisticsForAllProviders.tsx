@@ -10,7 +10,7 @@ import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { validityCategoryLabel } from './lineStatistics.constants';
 import style from './lineStatistics.module.scss';
-import { useLocale } from '../appProvider';
+import { useLocale } from '../appContext';
 
 export const LineStatisticsForAllProviders = () => {
   const locale = useLocale();

@@ -3,7 +3,7 @@ import { FetchError } from '../../apiHooks/lineStatistics.response.types';
 import style from './incompleteLineStatisticsError.module.scss';
 import { SmallAlertBox } from '@entur/alert';
 import { errorText } from '../../lineStatistics.constants';
-import { useLocale } from '../../../appProvider';
+import { useLocale } from '../../../appContext';
 
 interface Props {
   lineStatisticsError?: FetchError;

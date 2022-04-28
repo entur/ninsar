@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Provider } from '../lineStatistics.types';
-import { useAuth } from '../../appProvider';
+import { useAuth } from '../../appContext';
 import { FetchError, ProviderResponse } from './lineStatistics.response.types';
 
 export const useProvider = (providerId: string | undefined) => {

@@ -1,7 +1,7 @@
-import { Heading3, Heading5 } from '@entur/typography';
+import { Heading1, Heading4 } from '@entur/typography';
 import { Card } from '../card/card';
 import { errorText, titleText } from '../../lineStatistics.constants';
-import { useLocale } from '../../../appProvider';
+import { useLocale } from '../../../appContext';
 import { useLatestDeliveryDate } from '../../apiHooks/useLatestDeliveryDate';
 import { LoadingOrFailed } from '../LoadingOrFailed';
 import style from './latestDeliveryDate.module.scss';
@@ -16,13 +16,13 @@ export const LatestDeliveryDate = ({ providerId }: Props) => {
     useLatestDeliveryDate(providerId);
   return (
     <Card className={style.latestDeliveryDate}>
-      <Heading5>{titleText(locale).latestDeliveryDate}</Heading5>
+      <Heading4>{titleText(locale).latestDeliveryDate}</Heading4>
       <LoadingOrFailed
         errorText={errorText(locale).failedToLoadLatestDate}
         isLoading={!latestDeliveryDate && !latestDeliveryDateError}
         error={!!latestDeliveryDateError}
       >
-        <Heading3>{latestDeliveryDate}</Heading3>
+        <Heading1 className={style.date}>{latestDeliveryDate}</Heading1>
       </LoadingOrFailed>
     </Card>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LineStatistics, Provider } from '../lineStatistics.types';
-import { useAuth } from '../../appProvider';
+import { useAuth } from '../../appContext';
 import { GraphQLClient } from 'graphql-request';
 import { calculateExportedLineStatistics } from '../lineStatisticsCalculator/exportedLineStatisticsCalculator';
 import {

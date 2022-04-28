@@ -3,6 +3,7 @@ import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import style from './lineStatistics.module.scss';
 import { Provider, Validity } from './lineStatistics.types';
 import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
+import { getNumberOfLinesType } from './components/numberOfLines/numberOfLines.util';
 
 interface Props {
   lineStatistics?: LineStatisticsPerProviderId;
@@ -43,10 +44,10 @@ export const PieStatisticsForAllProviders = ({
               handlePieOnClick={(label: Validity) =>
                 handlePieOnClick(label, provider)
               }
-              lineStatistics={lineStatistics && lineStatistics[provider.id]}
-              exportedLineStatistics={
-                exportedLineStatistics && exportedLineStatistics[provider.id]
-              }
+              numberOfLines={getNumberOfLinesType(
+                lineStatistics && lineStatistics[provider.id],
+                exportedLineStatistics && exportedLineStatistics[provider.id],
+              )}
               pieWidth={150}
               pieHeight={250}
             />

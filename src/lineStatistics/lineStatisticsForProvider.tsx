@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
 import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
 import { useProvider } from './apiHooks/useProvider';
-import { BannerAlertBox } from '@entur/alert';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
@@ -11,10 +10,13 @@ import { infoText, validityCategoryLabel } from './lineStatistics.constants';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
-import { useLocale } from '../appProvider';
 import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
 import style from './lineStatistics.module.scss';
 import { DaysToFirstExpiringLine } from './components/daysInFirstLineExpiration/daysToFirstExpiringLine';
+import { NumberOfLines } from './components/numberOfLines/numberOfLines';
+import { getNumberOfLinesType } from './components/numberOfLines/numberOfLines.util';
+import { BannerAlertBox } from '@entur/alert';
+import { useAppConfig, useLocale } from '../appContext';
 
 interface Props {
   providerId: string;
@@ -22,6 +24,8 @@ interface Props {
 
 export const LineStatisticsForProvider = ({ providerId }: Props) => {
   const locale = useLocale();
+  const appConfig = useAppConfig();
+
   const { lineStatistics, lineStatisticsError } =
     useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);
@@ -30,6 +34,11 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
 
   const [selectedValidityCategory, setSelectedValidityCategory] =
     useState<Validity>(Validity.ALL);
+
+  const numberOfLines = getNumberOfLinesType(
+    lineStatistics,
+    exportedLineStatistics,
+  );
 
   const handlePieOnClick = (selectedValidityCategory: Validity) => {
     setSelectedValidityCategory(selectedValidityCategory);
@@ -90,17 +99,25 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                         handleShowAllClick={handleShowAll}
                         providerName={provider.name}
                         showHeader={false}
-                        lineStatistics={lineStatistics}
-                        exportedLineStatistics={exportedLineStatistics}
+                        numberOfLines={numberOfLines}
                         pieWidth={200}
                         pieHeight={300}
                       />
                     </Card>
-                    <LatestDeliveryDate providerId={providerId} />
-                    {lineStatistics && (
-                      <DaysToFirstExpiringLine
-                        lineStatistics={lineStatistics}
-                      />
+                    {lineStatistics && exportedLineStatistics && (
+                      <>
+                        {appConfig.showNumberOfLinesCard && (
+                          <NumberOfLines numberOfLines={numberOfLines} />
+                        )}
+                        {appConfig.showExpiringDaysCard && (
+                          <DaysToFirstExpiringLine
+                            lineStatistics={lineStatistics}
+                          />
+                        )}
+                      </>
+                    )}
+                    {appConfig.showDeliveryDateCard && (
+                      <LatestDeliveryDate providerId={providerId} />
                     )}
                   </div>
                 </div>

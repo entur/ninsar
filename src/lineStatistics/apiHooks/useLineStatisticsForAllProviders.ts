@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../appProvider';
+import { useAuth } from '../../appContext';
 import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
 import {
   FetchError,
