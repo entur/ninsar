@@ -35,7 +35,9 @@ export const errorText = (locale?: Locale) => ({
 });
 
 export const infoText = (locale?: Locale) => ({
-  noLinesFound: textForLocale(
+  foundNot: textForLocale('Fant ingen', 'Not found any', locale),
+  noLinesFound: textForLocale('Fant ingen linjer', 'No lines found', locale),
+  noLinesFoundInfo: textForLocale(
     'Last opp nytt datasett i Operatørportalen eller opprett linjer i Nplan.',
     'Upload new dataset in Operator portal or create lines in Nplan.',
     locale,
@@ -66,6 +68,7 @@ export const titleText = (locale?: Locale) => ({
     'Days to first outgoing line',
     locale,
   ),
+  days: textForLocale('dager', 'days', locale),
 });
 
 const textForLocale = (

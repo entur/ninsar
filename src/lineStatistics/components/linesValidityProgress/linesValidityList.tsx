@@ -5,7 +5,11 @@ import { HeaderTimeline, Timeline } from 'bogu';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import { sortLines } from './sorting/sortingUtilities';
 import { LinesValidityListHeader } from './linesValidityListHeader';
-import { validityCategoryLabel } from '../../lineStatistics.constants';
+import {
+  infoText,
+  validityCategoryLabel,
+} from '../../lineStatistics.constants';
+import { useLocale } from '../../../appContext';
 
 interface Props {
   selectedValidityCategory: Validity;
@@ -16,6 +20,7 @@ export const LinesValidityList = ({
   selectedValidityCategory,
   lineStatistics,
 }: Props) => {
+  const locale = useLocale();
   const [expandedLinesState, setExpandedLinesState] = useState<
     Map<string, boolean>
   >(new Map<string, boolean>());
@@ -98,8 +103,10 @@ export const LinesValidityList = ({
       {!sortedLineNumbers || sortedLineNumbers.length === 0 ? (
         <div style={{ marginLeft: '20px' }}>
           {selectedValidityCategory === Validity.ALL
-            ? 'Fant ingen linjer'
-            : `Fant ingen ${validityCategoryLabel()[selectedValidityCategory]}`}
+            ? infoText(locale).noLinesFoundInfo
+            : `${infoText(locale).foundNot} ${
+                validityCategoryLabel()[selectedValidityCategory]
+              }`}
         </div>
       ) : (
         <List>

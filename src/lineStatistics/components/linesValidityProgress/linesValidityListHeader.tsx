@@ -30,7 +30,9 @@ export const LinesValidityListHeader = ({
         {sortIcon(sorting)}
       </div>
       <div className={style.headerText}>{startDate}</div>
-      <div className={style.headerText}>{validFromDate} (120 dager)</div>
+      <div className={style.headerText}>{`${validFromDate} (120 ${
+        titleText(locale).days
+      })`}</div>
       <div className={style.headerText}>{endDate}</div>
     </div>
   );

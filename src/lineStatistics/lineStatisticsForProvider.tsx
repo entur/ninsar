@@ -121,8 +121,8 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                   </div>
                 </div>
               ) : (
-                <BannerAlertBox title="Fant ingen linjer" variant="info">
-                  {infoText(locale).noLinesFound}
+                <BannerAlertBox title={infoText(locale).noLinesFound} variant="info">
+                  {infoText(locale).noLinesFoundInfo}
                 </BannerAlertBox>
               )}
             </>
