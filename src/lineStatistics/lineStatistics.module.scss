@@ -2,10 +2,18 @@
   display: flex;
   margin: 10px;
   flex-direction: column;
+
+  .pieChartContainer > * {
+    width: 280px
+  }
 }
 
 .lineStatisticsForAllProviders {
   margin: 10px;
+
+  .pieChartContainer > * {
+    width: 235px
+  }
 }
 
 .pieStatisticsForAllProviders {

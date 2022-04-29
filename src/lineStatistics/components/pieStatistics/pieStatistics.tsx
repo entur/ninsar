@@ -19,6 +19,7 @@ import { Button } from '@entur/button';
 import { Heading6 } from '@entur/typography';
 import { titleText } from '../../lineStatistics.constants';
 import { useLocale } from '../../../appContext';
+import classnames from 'classnames';
 
 Chart.register([ArcElement, Tooltip, Legend]);
 
@@ -30,6 +31,7 @@ interface Props {
   pieWidth: number;
   pieHeight: number;
   numberOfLines: NumberOfLinesType;
+  className?: string;
 }
 
 export const PieStatistics = ({
@@ -40,10 +42,11 @@ export const PieStatistics = ({
   pieHeight,
   pieWidth,
   numberOfLines,
+  className = '',
 }: Props) => {
   const locale = useLocale();
   return (
-    <div className={style.pieChartContainer}>
+    <div className={classnames(style.pieChartContainer, className)}>
       {showHeader && (
         <div className={style.headerContainer}>
           <Heading6 className={style.header}>{providerName}</Heading6>

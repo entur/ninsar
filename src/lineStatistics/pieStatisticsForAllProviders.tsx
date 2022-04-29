@@ -50,6 +50,7 @@ export const PieStatisticsForAllProviders = ({
               )}
               pieWidth={150}
               pieHeight={250}
+              className={style.pieChartContainer}
             />
           ))}
     </div>

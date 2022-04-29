@@ -102,6 +102,7 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                         numberOfLines={numberOfLines}
                         pieWidth={200}
                         pieHeight={300}
+                        className={style.pieChartContainer}
                       />
                     </Card>
                     {appConfig.showNumberOfLinesCard && (
