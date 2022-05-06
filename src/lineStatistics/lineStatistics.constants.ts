@@ -52,8 +52,8 @@ export const titleText = (locale?: Locale) => ({
     locale,
   ),
   lineStatisticsFromChouette: textForLocale(
-    'Linjestatus fra Ruterdata',
-    'Line statistics from Routes data',
+    'Linjestatus for Ruterdata',
+    'Line statistics for Routes data',
     locale,
   ),
   numberOfLines: textForLocale('Antall linjer', 'Number of lines', locale),
