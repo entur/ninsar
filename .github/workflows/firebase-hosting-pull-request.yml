@@ -15,7 +15,7 @@ jobs:
       REACT_APP_PROVIDERS_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/providers
       REACT_APP_UTTU_API_URL: https://api.dev.entur.io/timetable-admin/v1/flexible-lines/exportedLineStatistics/graphql
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
