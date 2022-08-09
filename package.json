@@ -29,7 +29,7 @@
     "husky": "7.0.4",
     "lint-staged": "12.3.7",
     "material-ui": "0.20.0",
-    "moment": "2.29.1",
+    "moment": "2.29.4",
     "node-sass": "7.0.1",
     "react": "17.0.2",
     "react-chartjs-2": "4.0.1",
