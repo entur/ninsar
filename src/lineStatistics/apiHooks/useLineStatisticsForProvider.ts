@@ -22,7 +22,10 @@ export const useLineStatisticsForProvider = (
       const response = await fetch(
         `${process.env.REACT_APP_TIMETABLE_ADMIN_BASE_URL}/${providerId}/line_statistics`,
         {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Et-Client-Name': 'entur-ninsar'
+          },
         },
       );
       if (response.ok) {

@@ -48,7 +48,10 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
       try {
         if (provider) {
           const client = new GraphQLClient(endpoint, {
-            headers: { authorization: `Bearer ${accessToken}` },
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Et-Client-Name': 'entur-ninsar'
+            },
           });
           const response = await client.request<{
             lineStatistics: ExportedLineStatisticsResponse;

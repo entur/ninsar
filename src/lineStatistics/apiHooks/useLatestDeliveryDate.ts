@@ -22,7 +22,10 @@ export const useLatestDeliveryDate = (providerId: string | undefined) => {
       const response = await fetch(
         `${process.env.REACT_APP_EVENT_BASE_URL}/latest_upload/${providerId}`,
         {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Et-Client-Name': 'entur-ninsar'
+          },
         },
       );
       if (response.ok) {

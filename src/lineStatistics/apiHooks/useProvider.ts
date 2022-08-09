@@ -15,7 +15,10 @@ export const useProvider = (providerId: string | undefined) => {
       const response = await fetch(
         `${process.env.REACT_APP_PROVIDERS_BASE_URL}/${providerId}`,
         {
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Et-Client-Name': 'entur-ninsar'
+          },
         },
       );
       if (response.ok) {
