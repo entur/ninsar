@@ -52,15 +52,15 @@ export const titleText = (locale?: Locale) => ({
     locale,
   ),
   lineStatisticsFromChouette: textForLocale(
-    'Linjestatus for Ruterdata',
-    'Line statistics for Routes data',
+    'Linjestatus for rutedata',
+    'Line statistics for timetable data',
     locale,
   ),
   numberOfLines: textForLocale('Antall linjer', 'Number of lines', locale),
   showAll: textForLocale('Vis alle', 'Show all', locale),
   latestDeliveryDate: textForLocale(
     'Dato for siste leveranse',
-    'Latest Delivery date',
+    'Latest delivery date',
     locale,
   ),
   daysToFirstExpiringLine: textForLocale(
