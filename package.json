@@ -22,7 +22,7 @@
     "@graphql-codegen/typescript-graphql-request": "^4.4.5",
     "bogu": "https://github.com/entur/bogu.git#v1.3.2",
     "chart.js": "3.7.1",
-    "graphql": "15.5.1",
+    "graphql": "15.8.0",
     "graphql-request": "1.8.2",
     "halogenium": "2.3.0",
     "http-proxy-middleware": "^2.0.4",
