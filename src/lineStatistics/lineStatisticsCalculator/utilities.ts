@@ -1,5 +1,4 @@
-import { Moment } from 'moment/moment';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { Validity } from '../lineStatistics.types';
 
 export const findTimeLineStartPositionForEffectivePeriod = (

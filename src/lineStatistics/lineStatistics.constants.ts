@@ -69,6 +69,7 @@ export const titleText = (locale?: Locale) => ({
     locale,
   ),
   days: textForLocale('dager', 'days', locale),
+  numberOfDays: textForLocale('Antall dager', 'Number of days', locale),
 });
 
 const textForLocale = (

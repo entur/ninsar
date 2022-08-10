@@ -58,7 +58,7 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
           }>(getLineForProviderQuery, { providerCode: provider.code });
 
           setExportedLineStatistics(
-            calculateExportedLineStatistics(response.lineStatistics),
+            calculateExportedLineStatistics(response.lineStatistics)
           );
           setExportedLineStatisticsError(undefined);
         }

@@ -3,7 +3,6 @@ import { Card } from '../card/card';
 import { titleText } from '../../lineStatistics.constants';
 import style from './numberOfLines.module.scss';
 import { NumberOfLinesType } from '../pieStatistics/pieStatistics.types';
-import { color } from 'bogu/styles';
 import { useLocale } from '../../../appContext';
 
 interface Props {
@@ -23,19 +22,19 @@ export const NumberOfLines = ({ numberOfLines }: Props) => {
       <div className={style.numberOfLinesPerCategory}>
         <Heading2
           className={style.numberOfLinesForCategory}
-          style={{ color: color.valid }}
+          style={{ color: 'var(--valid-color)' }}
         >
           {numberOfLines.numberOfValidLines}
         </Heading2>
         <Heading2
           className={style.numberOfLinesForCategory}
-          style={{ color: color.expiring }}
+          style={{ color: 'var(--expiring-color)' }}
         >
           {numberOfLines.numberOfExpiringLines}
         </Heading2>
         <Heading2
           className={style.numberOfLinesForCategory}
-          style={{ color: color.invalid }}
+          style={{ color: 'var(--invalid-color)' }}
         >
           {numberOfLines.numberOfInvalidLines}
         </Heading2>

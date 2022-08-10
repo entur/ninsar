@@ -1,5 +1,4 @@
-import moment from 'moment';
-import { Moment } from 'moment/moment';
+import moment, { Moment } from 'moment';
 import {
   LineNumbers,
   LinesMap,
@@ -22,6 +21,7 @@ import { ExportedLineStatisticsResponse } from '../apiHooks/lineStatistics.respo
 export const calculateExportedLineStatistics = (
   exportedLineStatisticsResponse: ExportedLineStatisticsResponse,
 ): LineStatistics => {
+
   const startDateLine: Moment = moment(
     exportedLineStatisticsResponse.startDate,
     'YYYY-MM-DD',

@@ -1,4 +1,3 @@
-import { color } from 'bogu/styles';
 import React from 'react';
 import style from './pieStatistics.module.scss';
 import { ExpandableText } from '@entur/expand';
@@ -18,10 +17,10 @@ export const ExpandableNumberOfLines = ({
       <ExpandableText
         title={`${titleText(locale).numberOfLines}: ${totalNumberOfLines}`}
       >
-        <div className={style.numberOfLinesPerCategory}>
-          <span style={{ color: color.invalid }}>{numberOfInvalidLines}</span> /{' '}
-          <span style={{ color: color.valid }}>{numberOfValidLines}</span> /{' '}
-          <span style={{ color: color.expiring }}>{numberOfExpiringLines}</span>
+        <div className={style.numberOfLinesPerCategory}> TODO:
+          <span style={{ color: 'var(--invalid-color)' }}>{numberOfInvalidLines}</span> /{' '}
+          <span style={{ color: 'var(--valid-color)' }}>{numberOfValidLines}</span> /{' '}
+          <span style={{ color: 'var(--expiring-color)' }}>{numberOfExpiringLines}</span>
         </div>
       </ExpandableText>
     </div>

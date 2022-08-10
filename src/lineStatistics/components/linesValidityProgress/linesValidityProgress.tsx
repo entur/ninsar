@@ -17,8 +17,6 @@
 import React from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
 import style from './linesValidityProgress.module.scss';
-import { Heading4 } from '@entur/typography';
-import { MuiThemeProvider } from 'material-ui/styles';
 import { LinesValidityList } from './linesValidityList';
 import { useLocale } from '../../../appContext';
 import { titleText } from '../../lineStatistics.constants';
@@ -39,28 +37,22 @@ export const LinesValidityProgress = ({
     (lineStatistics.validityCategories.get(Validity.ALL)?.length ?? 0) > 0;
 
   return (
-    <MuiThemeProvider>
-      <div className={style.linesListContainer}>
-        {exportedLineStatistics && hasLines(exportedLineStatistics) && (
-          <>
-            <Heading4>{titleText(locale).lineStatisticsFromNplan}</Heading4>
-            <LinesValidityList
-              lineStatistics={exportedLineStatistics}
-              selectedValidityCategory={selectedValidityCategory}
-            />
-          </>
-        )}
+    <div className={style.linesListContainer}>
+      {exportedLineStatistics && hasLines(exportedLineStatistics) && (
+        <LinesValidityList
+          listTitle={titleText(locale).lineStatisticsFromNplan}
+          lineStatistics={exportedLineStatistics}
+          selectedValidityCategory={selectedValidityCategory}
+        />
+      )}
 
-        {lineStatistics && hasLines(lineStatistics) && (
-          <>
-            <Heading4>{titleText(locale).lineStatisticsFromChouette}</Heading4>
-            <LinesValidityList
-              lineStatistics={lineStatistics}
-              selectedValidityCategory={selectedValidityCategory}
-            />
-          </>
-        )}
-      </div>
-    </MuiThemeProvider>
+      {lineStatistics && hasLines(lineStatistics) && (
+        <LinesValidityList
+          listTitle={titleText(locale).lineStatisticsFromChouette}
+          lineStatistics={lineStatistics}
+          selectedValidityCategory={selectedValidityCategory}
+        />
+      )}
+    </div>
   );
 };
