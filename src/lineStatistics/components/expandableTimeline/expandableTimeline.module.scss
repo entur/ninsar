@@ -1,0 +1,102 @@
+@import '~@entur/tokens/dist/styles.scss';
+
+.timeLineContainer {
+  background: linear-gradient(to right,
+          var(--invalid-color-light) 0%, var(--invalid-color-light) 66%,
+          $colors-greys-grey70 66%, $colors-greys-grey70 100%);
+  width: 100%;
+  height: 56px;
+  display: flex;
+  border-radius: $border-radiuses-medium;
+  position: relative;
+}
+
+.headerLineNumber {
+  width: 100px;
+  overflow:hidden;
+  white-space:nowrap;
+  display:inline-block;
+  text-overflow:ellipsis;
+}
+
+.validPeriodTitleContainer {
+  overflow: hidden;
+  background-color: var(--valid-color-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $border-radiuses-medium;
+}
+
+.validPeriodTitle {
+}
+
+.headerLineNumberContainer {
+  margin: 20px 1px 5px 1px;
+}
+
+.edsExpandablePanel {
+  width: 100%;
+  position: relative;
+
+  & + & {
+    margin-top: $border-widths-default;
+  }
+
+  &:focus,
+  &:focus-within {
+    z-index: 2;
+  }
+}
+
+.edsExpandablePanel_titleContainer {
+  display: flex;
+}
+
+.edsExpandablePanel__trigger {
+  appearance: none;
+  border: none;
+  border-radius: $border-radiuses-medium;
+  background: $colors-greys-grey70;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  user-select: none;
+  width: 100%;
+  padding: 1px;
+
+  &:hover {
+    opacity: .8;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: $shadows-focus;
+  }
+}
+
+.verticalLine {
+  background: black;
+  width: 1px;
+  height: 100%;
+  position: absolute;
+  margin-left: 66%;
+}
+
+.edsExpandablePanel__iconContainer {
+  display: flex;
+  align-items: center;
+  margin: 0 10px 0 11px;
+}
+
+.edsExpandablePanel__content {
+  overflow: auto;
+  padding: $space-default 0;
+}
+
+// Used to override react-collapse's default transition
+.ReactCollapse--collapse {
+  transition: height $timings-slow ease-out;
+}

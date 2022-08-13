@@ -1,3 +1,10 @@
-.ninsar-app {}
-
-.ninsar-app-content {}
+:root {
+  --valid-color: #33c146;
+  --invalid-color: #b20000;
+  --expiring-color: #FFAA00;
+  --valid-color-highlight: #4caf50;
+  --invalid-color-highlight: #cc0000;
+  --expiring-color-highlight: #FFB60A;
+  --invalid-color-light: #f6c0c0;
+  --valid-color-light: #c3e2c3;
+}
