@@ -10,7 +10,7 @@ export const sortLines = (
 
   if (linesNumbersForSelectedValidityCategory) {
     switch (sorting) {
-      case 0:
+      default:
         return linesNumbersForSelectedValidityCategory;
       case 1:
         return [...linesNumbersForSelectedValidityCategory].sort((a, b) => {
