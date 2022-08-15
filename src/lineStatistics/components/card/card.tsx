@@ -37,10 +37,10 @@ export const Card = ({
           >
             <BackArrowIcon /> {titleText(locale).back}
           </Button>
-          {title && <Heading2>{title}</Heading2>}
         </div>
       )}
       <div className={classnames(style.card, className)}>
+        {title && <Heading2 margin="none">{title}</Heading2>}
         {subTitle && <Heading3>{subTitle}</Heading3>}
         {children}
       </div>

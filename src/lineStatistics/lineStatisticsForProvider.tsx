@@ -5,7 +5,6 @@ import { useProvider } from './apiHooks/useProvider';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
-import { Heading2 } from '@entur/typography';
 import { infoText, validityCategoryLabel } from './lineStatistics.constants';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
@@ -74,13 +73,11 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 lineStatisticsError={lineStatisticsError}
                 exportedLineStatisticsError={exportedLineStatisticsError}
               />
-              <Heading2>
-                {provider.name}
-              </Heading2>
               {hasLineStatistics(lineStatistics) ||
               hasLineStatistics(exportedLineStatistics) ? (
                 <div className={style.linesStatisticsContainer}>
                   <Card
+                    title={provider.name}
                     className={style.lineStatisticsCard}
                     subTitle={
                       validityCategoryLabel(locale)[selectedValidityCategory]
