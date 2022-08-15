@@ -1,10 +1,11 @@
 import style from './card.module.scss';
-import { Tooltip } from '@entur/tooltip';
-import { IconButton } from '@entur/button';
-import { CloseIcon } from '@entur/icons';
+import { Button } from '@entur/button';
+import { BackArrowIcon } from '@entur/icons';
 import React, { ReactElement } from 'react';
 import { Heading2, Heading3 } from '@entur/typography';
 import classnames from 'classnames';
+import { titleText } from "../../lineStatistics.constants";
+import { useLocale } from "../../../appContext";
 
 interface Props {
   handleClose?: () => void;
@@ -21,16 +22,22 @@ export const Card = ({
   title,
   subTitle,
 }: Props) => {
+
+  const locale = useLocale();
+
   return (
     <>
       {handleClose && (
         <div className={style.closeable}>
+          <Button
+            width="auto"
+            variant="tertiary"
+            size="medium"
+            onClick={handleClose}
+          >
+            <BackArrowIcon /> {titleText(locale).back}
+          </Button>
           {title && <Heading2>{title}</Heading2>}
-          <Tooltip placement="bottom" content="Lukk">
-            <IconButton onClick={handleClose}>
-              <CloseIcon />
-            </IconButton>
-          </Tooltip>
         </div>
       )}
       <div className={classnames(style.card, className)}>

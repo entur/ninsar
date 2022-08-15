@@ -74,7 +74,7 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 lineStatisticsError={lineStatisticsError}
                 exportedLineStatisticsError={exportedLineStatisticsError}
               />
-              <Heading2 className={style.providerTitle}>
+              <Heading2>
                 {provider.name}
               </Heading2>
               {hasLineStatistics(lineStatistics) ||
