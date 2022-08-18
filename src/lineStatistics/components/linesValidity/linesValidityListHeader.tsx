@@ -1,4 +1,4 @@
-import style from './linesValidityProgress.module.scss';
+import style from './linesValidity.module.scss';
 import React from 'react';
 import { titleText } from '../../lineStatistics.constants';
 import { useLocale } from '../../../appContext';

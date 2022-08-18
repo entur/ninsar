@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
 import { Provider, Validity } from './lineStatistics.types';
-import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
+import { LinesValidity } from './components/linesValidity/linesValidity';
 import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
 import { useExportedLineStatisticsForAllProviders } from './apiHooks/useExportedLineStatisticsForAllProviders';
-import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
+import {
+  IncompleteLineStatisticsError
+} from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { validityCategoryLabel } from './lineStatistics.constants';
 import style from './lineStatistics.module.scss';
 import { useLocale } from '../appContext';
+import { Button, FloatingButton } from "@entur/button";
 
 export const LineStatisticsForAllProviders = () => {
   const locale = useLocale();
@@ -22,7 +25,7 @@ export const LineStatisticsForAllProviders = () => {
     exportedLineStatisticsForAllProvidersError,
   } = useExportedLineStatisticsForAllProviders(allProviders);
 
-  const [selectedValidityCategory, setSelectedValidityCategory] =
+  const [defaultSelectedValidity, setDefaultSelectedValidity] =
     useState<Validity>(Validity.ALL);
   const [selectedProvider, setSelectedProvider] = useState<Provider>();
 
@@ -30,12 +33,12 @@ export const LineStatisticsForAllProviders = () => {
     selectedValidityCategory: Validity,
     selectedProvider: Provider,
   ) => {
-    setSelectedValidityCategory(selectedValidityCategory);
+    setDefaultSelectedValidity(selectedValidityCategory);
     setSelectedProvider(selectedProvider);
   };
 
   const handleShowAll = (provider: Provider) => {
-    setSelectedValidityCategory(Validity.ALL);
+    setDefaultSelectedValidity(Validity.ALL);
     setSelectedProvider(provider);
   };
 
@@ -43,7 +46,7 @@ export const LineStatisticsForAllProviders = () => {
     (!allProviders && !allProvidersError) ||
     (!lineStatisticsForAllProviders && !lineStatisticsForAllProvidersError) ||
     (!exportedLineStatisticsForAllProviders &&
-      !exportedLineStatisticsForAllProvidersError);
+     !exportedLineStatisticsForAllProvidersError);
 
   return (
     <div className={style.lineStatisticsForAllProviders}>
@@ -51,10 +54,9 @@ export const LineStatisticsForAllProviders = () => {
         <Card
           handleClose={() => setSelectedProvider(undefined)}
           title={selectedProvider.name}
-          subTitle={validityCategoryLabel(locale)[selectedValidityCategory]}
         >
-          <LinesValidityProgress
-            selectedValidityCategory={selectedValidityCategory}
+          <LinesValidity
+            defaultSelectedValidity={defaultSelectedValidity}
             lineStatistics={
               lineStatisticsForAllProviders &&
               lineStatisticsForAllProviders[selectedProvider.id]
@@ -82,16 +84,27 @@ export const LineStatisticsForAllProviders = () => {
           />
           <div>
             {allProviders &&
-              (lineStatisticsForAllProviders ||
-                exportedLineStatisticsForAllProviders) && (
-                <PieStatisticsForAllProviders
-                  lineStatistics={lineStatisticsForAllProviders}
-                  exportedLineStatistics={exportedLineStatisticsForAllProviders}
-                  providers={allProviders}
-                  handlePieOnClick={handlePieOnClick}
-                  handleShowAll={handleShowAll}
-                />
-              )}
+             (lineStatisticsForAllProviders ||
+              exportedLineStatisticsForAllProviders) && (
+               <>
+                 <FloatingButton
+                   size="medium"
+                   aria-label={"Show"}
+                   onClick={() => {
+                   }}
+                   style={{ margin: "20px" }}
+                 >
+                   Vis oversikt over alle linjer fra Nplan.
+                 </FloatingButton>
+                 <PieStatisticsForAllProviders
+                   lineStatistics={lineStatisticsForAllProviders}
+                   exportedLineStatistics={exportedLineStatisticsForAllProviders}
+                   providers={allProviders}
+                   handlePieOnClick={handlePieOnClick}
+                   handleShowAll={handleShowAll}
+                 />
+               </>
+             )}
           </div>
         </LoadingLineStatistics>
       )}

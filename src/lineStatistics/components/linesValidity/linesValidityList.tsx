@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import style from './linesValidityProgress.module.scss';
+import style from './linesValidity.module.scss';
 import { LineStatistics, PeriodValidity, Validity } from '../../lineStatistics.types';
-import { sortLines } from './sorting/sortingUtilities';
+import { sortLines } from './linesFilters/sortingUtilities';
 import { LinesValidityListHeader } from './linesValidityListHeader';
 import {
   infoText,
@@ -11,17 +11,19 @@ import { useLocale } from '../../../appContext';
 import { Timeline } from "../timeline/timeline";
 import { ExpandableTimeline } from "../expandableTimeline/expandableTimeline";
 import { useRandomId } from "@entur/utils";
-import { Heading4 } from "@entur/typography";
-import { SortingChips } from "./sorting/sortingChips";
+import { Heading3 } from "@entur/typography";
+import { SortingChips } from "./linesFilters/sortingChips";
+import { ValidityChips } from "./linesFilters/validityChips";
+import { BannerAlertBox } from "@entur/alert";
 
 interface Props {
-  selectedValidityCategory: Validity;
+  defaultSelectedValidity: Validity;
   lineStatistics: LineStatistics;
   listTitle: string;
 }
 
 export const LinesValidityList = ({
-  selectedValidityCategory,
+  defaultSelectedValidity,
   lineStatistics,
   listTitle
 }: Props) => {
@@ -32,6 +34,8 @@ export const LinesValidityList = ({
 
   const [sorting, setSorting] = useState<number>(0);
   const [sortedLineNumbers, setSortedLineNumbers] = useState<string[]>();
+
+  const [selectedValidity, setSelectedValidity] = useState<Validity>(defaultSelectedValidity);
 
   const toggleLineOpen = (lineNumber: string) => {
     const expandedLinesStateCopy = new Map<string, boolean>(expandedLinesState);
@@ -44,11 +48,15 @@ export const LinesValidityList = ({
   };
 
   useEffect(() => {
+    setSelectedValidity(defaultSelectedValidity);
+  }, [defaultSelectedValidity])
+
+  useEffect(() => {
     lineStatistics &&
     setSortedLineNumbers(
-      sortLines(sorting, lineStatistics, selectedValidityCategory),
+      sortLines(sorting, lineStatistics, selectedValidity),
     );
-  }, [lineStatistics, selectedValidityCategory, sorting]);
+  }, [lineStatistics, selectedValidity, sorting]);
 
   const DayTypesValidity = ({
     index,
@@ -69,20 +77,19 @@ export const LinesValidityList = ({
 
   return (
     <>
-      <Heading4>{listTitle}</Heading4>
+      <Heading3>{listTitle}</Heading3>
       <div className={style.linesValidityListContainer}>
+        <ValidityChips selectedValidity={selectedValidity} setSelectedValidity={setSelectedValidity} />
         {!sortedLineNumbers || sortedLineNumbers.length === 0 ? (
-          <div style={{ marginLeft: '20px' }}>
-            {selectedValidityCategory === Validity.ALL
+          <BannerAlertBox variant="info">
+            {selectedValidity === Validity.ALL
               ? infoText(locale).noLinesFoundInfo
-              : `${infoText(locale).foundNot} ${
-                validityCategoryLabel()[selectedValidityCategory]
-              }`}
-          </div>
+              : infoText(locale).foundNot(validityCategoryLabel(locale)[selectedValidity])}
+          </BannerAlertBox>
         ) : (
           <>
             {sortedLineNumbers.length > 1 &&
-             <SortingChips id={randomId} sorting={sorting} setSorting={setSorting} />
+             <SortingChips sorting={sorting} setSorting={setSorting} />
             }
             {sortedLineNumbers.map((lineNumber, index) => (
               <ExpandableTimeline

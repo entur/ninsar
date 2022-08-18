@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import { useLocale } from '../../../appContext';
 
 interface Props {
-  lineStatistics?: LineStatistics;
-  exportedLineStatistics?: LineStatistics;
+  lineStatistics?: LineStatistics | undefined;
+  exportedLineStatistics?: LineStatistics | undefined;
 }
 
 export const DaysToFirstExpiringLine = ({

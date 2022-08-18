@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
-import { LinesValidityProgress } from './components/linesValidityProgress/linesValidityProgress';
+import { LinesValidity } from './components/linesValidity/linesValidity';
 import { useProvider } from './apiHooks/useProvider';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
 import { infoText, validityCategoryLabel } from './lineStatistics.constants';
-import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
+import {
+  IncompleteLineStatisticsError
+} from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
@@ -28,23 +30,21 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
   const { lineStatistics, lineStatisticsError } =
     useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);
-  const { exportedLineStatistics, exportedLineStatisticsError } =
-    useExportedLineStatisticsForProvider(provider);
+  const { exportedLineStatistics, exportedLineStatisticsError } = useExportedLineStatisticsForProvider(provider);
 
-  const [selectedValidityCategory, setSelectedValidityCategory] =
-    useState<Validity>(Validity.ALL);
+  const [defaultSelectedValidity, setDefaultSelectedValidity] = useState<Validity>(Validity.ALL);
 
   const numberOfLines = getNumberOfLinesType(
     lineStatistics,
     exportedLineStatistics,
   );
 
-  const handlePieOnClick = (selectedValidityCategory: Validity) => {
-    setSelectedValidityCategory(selectedValidityCategory);
+  const handlePieOnClick = (selectedValidity: Validity) => {
+    setDefaultSelectedValidity(selectedValidity);
   };
 
   const handleShowAll = () => {
-    setSelectedValidityCategory(Validity.ALL);
+    setDefaultSelectedValidity(Validity.ALL);
   };
 
   const isLoading =
@@ -74,17 +74,14 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 exportedLineStatisticsError={exportedLineStatisticsError}
               />
               {hasLineStatistics(lineStatistics) ||
-              hasLineStatistics(exportedLineStatistics) ? (
+               hasLineStatistics(exportedLineStatistics) ? (
                 <div className={style.linesStatisticsContainer}>
                   <Card
                     title={provider.name}
                     className={style.lineStatisticsCard}
-                    subTitle={
-                      validityCategoryLabel(locale)[selectedValidityCategory]
-                    }
                   >
-                    <LinesValidityProgress
-                      selectedValidityCategory={selectedValidityCategory}
+                    <LinesValidity
+                      defaultSelectedValidity={defaultSelectedValidity}
                       lineStatistics={lineStatistics}
                       exportedLineStatistics={exportedLineStatistics}
                     />
@@ -106,12 +103,12 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                       <NumberOfLines numberOfLines={numberOfLines} />
                     )}
                     {appConfig.showExpiringDaysCard &&
-                      (exportedLineStatistics || lineStatistics) && (
-                        <DaysToFirstExpiringLine
-                          lineStatistics={lineStatistics}
-                          exportedLineStatistics={exportedLineStatistics}
-                        />
-                      )}
+                     (exportedLineStatistics || lineStatistics) && (
+                       <DaysToFirstExpiringLine
+                         lineStatistics={lineStatistics}
+                         exportedLineStatistics={exportedLineStatistics}
+                       />
+                     )}
                     {appConfig.showDeliveryDateCard && (
                       <LatestDeliveryDate providerId={providerId} />
                     )}

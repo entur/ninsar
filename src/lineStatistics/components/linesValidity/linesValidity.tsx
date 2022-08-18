@@ -16,21 +16,21 @@
 
 import React from 'react';
 import { LineStatistics, Validity } from '../../lineStatistics.types';
-import style from './linesValidityProgress.module.scss';
+import style from './linesValidity.module.scss';
 import { LinesValidityList } from './linesValidityList';
 import { useLocale } from '../../../appContext';
 import { titleText } from '../../lineStatistics.constants';
 
 interface Props {
-  selectedValidityCategory: Validity;
-  lineStatistics?: LineStatistics;
-  exportedLineStatistics?: LineStatistics;
+  defaultSelectedValidity: Validity;
+  lineStatistics: LineStatistics | undefined;
+  exportedLineStatistics: LineStatistics | undefined;
 }
 
-export const LinesValidityProgress = ({
+export const LinesValidity = ({
   lineStatistics,
   exportedLineStatistics,
-  selectedValidityCategory,
+  defaultSelectedValidity,
 }: Props) => {
   const locale = useLocale();
   const hasLines = (lineStatistics: LineStatistics) =>
@@ -42,7 +42,7 @@ export const LinesValidityProgress = ({
         <LinesValidityList
           listTitle={titleText(locale).lineStatisticsFromNplan}
           lineStatistics={exportedLineStatistics}
-          selectedValidityCategory={selectedValidityCategory}
+          defaultSelectedValidity={defaultSelectedValidity}
         />
       )}
 
@@ -50,7 +50,7 @@ export const LinesValidityProgress = ({
         <LinesValidityList
           listTitle={titleText(locale).lineStatisticsFromChouette}
           lineStatistics={lineStatistics}
-          selectedValidityCategory={selectedValidityCategory}
+          defaultSelectedValidity={defaultSelectedValidity}
         />
       )}
     </div>

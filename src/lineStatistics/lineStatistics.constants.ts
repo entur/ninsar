@@ -35,7 +35,9 @@ export const errorText = (locale?: Locale) => ({
 });
 
 export const infoText = (locale?: Locale) => ({
-  foundNot: textForLocale('Fant ingen', 'Not found any', locale),
+  foundNot: function (something: string) {
+    return textForLocale(`Fant ingen ${something}`, `No ${something} found`, locale)
+  },
   noLinesFound: textForLocale('Fant ingen linjer', 'No lines found', locale),
   noLinesFoundInfo: textForLocale(
     'Last opp nytt datasett i Operatørportalen eller opprett linjer i Nplan.',
@@ -46,6 +48,7 @@ export const infoText = (locale?: Locale) => ({
 
 export const titleText = (locale?: Locale) => ({
   sortLines: textForLocale('Sorter linjer', 'Sort lines', locale),
+  selectLines: textForLocale('Velg linjer ', 'Select lines', locale),
   lineStatisticsFromNplan: textForLocale(
     'Linjestatus fra NPlan',
     'Line statistics from Nplan',
