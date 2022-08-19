@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAllProviders } from './apiHooks/useAllProviders';
 import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
-import { Provider, Validity } from './lineStatistics.types';
+import { Locale, Provider, Validity } from './lineStatistics.types';
 import { LinesValidity } from './components/linesValidity/linesValidity';
 import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
 import { useExportedLineStatisticsForAllProviders } from './apiHooks/useExportedLineStatisticsForAllProviders';
@@ -10,10 +10,11 @@ import {
 } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
-import { validityCategoryLabel } from './lineStatistics.constants';
 import style from './lineStatistics.module.scss';
 import { useLocale } from '../appContext';
-import { Button, FloatingButton } from "@entur/button";
+import { FloatingButton } from "@entur/button";
+import { ExportedLineStatisticsForAllProviders } from "./exportedLineStatisticsForAllProviders";
+import { titleText } from "./lineStatistics.constants";
 
 export const LineStatisticsForAllProviders = () => {
   const locale = useLocale();
@@ -28,6 +29,7 @@ export const LineStatisticsForAllProviders = () => {
   const [defaultSelectedValidity, setDefaultSelectedValidity] =
     useState<Validity>(Validity.ALL);
   const [selectedProvider, setSelectedProvider] = useState<Provider>();
+  const [showAllExportedLineStatistics, setShowAllExportedLineStatistics] = useState<boolean>(false);
 
   const handlePieOnClick = (
     selectedValidityCategory: Validity,
@@ -50,64 +52,74 @@ export const LineStatisticsForAllProviders = () => {
 
   return (
     <div className={style.lineStatisticsForAllProviders}>
-      {selectedProvider ? (
-        <Card
-          handleClose={() => setSelectedProvider(undefined)}
-          title={selectedProvider.name}
-        >
-          <LinesValidity
-            defaultSelectedValidity={defaultSelectedValidity}
-            lineStatistics={
-              lineStatisticsForAllProviders &&
-              lineStatisticsForAllProviders[selectedProvider.id]
-            }
-            exportedLineStatistics={
-              exportedLineStatisticsForAllProviders &&
-              exportedLineStatisticsForAllProviders[selectedProvider.id]
-            }
-          />
-        </Card>
-      ) : (
-        <LoadingLineStatistics
-          isLoading={isLoading}
-          lineStatisticsError={lineStatisticsForAllProvidersError}
-          exportedLineStatisticsError={
-            exportedLineStatisticsForAllProvidersError
-          }
-          providerError={allProvidersError}
-        >
-          <IncompleteLineStatisticsError
-            lineStatisticsError={lineStatisticsForAllProvidersError}
-            exportedLineStatisticsError={
-              exportedLineStatisticsForAllProvidersError
-            }
-          />
-          <div>
-            {allProviders &&
-             (lineStatisticsForAllProviders ||
-              exportedLineStatisticsForAllProviders) && (
-               <>
-                 <FloatingButton
-                   size="medium"
-                   aria-label={"Show"}
-                   onClick={() => {
-                   }}
-                   style={{ margin: "20px" }}
-                 >
-                   Vis oversikt over alle linjer fra Nplan.
-                 </FloatingButton>
-                 <PieStatisticsForAllProviders
-                   lineStatistics={lineStatisticsForAllProviders}
-                   exportedLineStatistics={exportedLineStatisticsForAllProviders}
-                   providers={allProviders}
-                   handlePieOnClick={handlePieOnClick}
-                   handleShowAll={handleShowAll}
-                 />
-               </>
-             )}
-          </div>
-        </LoadingLineStatistics>
-      )}
+      {showAllExportedLineStatistics ?
+        <ExportedLineStatisticsForAllProviders
+          onClose={() => setShowAllExportedLineStatistics(false)}
+          exportedLineStatistics={exportedLineStatisticsForAllProviders}
+          allProviders={allProviders}
+        /> : <>
+          {selectedProvider ? (
+            <Card
+              handleClose={() => setSelectedProvider(undefined)}
+              title={selectedProvider.name}
+            >
+              <LinesValidity
+                defaultSelectedValidity={defaultSelectedValidity}
+                lineStatistics={
+                  lineStatisticsForAllProviders &&
+                  lineStatisticsForAllProviders[selectedProvider.id]
+                }
+                exportedLineStatistics={
+                  exportedLineStatisticsForAllProviders &&
+                  exportedLineStatisticsForAllProviders[selectedProvider.id]
+                }
+              />
+            </Card>
+          ) : (
+            <LoadingLineStatistics
+              isLoading={isLoading}
+              lineStatisticsError={lineStatisticsForAllProvidersError}
+              exportedLineStatisticsError={
+                exportedLineStatisticsForAllProvidersError
+              }
+              providerError={allProvidersError}
+            >
+              <IncompleteLineStatisticsError
+                lineStatisticsError={lineStatisticsForAllProvidersError}
+                exportedLineStatisticsError={
+                  exportedLineStatisticsForAllProvidersError
+                }
+              />
+              <div>
+                {allProviders &&
+                 (lineStatisticsForAllProviders ||
+                  exportedLineStatisticsForAllProviders) && (
+                   <>
+                     {exportedLineStatisticsForAllProviders &&
+                      <FloatingButton
+                        className={style.showAllExportedLinesButton}
+                        size="medium"
+                        aria-label={titleText(Locale.EN).showAllLinesFromNplan}
+                        onClick={() => setShowAllExportedLineStatistics(true)}
+                        style={{ margin: "20px" }}
+                      >
+                        {titleText(locale).showAllLinesFromNplan}
+                      </FloatingButton>
+                     }
+                     <PieStatisticsForAllProviders
+                       lineStatistics={lineStatisticsForAllProviders}
+                       exportedLineStatistics={exportedLineStatisticsForAllProviders}
+                       providers={allProviders}
+                       handlePieOnClick={handlePieOnClick}
+                       handleShowAll={handleShowAll}
+                     />
+                   </>
+                 )}
+              </div>
+            </LoadingLineStatistics>
+          )}
+        </>
+      }
     </div>
   );
 };

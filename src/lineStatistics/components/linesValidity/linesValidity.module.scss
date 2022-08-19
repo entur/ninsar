@@ -14,9 +14,19 @@
 
 .headerContainer {
   display: flex;
-  justify-content: space-between;
   padding-right: 37px;
-  margin: 0 1px;
+}
+
+.endDate {
+  margin-left: auto;
+}
+
+.startDate {
+  margin-right: auto;
+}
+
+.validFromDate {
+  margin-left: 35%;
 }
 
 .linesListContainer {
