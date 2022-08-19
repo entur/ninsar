@@ -6,8 +6,8 @@ import { errorText } from '../../lineStatistics.constants';
 import { useLocale } from '../../../appContext';
 
 interface Props {
-  lineStatisticsError?: FetchError;
-  exportedLineStatisticsError?: FetchError;
+  lineStatisticsError?: FetchError | undefined;
+  exportedLineStatisticsError?: FetchError | undefined;
 }
 
 export const IncompleteLineStatisticsError = ({

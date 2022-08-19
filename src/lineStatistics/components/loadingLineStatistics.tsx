@@ -5,9 +5,9 @@ import { LoadingOrFailed } from './LoadingOrFailed';
 import { useLocale } from '../../appContext';
 
 interface Props {
-  providerError?: FetchError;
-  lineStatisticsError?: FetchError;
-  exportedLineStatisticsError?: FetchError;
+  providerError?: FetchError | undefined;
+  lineStatisticsError?: FetchError | undefined;
+  exportedLineStatisticsError: FetchError | undefined;
   children: ReactElement | ReactElement[];
   isLoading: boolean;
 }
