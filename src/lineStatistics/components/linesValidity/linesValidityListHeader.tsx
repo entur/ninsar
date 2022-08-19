@@ -18,14 +18,13 @@ export const LinesValidityListHeader = ({
   const locale = useLocale();
   return (
     <div className={style.headerContainer}>
-      <SmallText margin="none" as="div">
+      <SmallText margin="none" as="div" className={style.startDate}>
         {startDate}
       </SmallText>
-      <div>{''}</div>
-      <SmallText margin="none" as="div">
+      <SmallText margin="none" as="div" className={style.validFromDate}>
         {`${validFromDate} (120 ${titleText(locale).days})`}
       </SmallText>
-      <SmallText margin="none" as="div">
+      <SmallText margin="none" as="div" className={style.endDate}>
         {endDate}
       </SmallText>
     </div>
