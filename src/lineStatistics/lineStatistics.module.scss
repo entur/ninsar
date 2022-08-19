@@ -48,5 +48,8 @@
 .showAllExportedLinesButton {
   padding-right: 35px;
   padding-left: 35px;
+}
+
+.showAllExportedLinesButton > span {
   color: #fff !important; // We need this because ninkasi has the global black color for span, which updates this button text color.
 }
