@@ -1,5 +1,5 @@
-import { ChoiceChip, ChoiceChipGroup } from "@entur/chip";
 import React from "react";
+import { ChoiceChip, ChoiceChipGroup } from "@entur/chip";
 import { useLocale } from "../../../../appContext";
 import { titleText, validityCategoryLabel } from "../../../lineStatistics.constants";
 import { useRandomId } from "@entur/utils";

@@ -61,6 +61,7 @@ export const ExpandableTimeline = ({
             {
               effectivePeriodsForLineNumber.map((effectivePeriod, index) => (
                 <SubParagraph
+                  key={`subparagraph${id}${index}`}
                   margin="none"
                   as="div"
                   title={effectivePeriodText(effectivePeriod)}

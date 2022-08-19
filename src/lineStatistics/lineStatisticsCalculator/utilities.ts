@@ -16,7 +16,7 @@ export const findTimeLineEndPositionForEffectivePeriod = (
   days: number,
 ) => {
   const toDiff = moment(endDateLine, 'YYYY-MM-DD').diff(
-    moment(effectivePeriodTo).add(1, 'days'),
+    moment(effectivePeriodTo, 'YYYY-MM-DD').add(1, 'days'),
     'days',
     true,
   );

@@ -68,7 +68,7 @@ export const LinesValidityList = ({
     <>
       {lineStatistics.linesMap[lineNumber].lines.map((l, i) => (
         <Timeline
-          key={'Timeline' + index + lineNumber}
+          key={`Timeline${randomId}${i}`}
           timetables={l.timetables}
         />
       ))}
@@ -99,9 +99,10 @@ export const LinesValidityList = ({
                 effectivePeriodsForLineNumber={lineStatistics.linesMap[lineNumber].effectivePeriods as PeriodValidity[]}
                 lineNumber={lineNumber}
                 lineNames={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
-                key={'LineItem' + index + lineNumber}
+                key={`LineItem${randomId}${index}`}
                 linesValidityListHeader={
                   <LinesValidityListHeader
+                    key={`LineItemHeader${randomId}`}
                     startDate={lineStatistics.startDate}
                     validFromDate={lineStatistics.requiredValidityDate}
                     endDate={lineStatistics.endDate}
@@ -111,7 +112,7 @@ export const LinesValidityList = ({
                 <DayTypesValidity
                   index={index}
                   lineNumber={lineNumber}
-                  key={'DayTypesValidity' + lineNumber + index}
+                  key={`DayTypesValidity${randomId}`}
                 />
               </ExpandableTimeline>
             ))}

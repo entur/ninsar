@@ -1,5 +1,5 @@
 import { ChoiceChip, ChoiceChipGroup } from "@entur/chip";
-import { DownwardIcon, UpwardIcon, CloseIcon } from "@entur/icons";
+import { DownwardIcon, UpwardIcon } from "@entur/icons";
 import React from "react";
 import { useLocale } from "../../../../appContext";
 import { titleText } from "../../../lineStatistics.constants";

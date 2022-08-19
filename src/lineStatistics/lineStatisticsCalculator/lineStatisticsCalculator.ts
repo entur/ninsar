@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import {
   Line,
   LineNumbers,
@@ -7,7 +7,6 @@ import {
   PeriodValidity,
   Validity,
 } from '../lineStatistics.types';
-import { Moment } from 'moment/moment';
 import {
   findTimeLineEndPositionForEffectivePeriod,
   findTimeLineEndPositionForTimeTable,
