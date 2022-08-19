@@ -97,6 +97,7 @@ export const LineStatisticsForAllProviders = () => {
                    <>
                      {exportedLineStatisticsForAllProviders &&
                       <FloatingButton
+                        className={style.showAllExportedLinesButton}
                         size="medium"
                         aria-label={titleText(Locale.EN).showAllLinesFromNplan}
                         onClick={() => setShowAllExportedLineStatistics(true)}
