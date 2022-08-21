@@ -75,7 +75,16 @@ export const titleText = (locale?: Locale) => ({
   numberOfDays: textForLocale('Antall dager', 'Number of days', locale),
   back: textForLocale('tilbake', 'back', locale),
   showAllLinesFromNplan: textForLocale('Vis alle linjer fra Nplan', 'Show all lines from nplan', locale),
-  allLinesFromNplan: textForLocale('Alle linjer fra Nplan', 'All lines from nplan', locale)
+  allLinesFromNplan: textForLocale('Alle linjer fra Nplan', 'All lines from nplan', locale),
+  noLongerValid: function (lineNumber: string, numberOfDays: number) {
+    return textForLocale(`Linje ${lineNumber} er ikke gyldig lenger.`, `Line ${lineNumber} is no longer valid.`, locale)
+  },
+  expiringLine: function (lineNumber: string, numberOfDays: number) {
+    return textForLocale(`Linje {lineNumber} utløper om {numberOfDays} dager.`, `Line ${lineNumber} is expiring in ${numberOfDays} days.`, locale)
+  },
+  validLine: function (lineNumber: string, numberOfDays: number) {
+    return textForLocale(`Linje {lineNumber} har gyldige data for {numberOfDays} dager.`, `Line ${lineNumber} has valid data for ${numberOfDays} days.`, locale)
+  },
 });
 
 const textForLocale = (

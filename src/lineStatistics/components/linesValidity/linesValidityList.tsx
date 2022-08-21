@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './linesValidity.module.scss';
 import { LineStatistics, PeriodValidity, Validity } from '../../lineStatistics.types';
 import { sortLines } from './linesFilters/sortingUtilities';
-import { LinesValidityListHeader } from './linesValidityListHeader';
+import { LinesValidityHeader } from './linesValidityHeader';
 import {
   infoText,
   validityCategoryLabel,
@@ -15,6 +15,7 @@ import { Heading3 } from "@entur/typography";
 import { SortingChips } from "./linesFilters/sortingChips";
 import { ValidityChips } from "./linesFilters/validityChips";
 import { BannerAlertBox } from "@entur/alert";
+import { ValidNumberOfDaysText } from "./validNumberOfDaysText";
 
 interface Props {
   defaultSelectedValidity: Validity;
@@ -92,29 +93,37 @@ export const LinesValidityList = ({
              <SortingChips sorting={sorting} setSorting={setSorting} />
             }
             {sortedLineNumbers.map((lineNumber, index) => (
-              <ExpandableTimeline
-                id={randomId}
-                open={isLineOpen(lineNumber)}
-                onToggle={() => toggleLineOpen(lineNumber)}
-                effectivePeriodsForLineNumber={lineStatistics.linesMap[lineNumber].effectivePeriods as PeriodValidity[]}
-                lineNumber={lineNumber}
-                lineNames={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
-                key={`LineItem${randomId}${index}`}
-                linesValidityListHeader={
-                  <LinesValidityListHeader
-                    key={`LineItemHeader${randomId}`}
-                    startDate={lineStatistics.startDate}
-                    validFromDate={lineStatistics.requiredValidityDate}
-                    endDate={lineStatistics.endDate}
-                  />
-                }
-              >
-                <DayTypesValidity
-                  index={index}
+              <>
+                <ExpandableTimeline
+                  id={randomId}
+                  open={isLineOpen(lineNumber)}
+                  onToggle={() => toggleLineOpen(lineNumber)}
+                  effectivePeriodsForLineNumber={lineStatistics.linesMap[lineNumber].effectivePeriods as PeriodValidity[]}
                   lineNumber={lineNumber}
-                  key={`DayTypesValidity${randomId}`}
-                />
-              </ExpandableTimeline>
+                  lineNames={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
+                  key={`LineItem${randomId}${index}`}
+                  numberOfDaysHeader={
+                    <ValidNumberOfDaysText
+                      lineNumber={lineNumber}
+                      numberOfDays={lineStatistics.linesMap[lineNumber].daysValid}
+                    />
+                  }
+                  linesValidityListHeader={
+                    <LinesValidityHeader
+                      key={`LineItemHeader${randomId}`}
+                      startDate={lineStatistics.startDate}
+                      validFromDate={lineStatistics.requiredValidityDate}
+                      endDate={lineStatistics.endDate}
+                    />
+                  }
+                >
+                  <DayTypesValidity
+                    index={index}
+                    lineNumber={lineNumber}
+                    key={`DayTypesValidity${randomId}`}
+                  />
+                </ExpandableTimeline>
+              </>
             ))}
           </>
         )}

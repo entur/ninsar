@@ -14,6 +14,7 @@ interface Props {
   onToggle: () => void;
   contentStyle?: CSSProperties | undefined;
   linesValidityListHeader: React.ReactNode;
+  numberOfDaysHeader: React.ReactNode;
 }
 
 export const ExpandableTimeline = ({
@@ -25,7 +26,8 @@ export const ExpandableTimeline = ({
   open,
   onToggle,
   contentStyle,
-  linesValidityListHeader
+  linesValidityListHeader,
+  numberOfDaysHeader
 }: Props) => {
 
   const getTimelineStyle = (index: number, effectivePeriod: PeriodValidity) => ({
@@ -78,6 +80,7 @@ export const ExpandableTimeline = ({
           </div>
         </div>
       </button>
+      {numberOfDaysHeader}
       <BaseExpand
         className={style.edsExpandablePanel__content}
         id={id}

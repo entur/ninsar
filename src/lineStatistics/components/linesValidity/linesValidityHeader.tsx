@@ -10,7 +10,7 @@ interface Props {
   endDate: string;
 }
 
-export const LinesValidityListHeader = ({
+export const LinesValidityHeader = ({
   startDate,
   validFromDate,
   endDate,
