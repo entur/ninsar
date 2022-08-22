@@ -80,10 +80,10 @@ export const titleText = (locale?: Locale) => ({
     return textForLocale(`Linje ${lineNumber} er ikke gyldig lenger.`, `Line ${lineNumber} is no longer valid.`, locale)
   },
   expiringLine: function (lineNumber: string, numberOfDays: number) {
-    return textForLocale(`Linje {lineNumber} utløper om {numberOfDays} dager.`, `Line ${lineNumber} is expiring in ${numberOfDays} days.`, locale)
+    return textForLocale(`Linje ${lineNumber} utløper om ${numberOfDays} dager.`, `Line ${lineNumber} is expiring in ${numberOfDays} days.`, locale)
   },
   validLine: function (lineNumber: string, numberOfDays: number) {
-    return textForLocale(`Linje {lineNumber} har gyldige data for {numberOfDays} dager.`, `Line ${lineNumber} has valid data for ${numberOfDays} days.`, locale)
+    return textForLocale(`Linje ${lineNumber} har gyldige data for ${numberOfDays} dager.`, `Line ${lineNumber} has valid data for ${numberOfDays} days.`, locale)
   },
 });
 

@@ -33,7 +33,7 @@ export const LinesValidityList = ({
 
   const [expandedLinesState, setExpandedLinesState] = useState<Map<string, boolean>>(new Map<string, boolean>());
 
-  const [sorting, setSorting] = useState<number>(0);
+  const [sorting, setSorting] = useState<number>(1);
   const [sortedLineNumbers, setSortedLineNumbers] = useState<string[]>();
 
   const [selectedValidity, setSelectedValidity] = useState<Validity>(defaultSelectedValidity);
