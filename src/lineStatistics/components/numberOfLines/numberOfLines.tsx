@@ -34,9 +34,9 @@ export const NumberOfLines = ({ numberOfLines }: Props) => {
         </Heading2>
         <Heading2
           className={style.numberOfLinesForCategory}
-          style={{ color: 'var(--invalid-color)' }}
+          style={{ color: 'var(--expired-color)' }}
         >
-          {numberOfLines.numberOfInvalidLines}
+          {numberOfLines.numberOfExpiredLines}
         </Heading2>
       </div>
     </Card>

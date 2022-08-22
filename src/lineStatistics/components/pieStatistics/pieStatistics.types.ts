@@ -1,5 +1,5 @@
 export interface NumberOfLinesType {
-  numberOfInvalidLines: number;
+  numberOfExpiredLines: number;
   numberOfValidLines: number;
   numberOfExpiringLines: number;
   totalNumberOfLines: number;

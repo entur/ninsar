@@ -1,7 +1,7 @@
 import { Locale, Validity } from './lineStatistics.types';
 
 export const validityCategoryLabel = (locale?: Locale) => ({
-  [Validity.INVALID]: textForLocale('Utgåtte linjer', 'Invalid lines', locale),
+  [Validity.EXPIRED]: textForLocale('Utgåtte linjer', 'Expired lines', locale),
   [Validity.VALID]: textForLocale('Gyldige linjer', 'Valid lines', locale),
   [Validity.EXPIRING]: textForLocale(
     'Utgående linjer',

@@ -6,7 +6,7 @@ import { titleText } from '../../lineStatistics.constants';
 import { useLocale } from '../../../appContext';
 
 export const ExpandableNumberOfLines = ({
-  numberOfInvalidLines,
+  numberOfExpiredLines,
   numberOfValidLines,
   numberOfExpiringLines,
   totalNumberOfLines,
@@ -18,7 +18,7 @@ export const ExpandableNumberOfLines = ({
         title={`${titleText(locale).numberOfLines}: ${totalNumberOfLines}`}
       >
         <div>
-          <span style={{ color: 'var(--invalid-color)' }}>{numberOfInvalidLines}</span> /{' '}
+          <span style={{ color: 'var(--expired-color)' }}>{numberOfExpiredLines}</span> /{' '}
           <span style={{ color: 'var(--valid-color)' }}>{numberOfValidLines}</span> /{' '}
           <span style={{ color: 'var(--expiring-color)' }}>{numberOfExpiringLines}</span>
         </div>

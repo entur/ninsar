@@ -51,8 +51,8 @@ export const findTimeLineEndPositionForTimeTable = (
 };
 
 export const findValidity = (daysForward: number) => {
-  if (daysForward < 0 || daysForward === Infinity) {
-    return Validity.INVALID;
+  if (daysForward <= 0 || daysForward === Infinity) {
+    return Validity.EXPIRED;
   } else if (daysForward >= 120) {
     return Validity.VALID;
   }

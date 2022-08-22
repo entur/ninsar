@@ -2,7 +2,7 @@
 
 .timeLineContainer {
   background: linear-gradient(to right,
-          var(--invalid-color-light) 0%, var(--invalid-color-light) var(--valid-line-percentage),
+          var(--expired-color-light) 0%, var(--expired-color-light) var(--valid-line-percentage),
           $colors-greys-grey70 var(--valid-line-percentage), $colors-greys-grey70 100%);
   width: 100%;
   height: 56px;

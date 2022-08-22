@@ -3,30 +3,30 @@ import { Validity } from '../../lineStatistics.types';
 
 export const color = {
   valid: '#33c146',
-  invalid: '#b20000',
+  expired: '#b20000',
   expiring: '#FFAA00',
   highlight: {
     valid: '#4caf50',
     expiring: '#FFB60A',
-    invalid: '#cc0000',
+    expired: '#cc0000',
   }
 }
 
 export const generatePieChartData = ({
   numberOfValidLines,
   numberOfExpiringLines,
-  numberOfInvalidLines,
+  numberOfExpiredLines,
 }: NumberOfLinesType) => ({
-  labels: [Validity.VALID, Validity.EXPIRING, Validity.INVALID],
+  labels: [Validity.VALID, Validity.EXPIRING, Validity.EXPIRED],
   datasets: [
     {
-      data: [numberOfValidLines, numberOfExpiringLines, numberOfInvalidLines],
+      data: [numberOfValidLines, numberOfExpiringLines, numberOfExpiredLines],
       backgroundColor: [
         color.highlight.valid,
         color.highlight.expiring,
-        color.highlight.invalid,
+        color.highlight.expired,
       ],
-      hoverBackgroundColor: [color.valid, color.expiring, color.invalid],
+      hoverBackgroundColor: [color.valid, color.expiring, color.expired],
     },
   ],
 });

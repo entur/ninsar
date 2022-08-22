@@ -23,8 +23,8 @@ export const getNumberOfLinesType = (
     lineStatistics,
     exportedLineStatistics,
   ),
-  numberOfInvalidLines: numberOfLinesForValidityCategory(
-    Validity.INVALID,
+  numberOfExpiredLines: numberOfLinesForValidityCategory(
+    Validity.EXPIRED,
     lineStatistics,
     exportedLineStatistics,
   ),
