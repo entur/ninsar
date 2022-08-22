@@ -22,7 +22,7 @@ export interface PeriodValidity extends Period {
 }
 
 export enum Validity {
-  EXPIRED = 'EXPIRED',
+  INVALID = 'INVALID', // Expired
   VALID = 'VALID',
   EXPIRING = 'EXPIRING',
   ALL = 'ALL',
