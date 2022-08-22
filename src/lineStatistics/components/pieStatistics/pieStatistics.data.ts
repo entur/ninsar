@@ -17,7 +17,7 @@ export const generatePieChartData = ({
   numberOfExpiringLines,
   numberOfExpiredLines,
 }: NumberOfLinesType) => ({
-  labels: [Validity.VALID, Validity.EXPIRING, Validity.EXPIRED],
+  labels: [Validity.VALID, Validity.EXPIRING, Validity.INVALID],
   datasets: [
     {
       data: [numberOfValidLines, numberOfExpiringLines, numberOfExpiredLines],

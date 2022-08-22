@@ -25,7 +25,7 @@ export const ValidityChips = ({ selectedValidity, setSelectedValidity }: Props) 
       >
         <ChoiceChip value={Validity.ALL}>{validityCategoryLabel(locale)[Validity.ALL]}</ChoiceChip>
         <ChoiceChip value={Validity.VALID}>{validityCategoryLabel(locale)[Validity.VALID]}</ChoiceChip>
-        <ChoiceChip value={Validity.EXPIRED}>{validityCategoryLabel(locale)[Validity.EXPIRED]}</ChoiceChip>
+        <ChoiceChip value={Validity.INVALID}>{validityCategoryLabel(locale)[Validity.INVALID]}</ChoiceChip>
         <ChoiceChip value={Validity.EXPIRING}>{validityCategoryLabel(locale)[Validity.EXPIRING]}</ChoiceChip>
       </ChoiceChipGroup>
     </div>
