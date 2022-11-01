@@ -54,7 +54,7 @@
     ]
   },
   "devDependencies": {
-    "@graphql-codegen/typescript-graphql-request": "4.5.7",
+    "@graphql-codegen/typescript-graphql-request": "4.5.8",
     "@types/material-ui": "0.21.12",
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
