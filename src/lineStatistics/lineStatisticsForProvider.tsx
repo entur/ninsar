@@ -6,9 +6,7 @@ import { PieStatistics } from './components/pieStatistics/pieStatistics';
 import { LineStatistics, Validity } from './lineStatistics.types';
 import { useExportedLineStatisticsForProvider } from './apiHooks/useExportedLineStatisticsForProvider';
 import { infoText } from './lineStatistics.constants';
-import {
-  IncompleteLineStatisticsError
-} from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
+import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { Card } from './components/card/card';
 import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
@@ -30,9 +28,11 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
   const { lineStatistics, lineStatisticsError } =
     useLineStatisticsForProvider(providerId);
   const { provider, providerError } = useProvider(providerId);
-  const { exportedLineStatistics, exportedLineStatisticsError } = useExportedLineStatisticsForProvider(provider);
+  const { exportedLineStatistics, exportedLineStatisticsError } =
+    useExportedLineStatisticsForProvider(provider);
 
-  const [defaultSelectedValidity, setDefaultSelectedValidity] = useState<Validity>(Validity.ALL);
+  const [defaultSelectedValidity, setDefaultSelectedValidity] =
+    useState<Validity>(Validity.ALL);
 
   const numberOfLines = getNumberOfLinesType(
     lineStatistics,
@@ -74,7 +74,7 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 exportedLineStatisticsError={exportedLineStatisticsError}
               />
               {hasLineStatistics(lineStatistics) ||
-               hasLineStatistics(exportedLineStatistics) ? (
+              hasLineStatistics(exportedLineStatistics) ? (
                 <div className={style.linesStatisticsContainer}>
                   <Card
                     title={provider.name}
@@ -94,28 +94,30 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                         providerName={provider.name}
                         showHeader={false}
                         numberOfLines={numberOfLines}
-                        pieWidth={200}
-                        pieHeight={300}
                         className={style.pieChartContainer}
+                        showLineButton={false}
                       />
                     </Card>
                     {appConfig.showNumberOfLinesCard && (
                       <NumberOfLines numberOfLines={numberOfLines} />
                     )}
                     {appConfig.showExpiringDaysCard &&
-                     (exportedLineStatistics || lineStatistics) && (
-                       <DaysToFirstExpiringLine
-                         lineStatistics={lineStatistics}
-                         exportedLineStatistics={exportedLineStatistics}
-                       />
-                     )}
+                      (exportedLineStatistics || lineStatistics) && (
+                        <DaysToFirstExpiringLine
+                          lineStatistics={lineStatistics}
+                          exportedLineStatistics={exportedLineStatistics}
+                        />
+                      )}
                     {appConfig.showDeliveryDateCard && (
                       <LatestDeliveryDate providerId={providerId} />
                     )}
                   </div>
                 </div>
               ) : (
-                <BannerAlertBox title={infoText(locale).noLinesFound} variant="info">
+                <BannerAlertBox
+                  title={infoText(locale).noLinesFound}
+                  variant="info"
+                >
                   {infoText(locale).noLinesFoundInfo}
                 </BannerAlertBox>
               )}

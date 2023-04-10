@@ -36,7 +36,11 @@ export const errorText = (locale?: Locale) => ({
 
 export const infoText = (locale?: Locale) => ({
   foundNot: function (something: string) {
-    return textForLocale(`Fant ingen ${(something ?? '').toLowerCase()}`, `No ${(something ?? '').toLowerCase()} found`, locale)
+    return textForLocale(
+      `Fant ingen ${(something ?? '').toLowerCase()}`,
+      `No ${(something ?? '').toLowerCase()} found`,
+      locale,
+    );
   },
   noLinesFound: textForLocale('Fant ingen linjer', 'No lines found', locale),
   noLinesFoundInfo: textForLocale(
@@ -60,7 +64,7 @@ export const titleText = (locale?: Locale) => ({
     locale,
   ),
   numberOfLines: textForLocale('Antall linjer', 'Number of lines', locale),
-  showAll: textForLocale('Vis alle', 'Show all', locale),
+  showLines: textForLocale('Vis linjer', 'Show lines', locale),
   latestDeliveryDate: textForLocale(
     'Dato for siste leveranse',
     'Latest delivery date',
@@ -74,16 +78,36 @@ export const titleText = (locale?: Locale) => ({
   days: textForLocale('dager', 'days', locale),
   numberOfDays: textForLocale('Antall dager', 'Number of days', locale),
   back: textForLocale('tilbake', 'back', locale),
-  showAllLinesFromNplan: textForLocale('Vis alle linjer fra Nplan', 'Show all lines from nplan', locale),
-  allLinesFromNplan: textForLocale('Alle linjer fra Nplan', 'All lines from nplan', locale),
-  noLongerValid: function (lineNumber: string, numberOfDays: number) {
-    return textForLocale(`Linje ${lineNumber} er ikke gyldig lenger.`, `Line ${lineNumber} is no longer valid.`, locale)
+  showAllLinesFromNplan: textForLocale(
+    'Vis alle linjer fra Nplan',
+    'Show all lines from nplan',
+    locale,
+  ),
+  allLinesFromNplan: textForLocale(
+    'Alle linjer fra Nplan',
+    'All lines from nplan',
+    locale,
+  ),
+  noLongerValid: function (lineNumber: string) {
+    return textForLocale(
+      `Linje ${lineNumber} er ikke gyldig lenger.`,
+      `Line ${lineNumber} is no longer valid.`,
+      locale,
+    );
   },
   expiringLine: function (lineNumber: string, numberOfDays: number) {
-    return textForLocale(`Linje ${lineNumber} utløper om ${numberOfDays} dager.`, `Line ${lineNumber} is expiring in ${numberOfDays} days.`, locale)
+    return textForLocale(
+      `Linje ${lineNumber} utløper om ${numberOfDays} dager.`,
+      `Line ${lineNumber} is expiring in ${numberOfDays} days.`,
+      locale,
+    );
   },
   validLine: function (lineNumber: string, numberOfDays: number) {
-    return textForLocale(`Linje ${lineNumber} har gyldige data for ${numberOfDays} dager.`, `Line ${lineNumber} has valid data for ${numberOfDays} days.`, locale)
+    return textForLocale(
+      `Linje ${lineNumber} har gyldige data for ${numberOfDays} dager.`,
+      `Line ${lineNumber} has valid data for ${numberOfDays} days.`,
+      locale,
+    );
   },
 });
 

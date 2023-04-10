@@ -23,36 +23,35 @@ export const PieStatisticsForAllProviders = ({
   return (
     <div className={style.pieStatisticsForAllProviders}>
       {(lineStatistics || exportedLineStatistics) &&
-       providers
-         .filter(
-           (provider) =>
-             (lineStatistics &&
-              Object.keys(lineStatistics).some(
-                (key) => key === String(provider.id),
-              )) ||
-             (exportedLineStatistics &&
-              Object.keys(exportedLineStatistics).some(
-                (key) => key === String(provider.id),
-              )),
-         )
-         .map((provider, index) => (
-           <PieStatistics
-             showHeader={true}
-             key={'provider-pie' + index}
-             providerName={provider.name}
-             handleShowAllClick={() => handleShowAll(provider)}
-             handlePieOnClick={(label: Validity) =>
-               handlePieOnClick(label, provider)
-             }
-             numberOfLines={getNumberOfLinesType(
-       lineStatistics && lineStatistics[provider.id],
-       exportedLineStatistics && exportedLineStatistics[provider.id],
-             )}
-             pieWidth={150}
-             pieHeight={250}
-             className={style.pieChartContainer}
-           />
-         ))}
+        providers
+          .filter(
+            (provider) =>
+              (lineStatistics &&
+                Object.keys(lineStatistics).some(
+                  (key) => key === String(provider.id),
+                )) ||
+              (exportedLineStatistics &&
+                Object.keys(exportedLineStatistics).some(
+                  (key) => key === String(provider.id),
+                )),
+          )
+          .map((provider, index) => (
+            <PieStatistics
+              showHeader={true}
+              key={'provider-pie' + index}
+              providerName={provider.name}
+              handleShowAllClick={() => handleShowAll(provider)}
+              handlePieOnClick={(label: Validity) =>
+                handlePieOnClick(label, provider)
+              }
+              numberOfLines={getNumberOfLinesType(
+                lineStatistics && lineStatistics[provider.id],
+                exportedLineStatistics && exportedLineStatistics[provider.id],
+              )}
+              className={style.pieChartContainer}
+              showLineButton={true}
+            />
+          ))}
     </div>
   );
 };
