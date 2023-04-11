@@ -47,10 +47,19 @@ export const PieStatistics = ({
 }: Props) => {
   const locale = useLocale();
 
-  const textCenter = {
-    id: 'textCenter',
-    beforeDatasetsDraw(chart: Chart): boolean | void {
-      const { ctx, data } = chart;
+  const totalNumberOfLines = {
+    id: 'totalNumberOfLines',
+    beforeDatasetsDraw(chart: Chart) {
+      const { ctx, data, legend } = chart;
+
+      const hiddenLegends = legend?.legendItems?.filter((item) => item.hidden);
+      const hiddenLegendsIndexes = hiddenLegends?.map((item) =>
+        legend?.legendItems?.indexOf(item),
+      );
+
+      const dataNotHidden = data.datasets[0].data.filter(
+        (value, index) => !hiddenLegendsIndexes?.includes(index),
+      );
 
       ctx.save();
       ctx.font = 'bold 20px sans-serif';
@@ -58,9 +67,9 @@ export const PieStatistics = ({
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(
-        `${data.datasets[0].data
+        `${dataNotHidden
           .map((d) => Number(d))
-          .reduce((a, b) => (a ?? 0) + (b ?? 0))}`,
+          .reduce((a, b) => (a ?? 0) + (b ?? 0), 0)}`,
         chart.getDatasetMeta(0).data[0].x,
         chart.getDatasetMeta(0).data[0].y,
       );
@@ -83,7 +92,7 @@ export const PieStatistics = ({
       >
         <Doughnut
           data={generatePieChartData(numberOfLines)}
-          plugins={[textCenter]}
+          plugins={[totalNumberOfLines]}
           options={{
             responsive: true,
             maintainAspectRatio: false,
