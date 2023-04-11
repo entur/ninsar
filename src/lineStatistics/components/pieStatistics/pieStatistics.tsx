@@ -98,7 +98,37 @@ export const PieStatistics = ({
                 handlePieOnClick(chart.data.labels[elements[0].index]);
             },
             plugins: {
-              tooltip: { enabled: true },
+              tooltip: {
+                callbacks: {
+                  title: (context) => {
+                    const label = context[0].label;
+                    return label.charAt(0) + label.slice(1).toLowerCase();
+                  },
+                  label: (context) => {
+                    const { chart } = context;
+                    return `${
+                      chart.data.datasets[context.datasetIndex].data[
+                        context.dataIndex
+                      ]
+                    }`;
+                  },
+                },
+                backgroundColor: '#FFF',
+                titleAlign: 'center',
+                titleFont: {
+                  size: 16,
+                },
+                titleColor: '#0066ff',
+                titleMarginBottom: 10,
+                bodyColor: '#000',
+                bodyAlign: 'center',
+                bodyFont: {
+                  size: 14,
+                },
+                displayColors: false,
+                borderColor: '#0066ff',
+                borderWidth: 1,
+              },
               legend: {
                 labels: {
                   usePointStyle: true,
