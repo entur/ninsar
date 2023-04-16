@@ -21,14 +21,10 @@
 
 .validPeriodTitleContainer {
   overflow: hidden;
-  background-color: var(--valid-color-light);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: $border-radiuses-medium;
-}
-
-.validPeriodTitle {
 }
 
 .headerLineNumberContainer {
