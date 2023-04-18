@@ -1,3 +1,5 @@
+$valid-line-percentage: 67;
+
 :root {
   --valid-color: #33c146;
   --expired-color: #b20000;
@@ -7,6 +9,11 @@
   --expiring-color-highlight: #FFB60A;
   --expired-color-light: #f6c0c0;
   --valid-color-light: #c3e2c3;
+  --expiring-color-light: #ffe4b4;
 
-  --valid-line-percentage: 67%;
+  --valid-line-percentage: #{$valid-line-percentage + '%'};
+}
+
+:export {
+  validLinePercentage: $valid-line-percentage
 }
