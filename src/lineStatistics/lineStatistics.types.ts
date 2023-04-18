@@ -46,6 +46,7 @@ export interface PublicLine {
   lineNumber: string;
   lineNames: string[];
   effectivePeriods: Period[] | PeriodValidity[];
+  lineType: LineType;
   lines: Line[];
 }
 
@@ -56,4 +57,10 @@ export interface PublicLineValidity extends PublicLine {
 export enum Locale {
   NO = 'NO',
   EN = 'EN',
+}
+
+export enum LineType {
+  ALL = 'ALL',
+  FIXED = 'FIXED',
+  FLEXIBLE = 'FLEXIBLE',
 }

@@ -1,4 +1,14 @@
-import { Locale, Validity } from './lineStatistics.types';
+import { LineType, Locale, Validity } from './lineStatistics.types';
+
+export const lineTypeLabel = (locale?: Locale) => ({
+  [LineType.ALL]: textForLocale('Alle', 'All', locale),
+  [LineType.FIXED]: textForLocale('Faste linjer', 'Fixed lines', locale),
+  [LineType.FLEXIBLE]: textForLocale(
+    'Flexible linjer',
+    'Flexible lines',
+    locale,
+  ),
+});
 
 export const validityCategoryLabel = (locale?: Locale) => ({
   [Validity.INVALID]: textForLocale('Utgåtte linjer', 'Expired lines', locale),
@@ -52,7 +62,8 @@ export const infoText = (locale?: Locale) => ({
 
 export const titleText = (locale?: Locale) => ({
   sortLines: textForLocale('Sorter linjer', 'Sort lines', locale),
-  selectLines: textForLocale('Velg linjer ', 'Select lines', locale),
+  selectLines: textForLocale('Velg linjer', 'Select lines', locale),
+  selectLineTypes: textForLocale('Velg linjetype', 'Select line type', locale),
   lineStatisticsFromNplan: textForLocale(
     'Linjestatus fra NPlan',
     'Line statistics from Nplan',

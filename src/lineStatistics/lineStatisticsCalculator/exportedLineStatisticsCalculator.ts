@@ -1,10 +1,10 @@
 import moment, { Moment } from 'moment';
 import {
+  Line,
   LineNumbers,
   LinesMap,
   LineStatistics,
   PeriodValidity,
-  Timetable,
   Validity,
 } from '../lineStatistics.types';
 import {
@@ -21,7 +21,6 @@ import { ExportedLineStatisticsResponse } from '../apiHooks/lineStatistics.respo
 export const calculateExportedLineStatistics = (
   exportedLineStatisticsResponse: ExportedLineStatisticsResponse,
 ): LineStatistics => {
-
   const startDateLine: Moment = moment(
     exportedLineStatisticsResponse.startDate,
     'YYYY-MM-DD',
@@ -86,47 +85,41 @@ export const calculateExportedLineStatistics = (
 
       const daysValid: number =
         getDaysRange(startDateLine, publicLineValidPeriod) || 0;
-
-      const timetables: Timetable[] = publicLine.lines.flatMap(
-        (line, lineIndex) => {
-          return line.exportedDayTypesStatistics.map(
-            (dayType, dayTypeIndex) => ({
-              id: dayTypeIndex,
-              objectId: dayType.serviceJourneyName
-                ? `${dayType.dayTypeNetexId} (${dayType.serviceJourneyName})`
-                : dayType.dayTypeNetexId,
-              periods: [
-                {
-                  to: dayType.operatingPeriodTo,
-                  from: dayType.operatingPeriodFrom,
-                  timelineStartPosition: findTimeLineStartPositionForTimeTable(
-                    dayType.operatingPeriodFrom,
-                    startDateLine,
-                    180,
-                  ),
-                  timelineEndPosition: findTimeLineEndPositionForTimeTable(
-                    dayType.operatingPeriodTo,
-                    endDateLine,
-                    180,
-                  ),
-                },
-              ],
-            }),
-          );
-        },
-      );
+      const lines: Line[] = publicLine.lines.flatMap((line) => ({
+        timetables: line.exportedDayTypesStatistics.map(
+          (dayType, dayTypeIndex) => ({
+            id: dayTypeIndex,
+            objectId: dayType.serviceJourneyName
+              ? `${dayType.dayTypeNetexId} (${dayType.serviceJourneyName})`
+              : dayType.dayTypeNetexId,
+            periods: [
+              {
+                to: dayType.operatingPeriodTo,
+                from: dayType.operatingPeriodFrom,
+                timelineStartPosition: findTimeLineStartPositionForTimeTable(
+                  dayType.operatingPeriodFrom,
+                  startDateLine,
+                  180,
+                ),
+                timelineEndPosition: findTimeLineEndPositionForTimeTable(
+                  dayType.operatingPeriodTo,
+                  endDateLine,
+                  180,
+                ),
+              },
+            ],
+          }),
+        ),
+      }));
 
       return {
         [publicLine.publicCode]: {
           lineNumber: publicLine.publicCode,
           lineNames: publicLine.lines.map((line) => line.lineName),
           effectivePeriods: [effectivePeriodFormatted],
-          lines: [
-            {
-              timetables,
-            },
-          ],
+          lines: lines,
           daysValid: daysValid,
+          lineType: publicLine.lines[0].lineType,
         },
       };
     })

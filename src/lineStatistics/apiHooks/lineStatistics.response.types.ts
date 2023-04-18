@@ -1,4 +1,9 @@
-import { LineStatistics, PublicLine, Validity } from '../lineStatistics.types';
+import {
+  LineStatistics,
+  LineType,
+  PublicLine,
+  Validity,
+} from '../lineStatistics.types';
 
 export type FetchError = {
   status: number;
@@ -44,6 +49,7 @@ export interface ExportedDayTypeStatisticsResponse {
 
 export interface ExportedLine {
   lineName: string;
+  lineType: LineType;
   operatingPeriodTo: string;
   operatingPeriodFrom: string;
   exportedDayTypesStatistics: ExportedDayTypeStatisticsResponse[];
