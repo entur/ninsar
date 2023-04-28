@@ -16,7 +16,7 @@
     "@entur/loader": "0.4.30",
     "@entur/menu": "4.1.41",
     "@entur/micro-frontend": "0.4.0",
-    "@entur/modal": "1.7.1",
+    "@entur/modal": "1.7.2",
     "@entur/table": "4.6.8",
     "@entur/tokens": "3.9.0",
     "@entur/typography": "1.7.17",
