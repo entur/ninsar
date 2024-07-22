@@ -20,7 +20,7 @@
     "@entur/table": "4.8.14",
     "@entur/tokens": "3.15.2",
     "@entur/typography": "1.8.41",
-    "chart.js": "3.9.1",
+    "chart.js": "4.4.3",
     "graphql": "16.9.0",
     "graphql-request": "4.3.0",
     "http-proxy-middleware": "2.0.6",
