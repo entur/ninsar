@@ -4,7 +4,7 @@
   "license": "EUPL-1.2",
   "proxy": "http://localhost:11701",
   "dependencies": {
-    "@auth0/auth0-react": "1.12.1",
+    "@auth0/auth0-react": "2.2.4",
     "@entur/alert": "0.16.17",
     "@entur/button": "2.10.15",
     "@entur/chip": "0.7.21",
