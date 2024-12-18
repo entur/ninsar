@@ -35,6 +35,7 @@ export const useExportedLineStatisticsForAllProviders = (
         operatingPeriodFrom
         lines {
           lineName
+          lineType
           operatingPeriodTo
           operatingPeriodFrom
           exportedDayTypesStatistics {
@@ -57,7 +58,7 @@ export const useExportedLineStatisticsForAllProviders = (
         const client = new GraphQLClient(endpoint, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Et-Client-Name': 'entur-ninsar'
+            'Et-Client-Name': 'entur-ninsar',
           },
         });
         const response = await client.request<{
