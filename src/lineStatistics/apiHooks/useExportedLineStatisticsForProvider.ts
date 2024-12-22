@@ -19,19 +19,20 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
   const getLineForProviderQuery = `
   query GetExportedLineStatistics($providerCode: ID!) {
     lineStatistics(providerCode: $providerCode) {
-      startDate,
+      startDate
       publicLines {
         providerCode
-        publicCode,
-        operatingPeriodTo,
-        operatingPeriodFrom,
+        publicCode
+        operatingPeriodTo
+        operatingPeriodFrom
         lines {
-          lineName,
-          operatingPeriodTo,
-          operatingPeriodFrom,
+          lineName
+          lineType
+          operatingPeriodTo
+          operatingPeriodFrom
           exportedDayTypesStatistics {
-            dayTypeNetexId,
-            operatingPeriodTo,
+            dayTypeNetexId
+            operatingPeriodTo
             operatingPeriodFrom
             serviceJourneyName
           }
@@ -50,7 +51,7 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
           const client = new GraphQLClient(endpoint, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
-              'Et-Client-Name': 'entur-ninsar'
+              'Et-Client-Name': 'entur-ninsar',
             },
           });
           const response = await client.request<{
@@ -58,7 +59,7 @@ export const useExportedLineStatisticsForProvider = (provider?: Provider) => {
           }>(getLineForProviderQuery, { providerCode: provider.code });
 
           setExportedLineStatistics(
-            calculateExportedLineStatistics(response.lineStatistics)
+            calculateExportedLineStatistics(response.lineStatistics),
           );
           setExportedLineStatisticsError(undefined);
         }
