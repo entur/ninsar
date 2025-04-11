@@ -12,6 +12,7 @@ export interface LineStatisticsResponse {
   startDate: string;
   validityCategories: {
     numDaysAtLeastValid?: number;
+    lineNumbersCount: number;
     lineNumbers: string[];
     name: Validity;
   }[];

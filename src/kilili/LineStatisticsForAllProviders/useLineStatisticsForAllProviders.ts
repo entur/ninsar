@@ -1,0 +1,106 @@
+import { LineStatisticsPerProviderId } from '../../lineStatistics/apiHooks/lineStatistics.response.types';
+import { useEffect, useState } from 'react';
+import { Validity } from '../../lineStatistics/lineStatistics.types';
+
+type Type = () => {
+  lineStatisticsForAllProviders: LineStatisticsPerProviderId;
+  loading: boolean;
+  error: Error | null;
+};
+
+const GRAPHQL_ENDPOINT = 'http://localhost:8080/graphql';
+
+const LINE_STATISTICS_QUERY = `
+  query {
+    lineStatistics {
+        providerId
+        startDate
+        days
+        validityCategories {
+          name
+          numDaysAtLeastValid
+          lineNumbersCount
+        }
+      }
+    }
+`;
+
+export const useLineStatisticsForAllProviders: Type = () => {
+  const [lineStatisticsForAllProviders, setLineStatisticsForAllProviders] = useState<LineStatisticsPerProviderId>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchLineStatistics = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: LINE_STATISTICS_QUERY,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`GraphQL request failed with status ${response.status}`);
+        }
+
+        const { data, errors } = await response.json();
+
+        if (errors) {
+          throw new Error(errors.map((e: any) => e.message).join(', '));
+        }
+
+        // Transform the response into the expected format
+        const transformedData: LineStatisticsPerProviderId = {};
+
+        data.lineStatistics.forEach((lineStatistics: any) => {
+          const { providerId } = lineStatistics;
+
+          if (lineStatistics) {
+            // Convert validityCategories to a Map
+            const validityCategories = new Map();
+            let sum = 0;
+            lineStatistics.validityCategories.forEach((category: any) => {
+              validityCategories.set(category.name, category.lineNumbersCount);
+              sum += category.lineNumbersCount;
+            });
+
+            validityCategories.set(Validity.ALL, sum);
+
+            // Since we don't have publicLines in the query, create an empty linesMap
+            const linesMap: { [lineNumber: string]: any } = {};
+
+            // Add the transformed data to the result
+            transformedData[providerId.toString()] = {
+              startDate: lineStatistics.startDate,
+              endDate: new Date(new Date(lineStatistics.startDate).getTime() + (lineStatistics.days * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+              requiredValidityDate: new Date().toISOString().split('T')[0], // Current date as a placeholder
+              linesMap,
+              validityCategories,
+              validityCategoriesCount: validityCategories,
+            };
+          }
+        });
+
+        setLineStatisticsForAllProviders(transformedData);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLineStatistics();
+  }, []);
+
+  return {
+    lineStatisticsForAllProviders,
+    loading,
+    error
+  };
+};

@@ -6,6 +6,7 @@ export interface LineStatistics {
   requiredValidityDate: string;
   linesMap: LinesMap;
   validityCategories: Map<Validity, LineNumbers>;
+  validityCategoriesCount?: Map<Validity, number>;
 }
 
 export type LinesMap = { [lineNumber: string]: PublicLineValidity };

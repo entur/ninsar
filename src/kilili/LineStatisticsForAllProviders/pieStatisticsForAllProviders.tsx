@@ -1,13 +1,12 @@
 import React from 'react';
-import { PieStatistics } from './components/pieStatistics/pieStatistics';
-import style from './lineStatistics.module.scss';
-import { Provider, Validity } from './lineStatistics.types';
-import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
-import { getNumberOfLinesType } from './components/numberOfLines/numberOfLines.util';
+import style from '../../lineStatistics/lineStatistics.module.scss';
+import { LineStatisticsPerProviderId } from '../../lineStatistics/apiHooks/lineStatistics.response.types';
+import { Provider, Validity } from '../../lineStatistics/lineStatistics.types';
+import { PieStatistics } from '../../lineStatistics/components/pieStatistics/pieStatistics';
+import { getNumberOfLinesType } from '../../lineStatistics/components/numberOfLines/numberOfLines.util';
 
 interface Props {
   lineStatistics: LineStatisticsPerProviderId | undefined;
-  exportedLineStatistics: LineStatisticsPerProviderId | undefined;
   providers: Provider[];
   handleShowAll: (provider: Provider) => void;
   handlePieOnClick: (validity: Validity, provider: Provider) => void;
@@ -15,7 +14,6 @@ interface Props {
 
 export const PieStatisticsForAllProviders = ({
   lineStatistics,
-  exportedLineStatistics,
   providers,
   handleShowAll,
   handlePieOnClick,
@@ -25,18 +23,14 @@ console.log('lineStatistics', lineStatistics);
 
   return (
     <div className={style.pieStatisticsForAllProviders}>
-      {(lineStatistics || exportedLineStatistics) &&
+      {(lineStatistics) &&
         providers
           .filter(
             (provider) =>
               (lineStatistics &&
                 Object.keys(lineStatistics).some(
                   (key) => key === String(provider.id),
-                )) ||
-              (exportedLineStatistics &&
-                Object.keys(exportedLineStatistics).some(
-                  (key) => key === String(provider.id),
-                )),
+                ))
           )
           .map((provider, index) => (
             <PieStatistics
@@ -47,11 +41,13 @@ console.log('lineStatistics', lineStatistics);
               handlePieOnClick={(label: Validity) =>
                 handlePieOnClick(label, provider)
               }
-              numberOfLines={getNumberOfLinesType(
-                lineStatistics && lineStatistics[provider.id],
-                exportedLineStatistics && exportedLineStatistics[provider.id],
-              )}
               className={style.pieChartContainer}
+              numberOfLines={{
+                numberOfExpiredLines: lineStatistics[provider.id].validityCategoriesCount?.get(Validity.INVALID)!,
+                numberOfValidLines: lineStatistics[provider.id].validityCategoriesCount?.get(Validity.VALID)!,
+                numberOfExpiringLines: lineStatistics[provider.id].validityCategoriesCount?.get(Validity.EXPIRING)!,
+                totalNumberOfLines: lineStatistics[provider.id].validityCategoriesCount?.get(Validity.ALL)!,
+              }}
               showLineButton={true}
             />
           ))}

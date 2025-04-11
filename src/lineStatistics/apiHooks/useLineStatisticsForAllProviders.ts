@@ -24,7 +24,7 @@ export const useLineStatisticsForAllProviders = () => {
         `${process.env.REACT_APP_TIMETABLE_ADMIN_BASE_URL}/line_statistics/level1`,
         {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            //Authorization: `Bearer ${accessToken}`,
             'Et-Client-Name': 'entur-ninsar'
           },
         },
@@ -36,8 +36,8 @@ export const useLineStatisticsForAllProviders = () => {
           const lineStatisticsResponseForProvider: LineStatisticsResponse =
             lineStatisticsResponse[providerId];
           if (
-            lineStatisticsResponseForProvider &&
-            lineStatisticsResponseForProvider.publicLines.length > 0
+            lineStatisticsResponseForProvider
+            // lineStatisticsResponseForProvider.publicLines.length > 0
           ) {
             const formatted = calculateLineStatistics(
               lineStatisticsResponseForProvider,
