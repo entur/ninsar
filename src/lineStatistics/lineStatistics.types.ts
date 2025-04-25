@@ -1,6 +1,7 @@
 export type LineNumbers = string[];
 
 export interface LineStatistics {
+  providerName?: string;
   startDate: string;
   endDate: string;
   requiredValidityDate: string;

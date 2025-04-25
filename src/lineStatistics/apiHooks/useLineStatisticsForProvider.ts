@@ -1,46 +1,214 @@
 import { useEffect, useState } from 'react';
-import { LineStatistics } from '../lineStatistics.types';
+import {
+  Line,
+  LineNumbers,
+  LineStatistics,
+  PeriodValidity,
+  Validity,
+} from '../lineStatistics.types';
+import moment, { Moment } from 'moment/moment';
+import {
+  findTimeLineEndPositionForEffectivePeriod,
+  findTimeLineStartPositionForEffectivePeriod,
+  findValidity,
+  getDaysRange,
+  validPeriod,
+} from '../lineStatisticsCalculator/utilities';
 import { useAuth } from '../../appContext';
-import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
-import { FetchError } from './lineStatistics.response.types';
 
-export const useLineStatisticsForProvider = (
-  providerId: string | undefined,
-) => {
+type Type = (providerId: string) => {
+  lineStatistics: LineStatistics | undefined
+  loading: boolean;
+  error: Error | null;
+};
+
+const GRAPHQL_ENDPOINT = process.env.REACT_APP_KILILI_API_URL;
+
+const LINE_STATISTICS_QUERY = `
+  query LineStatisticsForProvider($providerId: Int) {
+    lineStatisticsForProvider(providerId: $providerId) {
+        providerId
+        startDate
+        days
+        validityCategories {
+          name
+          lineNumbers
+        }
+        publicLines {
+          lineNumber
+          lineNames
+          effectivePeriods {
+            from
+            to
+          }
+        }
+      }
+    }
+`;
+
+const mapLines = (lineStatisticsResponse: any) => {
+  const startDateLine: Moment = moment(
+    lineStatisticsResponse.startDate,
+    'YYYY-MM-DD',
+  );
+  const endDateLine: Moment = moment(startDateLine).add(
+    lineStatisticsResponse.days,
+    'days',
+  );
+  const lines = lineStatisticsResponse.publicLines
+    // @ts-ignore
+    .map((publicLine) => {
+      let publicLineValidPeriod: Moment | undefined = undefined;
+
+      const effectivePeriodsFormatted: PeriodValidity[] =
+        // @ts-ignore
+        publicLine.effectivePeriods.map((effectivePeriod) => {
+          const effectivePeriodFrom: Moment = moment(
+            effectivePeriod.from,
+            'YYYY-MM-DD',
+          );
+          const effectivePeriodTo: Moment = moment(
+            effectivePeriod.to,
+            'YYYY-MM-DD',
+          );
+
+          const timelineStartPosition: number =
+            findTimeLineStartPositionForEffectivePeriod(
+              effectivePeriodFrom,
+              startDateLine,
+              lineStatisticsResponse.days,
+            );
+
+          const timelineEndPosition = findTimeLineEndPositionForEffectivePeriod(
+            effectivePeriodTo,
+            endDateLine,
+            lineStatisticsResponse.days,
+          );
+
+          let daysForward =
+            (timelineEndPosition / 100) * lineStatisticsResponse.days;
+          const validationLevel = findValidity(daysForward);
+
+          publicLineValidPeriod = validPeriod(
+            publicLineValidPeriod || startDateLine,
+            effectivePeriodFrom,
+            effectivePeriodTo,
+          );
+
+          return {
+            ...effectivePeriod,
+            timelineStartPosition,
+            timelineEndPosition,
+            validationLevel,
+          };
+        });
+
+      const daysValid: number =
+        getDaysRange(startDateLine, publicLineValidPeriod) || 0;
+// @ts-ignore
+      const lines: Line[] = [];
+
+      return {
+        [publicLine.lineNumber]: {
+          ...publicLine,
+          daysValid: daysValid,
+          effectivePeriods: effectivePeriodsFormatted,
+          lines: lines,
+        },
+      };
+    })
+    // @ts-ignore
+    .reduce((result, obj) => ({ ...result, ...obj }), {});
+
+  return {
+    startDateLine,
+    endDateLine,
+    lines
+  };
+
+}
+
+export const useLineStatisticsForProvider: Type = (providerId: string) => {
   const { getToken } = useAuth();
-
-  const [lineStatistics, setLineStatistics] = useState<
-    LineStatistics | undefined
-  >();
-  const [lineStatisticsError, setLineStatisticsError] = useState<
-    FetchError | undefined
-  >();
+  const [lineStatistics, setLineStatistics] = useState<LineStatistics | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchLineStatisticsForProvider = async () => {
-      const accessToken = getToken ? await getToken() : '';
-      const response = await fetch(
-        `${process.env.REACT_APP_TIMETABLE_ADMIN_BASE_URL}/${providerId}/line_statistics`,
-        {
+    const fetchLineStatistics = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(GRAPHQL_ENDPOINT!, {
+          method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await getToken!()}`,
             'Et-Client-Name': 'entur-ninsar'
           },
-        },
-      );
-      if (response.ok) {
-        const lineStatisticsResponse = await response.json();
-        setLineStatistics(calculateLineStatistics(lineStatisticsResponse));
-        setLineStatisticsError(undefined);
-      } else {
-        setLineStatisticsError({
-          status: response.status,
-          statusText: response.statusText,
+          body: JSON.stringify({
+            query: LINE_STATISTICS_QUERY,
+            variables: {
+              providerId: Number(providerId)
+            }
+          }),
         });
+
+        if (!response.ok) {
+          throw new Error(`GraphQL request failed with status ${response.status}`);
+        }
+
+        const { data, errors } = await response.json();
+
+        if (errors) {
+          throw new Error(errors.map((e: any) => e.message).join(', '));
+        }
+
+        const {
+          startDateLine,
+          endDateLine,
+          lines: linesMap
+        } = mapLines(data.lineStatisticsForProvider);
+
+        const validityCategories = new Map<Validity, LineNumbers>();
+        const allLineNumbers: LineNumbers = [];
+
+        data.lineStatisticsForProvider.validityCategories.forEach((category: any) => {
+          validityCategories.set(category.name, category.lineNumbers);
+          allLineNumbers.push(...category.lineNumbers);
+        });
+
+        validityCategories.set(Validity.ALL, allLineNumbers);
+
+        // Transform the response into the expected format
+        const transformedData: LineStatistics = {
+          providerName: data.lineStatisticsForProvider.providerName,
+          startDate: startDateLine.format('YYYY-MM-DD'),
+          endDate: endDateLine.format('YYYY-MM-DD'),
+          requiredValidityDate: moment(startDateLine)
+            .add(120, 'days')
+            .format('YYYY-MM-DD'),
+          linesMap,
+          validityCategories,
+        };
+
+        console.log(transformedData);
+
+        setLineStatistics(transformedData);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+        throw err;
+      } finally {
+        setLoading(false);
       }
     };
-    fetchLineStatisticsForProvider();
-  }, [getToken, providerId]);
 
-  return { lineStatistics, lineStatisticsError };
+    fetchLineStatistics();
+  }, [providerId]);
+
+  return {
+    lineStatistics,
+    loading,
+    error
+  };
 };

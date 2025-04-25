@@ -1,12 +1,12 @@
-import { useLineStatisticsForProvider } from './useLineStatisticsForProvider';
-import style from '../../lineStatistics/lineStatistics.module.scss';
-import { Card } from '../../lineStatistics/components/card/card';
-import { LinesValidity } from '../linesValidity/linesValidity';
+import { useLineStatisticsForProvider } from './lineStatistics/apiHooks/useLineStatisticsForProvider';
+import style from './lineStatistics/lineStatistics.module.scss';
+import { Card } from './lineStatistics/components/card/card';
+import { LinesValidity } from './lineStatistics/components/linesValidity/linesValidity';
 import React from 'react';
-import { Validity } from '../../lineStatistics/lineStatistics.types';
+import { Validity } from './lineStatistics/lineStatistics.types';
 
 type Props = {
-  providerId: number;
+  providerId: string;
 };
 export const LineStatisticsForProvider = ({ providerId}: Props) => {
   const {
@@ -22,7 +22,7 @@ export const LineStatisticsForProvider = ({ providerId}: Props) => {
       {(!loading && !error && (
       <div className={style.linesStatisticsContainer}>
         <Card
-          title={"Eivind"}
+          title={lineStatistics?.providerName}
           className={style.lineStatisticsCard}
         >
           <LinesValidity

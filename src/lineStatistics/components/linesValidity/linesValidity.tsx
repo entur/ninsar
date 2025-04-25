@@ -15,21 +15,21 @@
  */
 
 import React from 'react';
-import { LineStatistics, Validity } from '../../lineStatistics.types';
 import style from './linesValidity.module.scss';
-import { LinesValidityList } from './linesValidityList';
 import { useLocale } from '../../../appContext';
+import { LineStatistics, Validity } from '../../lineStatistics.types';
 import { titleText } from '../../lineStatistics.constants';
+import { LinesValidityList } from './linesValidityList';
 
 interface Props {
+  providerId: string;
   defaultSelectedValidity: Validity;
   lineStatistics: LineStatistics | undefined;
-  exportedLineStatistics: LineStatistics | undefined;
 }
 
 export const LinesValidity = ({
+  providerId,
   lineStatistics,
-  exportedLineStatistics,
   defaultSelectedValidity,
 }: Props) => {
   const locale = useLocale();
@@ -38,16 +38,9 @@ export const LinesValidity = ({
 
   return (
     <div className={style.linesListContainer}>
-      {exportedLineStatistics && hasLines(exportedLineStatistics) && (
-        <LinesValidityList
-          listTitle={titleText(locale).lineStatisticsFromNplan}
-          lineStatistics={exportedLineStatistics}
-          defaultSelectedValidity={defaultSelectedValidity}
-        />
-      )}
-
       {lineStatistics && hasLines(lineStatistics) && (
         <LinesValidityList
+          providerId={providerId}
           listTitle={titleText(locale).lineStatisticsFromChouette}
           lineStatistics={lineStatistics}
           defaultSelectedValidity={defaultSelectedValidity}

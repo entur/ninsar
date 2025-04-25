@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import style from './linesValidity.module.scss';
-import { LineStatistics, PeriodValidity, Validity } from '../../lineStatistics.types';
-import { sortLines } from './linesFilters/sortingUtilities';
-import { LinesValidityHeader } from './linesValidityHeader';
-import {
-  infoText,
-  validityCategoryLabel,
-} from '../../lineStatistics.constants';
-import { useLocale } from '../../../appContext';
-import { Timeline } from "../timeline/timeline";
-import { ExpandableTimeline } from "../expandableTimeline/expandableTimeline";
 import { useRandomId } from "@entur/utils";
 import { Heading3 } from "@entur/typography";
-import { SortingChips } from "./linesFilters/sortingChips";
-import { ValidityChips } from "./linesFilters/validityChips";
 import { BannerAlertBox } from "@entur/alert";
-import { ValidNumberOfDaysText } from "./validNumberOfDaysText";
+import { LineStatistics, PeriodValidity, Validity } from '../../lineStatistics.types';
+import { useLocale } from '../../../appContext';
+import { sortLines } from './linesFilters/sortingUtilities';
+import { Timeline } from '../timeline/timeline';
+import { ValidityChips } from './linesFilters/validityChips';
+import { infoText, validityCategoryLabel } from '../../lineStatistics.constants';
+import { SortingChips } from './linesFilters/sortingChips';
+import { ExpandableTimeline } from '../expandableTimeline/expandableTimeline';
+import { ValidNumberOfDaysText } from './validNumberOfDaysText';
+import { LinesValidityHeader } from './linesValidityHeader';
+import { useLineStatisticsPublicLineDetails } from '../../apiHooks/useLineStatisticsPublicLineDetails';
 
 interface Props {
+  providerId: string;
   defaultSelectedValidity: Validity;
   lineStatistics: LineStatistics;
   listTitle: string;
 }
 
 export const LinesValidityList = ({
+  providerId,
   defaultSelectedValidity,
   lineStatistics,
   listTitle
 }: Props) => {
   const locale = useLocale();
   const randomId = useRandomId('eds-expandable');
+
+  const {
+    fetchPublicLineValidity,
+    mergedLineStatistics,
+    loading,
+    error
+  } = useLineStatisticsPublicLineDetails(providerId, lineStatistics);
 
   const [expandedLinesState, setExpandedLinesState] = useState<Map<string, boolean>>(new Map<string, boolean>());
 
@@ -39,6 +46,7 @@ export const LinesValidityList = ({
   const [selectedValidity, setSelectedValidity] = useState<Validity>(defaultSelectedValidity);
 
   const toggleLineOpen = (lineNumber: string) => {
+    fetchPublicLineValidity(lineNumber);
     const expandedLinesStateCopy = new Map<string, boolean>(expandedLinesState);
     expandedLinesStateCopy.set(lineNumber, !isLineOpen(lineNumber));
     setExpandedLinesState(expandedLinesStateCopy);
@@ -53,11 +61,11 @@ export const LinesValidityList = ({
   }, [defaultSelectedValidity])
 
   useEffect(() => {
-    lineStatistics &&
+    mergedLineStatistics &&
     setSortedLineNumbers(
-      sortLines(sorting, lineStatistics, selectedValidity),
+      sortLines(sorting, mergedLineStatistics, selectedValidity),
     );
-  }, [lineStatistics, selectedValidity, sorting]);
+  }, [mergedLineStatistics, selectedValidity, sorting]);
 
   const DayTypesValidity = ({
     index,
@@ -67,7 +75,7 @@ export const LinesValidityList = ({
     lineNumber: string;
   }) => (
     <>
-      {lineStatistics.linesMap[lineNumber].lines.map((l, i) => (
+      {mergedLineStatistics.linesMap[lineNumber].lines.map((l, i) => (
         <Timeline
           key={`Timeline${randomId}${i}`}
           timetables={l.timetables}
@@ -98,22 +106,22 @@ export const LinesValidityList = ({
                   id={randomId}
                   open={isLineOpen(lineNumber)}
                   onToggle={() => toggleLineOpen(lineNumber)}
-                  effectivePeriodsForLineNumber={lineStatistics.linesMap[lineNumber].effectivePeriods as PeriodValidity[]}
+                  effectivePeriodsForLineNumber={mergedLineStatistics.linesMap[lineNumber].effectivePeriods as PeriodValidity[]}
                   lineNumber={lineNumber}
-                  lineNames={lineStatistics.linesMap[lineNumber].lineNames.join(', ')}
+                  lineNames={mergedLineStatistics.linesMap[lineNumber].lineNames.join(', ')}
                   key={`LineItem${randomId}${index}`}
                   numberOfDaysHeader={
                     <ValidNumberOfDaysText
                       lineNumber={lineNumber}
-                      numberOfDays={lineStatistics.linesMap[lineNumber].daysValid}
+                      numberOfDays={mergedLineStatistics.linesMap[lineNumber].daysValid}
                     />
                   }
                   linesValidityListHeader={
                     <LinesValidityHeader
                       key={`LineItemHeader${randomId}`}
-                      startDate={lineStatistics.startDate}
-                      validFromDate={lineStatistics.requiredValidityDate}
-                      endDate={lineStatistics.endDate}
+                      startDate={mergedLineStatistics.startDate}
+                      validFromDate={mergedLineStatistics.requiredValidityDate}
+                      endDate={mergedLineStatistics.endDate}
                     />
                   }
                 >

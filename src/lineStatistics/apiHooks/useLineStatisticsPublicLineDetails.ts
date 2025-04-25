@@ -1,13 +1,13 @@
-import { LineStatisticsPerProviderId } from '../../lineStatistics/apiHooks/lineStatistics.response.types';
-import { useEffect, useState } from 'react';
+import { LineStatisticsPerProviderId } from './lineStatistics.response.types';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Line,
   LineNumbers,
   LinesMap,
   LineStatistics,
-  PeriodValidity,
+  PeriodValidity, PublicLineValidity,
   Validity,
-} from '../../lineStatistics/lineStatistics.types';
+} from '../lineStatistics.types';
 import moment, { Moment } from 'moment/moment';
 import {
   findTimeLineEndPositionForEffectivePeriod, findTimeLineEndPositionForTimeTable,
@@ -16,39 +16,48 @@ import {
   findValidity,
   getDaysRange,
   validPeriod,
-} from '../../lineStatistics/lineStatisticsCalculator/utilities';
+} from '../lineStatisticsCalculator/utilities';
+import { useAuth } from '../../appContext';
 
-type Type = (providerId: number) => {
-  lineStatistics: LineStatistics | undefined
+type Type = (providerId: string, lineStatistics: LineStatistics) => {
+  fetchPublicLineValidity: (lineNumber: string) => void;
+  mergedLineStatistics: LineStatistics;
   loading: boolean;
   error: Error | null;
 };
 
-const GRAPHQL_ENDPOINT = 'http://localhost:8080/graphql';
+const GRAPHQL_ENDPOINT = process.env.REACT_APP_KILILI_API_URL;
 
 const LINE_STATISTICS_QUERY = `
-  query LineStatisticsForProvider($providerId: Int) {
+  query LineStatisticsForProvider($providerId: Int, $lineNumbers: [String!]) {
     lineStatisticsForProvider(providerId: $providerId) {
-        providerId
         startDate
         days
-        validityCategories {
-          name
-          lineNumbers
-        }
-        publicLines {
+        providerId
+        publicLines(lineNumbers: $lineNumbers) {
           lineNumber
           lineNames
           effectivePeriods {
             from
             to
           }
+          lines {
+            objectId
+            name
+            timetables {
+              objectId
+              periods {
+                from
+                to
+              }
+            }
+          }
         }
       }
     }
 `;
 
-const mapLines = (lineStatisticsResponse: any) => {
+const mapPublicLineValidity = (lineStatisticsResponse: any): PublicLineValidity => {
   const startDateLine: Moment = moment(
     lineStatisticsResponse.startDate,
     'YYYY-MM-DD',
@@ -57,9 +66,9 @@ const mapLines = (lineStatisticsResponse: any) => {
     lineStatisticsResponse.days,
     'days',
   );
-  const lines = lineStatisticsResponse.publicLines
-    // @ts-ignore
-    .map((publicLine) => {
+
+  const publicLine = lineStatisticsResponse.publicLines[0];
+
       let publicLineValidPeriod: Moment | undefined = undefined;
 
       const effectivePeriodsFormatted: PeriodValidity[] =
@@ -107,48 +116,61 @@ const mapLines = (lineStatisticsResponse: any) => {
 
       const daysValid: number =
         getDaysRange(startDateLine, publicLineValidPeriod) || 0;
-// @ts-ignore
-      const lines: Line[] = [];
+
+      //@ts-ignore
+      const lines: Line[] = publicLine.lines.map((line) => ({
+        ...line,
+        //@ts-ignore
+        timetables: line.timetables.map((timetable) => ({
+          ...timetable,
+          //@ts-ignore
+          periods: timetable.periods.map((period) => ({
+            ...period,
+            timelineStartPosition: findTimeLineStartPositionForTimeTable(
+              period.from,
+              startDateLine,
+              lineStatisticsResponse.days,
+            ),
+            timelineEndPosition: findTimeLineEndPositionForTimeTable(
+              period.to,
+              endDateLine,
+              lineStatisticsResponse.days,
+            ),
+          })),
+        })),
+      }));
 
       return {
-        [publicLine.lineNumber]: {
           ...publicLine,
           daysValid: daysValid,
           effectivePeriods: effectivePeriodsFormatted,
           lines: lines,
-        },
       };
-    })
-    // @ts-ignore
-    .reduce((result, obj) => ({ ...result, ...obj }), {});
-
-  return {
-    startDateLine,
-    endDateLine,
-    lines
-  };
-
 }
 
-export const useLineStatisticsForProvider: Type = (providerId: number) => {
-  const [lineStatistics, setLineStatistics] = useState<LineStatistics | undefined>();
+export const useLineStatisticsPublicLineDetails: Type = (providerId: string, lineStatistics: LineStatistics) => {
+  const { getToken } = useAuth();
+  const [mergedLineStatistics, setMergedLineStatistics] = useState<LineStatistics>(lineStatistics);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
+  const fetchPublicLineValidity = useCallback((lineNumber: string) => {
     const fetchLineStatistics = async () => {
       try {
         setLoading(true);
 
-        const response = await fetch(GRAPHQL_ENDPOINT, {
+        const response = await fetch(GRAPHQL_ENDPOINT!, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${await getToken!()}`,
+            'Et-Client-Name': 'entur-ninsar'
           },
           body: JSON.stringify({
             query: LINE_STATISTICS_QUERY,
             variables: {
-              providerId
+              providerId: Number(providerId),
+              lineNumbers: [lineNumber]
             }
           }),
         });
@@ -163,36 +185,16 @@ export const useLineStatisticsForProvider: Type = (providerId: number) => {
           throw new Error(errors.map((e: any) => e.message).join(', '));
         }
 
-        const {
-          startDateLine,
-          endDateLine,
-          lines: linesMap
-        } = mapLines(data.lineStatisticsForProvider);
+        const mappedPublicLineValidity = mapPublicLineValidity(data.lineStatisticsForProvider);
 
-        const validityCategories = new Map<Validity, LineNumbers>();
-        const allLineNumbers: LineNumbers = [];
-
-        data.lineStatisticsForProvider.validityCategories.forEach((category: any) => {
-          validityCategories.set(category.name, category.lineNumbers);
-          allLineNumbers.push(...category.lineNumbers);
+        setMergedLineStatistics({
+          ...lineStatistics,
+          linesMap: {
+            ...lineStatistics.linesMap,
+            [lineNumber]: mappedPublicLineValidity
+          }
         });
 
-        validityCategories.set(Validity.ALL, allLineNumbers);
-
-        // Transform the response into the expected format
-        const transformedData: LineStatistics = {
-          startDate: startDateLine.format('YYYY-MM-DD'),
-          endDate: endDateLine.format('YYYY-MM-DD'),
-          requiredValidityDate: moment(startDateLine)
-            .add(120, 'days')
-            .format('YYYY-MM-DD'),
-          linesMap,
-          validityCategories,
-        };
-
-        console.log(transformedData);
-
-        setLineStatistics(transformedData);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('An unknown error occurred'));
         throw err;
@@ -205,7 +207,8 @@ export const useLineStatisticsForProvider: Type = (providerId: number) => {
   }, [providerId]);
 
   return {
-    lineStatistics,
+    fetchPublicLineValidity,
+    mergedLineStatistics,
     loading,
     error
   };
