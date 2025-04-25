@@ -11,9 +11,8 @@ jobs:
       REACT_APP_AUTH0_CLIENT_ID: fa3xdcRIvN3QpVl3eVRUGPiJEoHSTy0C
       REACT_APP_AUTH0_AUDIENCE: https://ror.api.dev.entur.io
       REACT_APP_AUTH0_RELATIVE_CALLBACK_URL: /
-      REACT_APP_TIMETABLE_ADMIN_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/timetable
-      REACT_APP_PROVIDERS_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/providers
-      REACT_APP_UTTU_API_URL: https://api.dev.entur.io/timetable-admin/v1/flexible-lines/exportedLineStatistics/graphql
+      REACT_APP_KILILI_API_URL: https://api.dev.entur.io/timetable-admin/v1/line-statistics/graphql
+      REACT_APP_EVENT_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/events
     steps:
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
