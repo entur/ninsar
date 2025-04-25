@@ -1,9 +1,9 @@
 import React from 'react';
-import style from './lineStatistics/lineStatistics.module.scss';
-import { LineStatisticsPerProviderId } from './lineStatistics/apiHooks/lineStatistics.response.types';
-import { Provider, Validity } from './lineStatistics/lineStatistics.types';
-import { PieStatistics } from './lineStatistics/components/pieStatistics/pieStatistics';
-import { getNumberOfLinesType } from './lineStatistics/components/numberOfLines/numberOfLines.util';
+import style from './lineStatistics.module.scss';
+import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
+import { Provider, Validity } from './lineStatistics.types';
+import { PieStatistics } from './components/pieStatistics/pieStatistics';
+import { getNumberOfLinesType } from './components/numberOfLines/numberOfLines.util';
 
 interface Props {
   lineStatistics: LineStatisticsPerProviderId | undefined;
