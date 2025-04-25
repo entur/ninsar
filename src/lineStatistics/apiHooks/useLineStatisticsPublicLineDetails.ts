@@ -1,16 +1,10 @@
-import {
-  FetchError,
-  LineStatisticsPerProviderId,
-} from './lineStatistics.response.types';
-import { useCallback, useEffect, useState } from 'react';
+import { FetchError } from './lineStatistics.response.types';
+import { useCallback, useState } from 'react';
 import {
   Line,
-  LineNumbers,
-  LinesMap,
   LineStatistics,
   PeriodValidity,
   PublicLineValidity,
-  Validity,
 } from '../lineStatistics.types';
 import moment, { Moment } from 'moment/moment';
 import {
