@@ -6,7 +6,9 @@ import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsFo
 import { LineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
 
 export function App(props: NinsarPayload) {
-  const [selectedProviderId, setSelectedProviderId] = React.useState<string | undefined>(props.providerId);
+  const [selectedProviderId, setSelectedProviderId] = React.useState<
+    string | undefined
+  >(props.providerId);
   return (
     <React.StrictMode>
       <AppProvider {...props}>
@@ -15,7 +17,11 @@ export function App(props: NinsarPayload) {
             {selectedProviderId ? (
               <LineStatisticsForProvider providerId={selectedProviderId!} />
             ) : (
-              <LineStatisticsForAllProviders handleShowAll={(providerId) => setSelectedProviderId(providerId)} />
+              <LineStatisticsForAllProviders
+                handleShowAll={(providerId) =>
+                  setSelectedProviderId(providerId)
+                }
+              />
             )}
           </div>
         </div>

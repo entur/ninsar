@@ -4,11 +4,10 @@ import React from 'react';
 
 type Props = {
   handleShowAll: (providerId: string) => void;
-}
+};
 
-export const LineStatisticsForAllProviders = ({handleShowAll}: Props) => {
-  const { lineStatisticsForAllProviders } =
-    useLineStatisticsForAllProviders();
+export const LineStatisticsForAllProviders = ({ handleShowAll }: Props) => {
+  const { lineStatisticsForAllProviders } = useLineStatisticsForAllProviders();
 
   return (
     <>

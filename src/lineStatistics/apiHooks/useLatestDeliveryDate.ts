@@ -24,7 +24,7 @@ export const useLatestDeliveryDate = (providerId: string | undefined) => {
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Et-Client-Name': 'entur-ninsar'
+            'Et-Client-Name': 'entur-ninsar',
           },
         },
       );

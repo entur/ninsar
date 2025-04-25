@@ -18,7 +18,7 @@ import { useAuth } from '../../appContext';
 import { FetchError } from './lineStatistics.response.types';
 
 type Type = (providerId: string) => {
-  lineStatistics: LineStatistics | undefined
+  lineStatistics: LineStatistics | undefined;
   loading: boolean;
   error: FetchError | null;
 };
@@ -106,7 +106,7 @@ const mapLines = (lineStatisticsResponse: any) => {
 
       const daysValid: number =
         getDaysRange(startDateLine, publicLineValidPeriod) || 0;
-// @ts-ignore
+      // @ts-ignore
       const lines: Line[] = [];
 
       return {
@@ -124,14 +124,15 @@ const mapLines = (lineStatisticsResponse: any) => {
   return {
     startDateLine,
     endDateLine,
-    lines
+    lines,
   };
-
-}
+};
 
 export const useLineStatisticsForProvider: Type = (providerId: string) => {
   const { getToken } = useAuth();
-  const [lineStatistics, setLineStatistics] = useState<LineStatistics | undefined>();
+  const [lineStatistics, setLineStatistics] = useState<
+    LineStatistics | undefined
+  >();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<FetchError | null>(null);
 
@@ -145,22 +146,26 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${await getToken!()}`,
-            'Et-Client-Name': 'entur-ninsar'
+            'Et-Client-Name': 'entur-ninsar',
           },
           body: JSON.stringify({
             query: LINE_STATISTICS_QUERY,
             variables: {
-              providerId: Number(providerId)
-            }
+              providerId: Number(providerId),
+            },
           }),
         });
 
         if (!response.ok) {
-          throw new Error(`GraphQL request failed with status ${response.status}`, { cause: {
-            status: response.status,
-            statusText: response.statusText
-            }
-          });
+          throw new Error(
+            `GraphQL request failed with status ${response.status}`,
+            {
+              cause: {
+                status: response.status,
+                statusText: response.statusText,
+              },
+            },
+          );
         }
 
         const { data, errors } = await response.json();
@@ -169,24 +174,26 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
           throw new Error(errors.map((e: any) => e.message).join(', '), {
             cause: {
               status: 'N/A',
-              statusText: errors.map((e: any) => e.message).join(', ')
-            }
+              statusText: errors.map((e: any) => e.message).join(', '),
+            },
           });
         }
 
         const {
           startDateLine,
           endDateLine,
-          lines: linesMap
+          lines: linesMap,
         } = mapLines(data.lineStatisticsForProvider);
 
         const validityCategories = new Map<Validity, LineNumbers>();
         const allLineNumbers: LineNumbers = [];
 
-        data.lineStatisticsForProvider.validityCategories.forEach((category: any) => {
-          validityCategories.set(category.name, category.lineNumbers);
-          allLineNumbers.push(...category.lineNumbers);
-        });
+        data.lineStatisticsForProvider.validityCategories.forEach(
+          (category: any) => {
+            validityCategories.set(category.name, category.lineNumbers);
+            allLineNumbers.push(...category.lineNumbers);
+          },
+        );
 
         validityCategories.set(Validity.ALL, allLineNumbers);
 
@@ -216,6 +223,6 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
   return {
     lineStatistics,
     loading,
-    error
+    error,
   };
 };

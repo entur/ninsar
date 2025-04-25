@@ -9,34 +9,28 @@ import { LoadingLineStatistics } from './components/loadingLineStatistics';
 type Props = {
   providerId: string;
 };
-export const LineStatisticsForProvider = ({ providerId}: Props) => {
-  const {
-    lineStatistics,
-    loading,
-    error
-  } = useLineStatisticsForProvider(providerId);
+export const LineStatisticsForProvider = ({ providerId }: Props) => {
+  const { lineStatistics, loading, error } =
+    useLineStatisticsForProvider(providerId);
 
   return (
-      <LoadingLineStatistics
-        isLoading={loading}
-        lineStatisticsError={error}
-      >
-        <>
-      {!loading && !error && (
-      <div className={style.linesStatisticsContainer}>
-        <Card
-          title={lineStatistics?.providerName}
-          className={style.lineStatisticsCard}
-        >
-          <LinesValidity
-            providerId={providerId}
-            defaultSelectedValidity={Validity.ALL}
-            lineStatistics={lineStatistics}
-          />
-        </Card>
-      </div>
-    )}
-        </>
+    <LoadingLineStatistics isLoading={loading} lineStatisticsError={error}>
+      <>
+        {!loading && !error && (
+          <div className={style.linesStatisticsContainer}>
+            <Card
+              title={lineStatistics?.providerName}
+              className={style.lineStatisticsCard}
+            >
+              <LinesValidity
+                providerId={providerId}
+                defaultSelectedValidity={Validity.ALL}
+                lineStatistics={lineStatistics}
+              />
+            </Card>
+          </div>
+        )}
+      </>
     </LoadingLineStatistics>
   );
-}
+};

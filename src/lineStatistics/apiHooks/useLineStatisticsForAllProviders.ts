@@ -29,7 +29,8 @@ const LINE_STATISTICS_QUERY = `
 
 export const useLineStatisticsForAllProviders: Type = () => {
   const { getToken } = useAuth();
-  const [lineStatisticsForAllProviders, setLineStatisticsForAllProviders] = useState<LineStatisticsPerProviderId>({});
+  const [lineStatisticsForAllProviders, setLineStatisticsForAllProviders] =
+    useState<LineStatisticsPerProviderId>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -43,7 +44,7 @@ export const useLineStatisticsForAllProviders: Type = () => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${await getToken!()}`,
-            'Et-Client-Name': 'entur-ninsar'
+            'Et-Client-Name': 'entur-ninsar',
           },
           body: JSON.stringify({
             query: LINE_STATISTICS_QUERY,
@@ -51,7 +52,9 @@ export const useLineStatisticsForAllProviders: Type = () => {
         });
 
         if (!response.ok) {
-          throw new Error(`GraphQL request failed with status ${response.status}`);
+          throw new Error(
+            `GraphQL request failed with status ${response.status}`,
+          );
         }
 
         const { data, errors } = await response.json();
@@ -84,7 +87,12 @@ export const useLineStatisticsForAllProviders: Type = () => {
             transformedData[providerId.toString()] = {
               providerName: lineStatistics.providerName,
               startDate: lineStatistics.startDate,
-              endDate: new Date(new Date(lineStatistics.startDate).getTime() + (lineStatistics.days * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+              endDate: new Date(
+                new Date(lineStatistics.startDate).getTime() +
+                  lineStatistics.days * 24 * 60 * 60 * 1000,
+              )
+                .toISOString()
+                .split('T')[0],
               requiredValidityDate: new Date().toISOString().split('T')[0], // Current date as a placeholder
               linesMap,
               validityCategories,
@@ -95,7 +103,9 @@ export const useLineStatisticsForAllProviders: Type = () => {
 
         setLineStatisticsForAllProviders(transformedData);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+        setError(
+          err instanceof Error ? err : new Error('An unknown error occurred'),
+        );
       } finally {
         setLoading(false);
       }
@@ -107,6 +117,6 @@ export const useLineStatisticsForAllProviders: Type = () => {
   return {
     lineStatisticsForAllProviders,
     loading,
-    error
+    error,
   };
 };

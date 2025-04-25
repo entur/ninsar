@@ -6,5 +6,5 @@ export const color = {
     valid: '#4caf50',
     expiring: '#FFB60A',
     expired: '#cc0000',
-  }
-}
+  },
+};
