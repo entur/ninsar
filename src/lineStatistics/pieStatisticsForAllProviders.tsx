@@ -1,9 +1,8 @@
 import React from 'react';
 import style from './lineStatistics.module.scss';
 import { LineStatisticsPerProviderId } from './apiHooks/lineStatistics.response.types';
-import { Provider, Validity } from './lineStatistics.types';
+import { Validity } from './lineStatistics.types';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
-import { getNumberOfLinesType } from './components/numberOfLines/numberOfLines.util';
 
 interface Props {
   lineStatistics: LineStatisticsPerProviderId | undefined;
@@ -20,10 +19,10 @@ export const PieStatisticsForAllProviders = ({
     <div className={style.pieStatisticsForAllProviders}>
       {(lineStatistics) &&
         Object.keys(lineStatistics)
-          .map((providerId, index) => (
+          .map((providerId) => (
             <PieStatistics
               showHeader={true}
-              key={'provider-pie' + index}
+              key={'provider-pie' + providerId}
               providerName={lineStatistics[providerId].providerName!}
               handleShowAllClick={() => handleShowAll(providerId)}
               handlePieOnClick={(label: Validity) =>

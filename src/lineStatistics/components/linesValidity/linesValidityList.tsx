@@ -68,16 +68,14 @@ export const LinesValidityList = ({
   }, [mergedLineStatistics, selectedValidity, sorting]);
 
   const DayTypesValidity = ({
-    index,
-    lineNumber,
+                              lineNumber,
   }: {
-    index: number;
     lineNumber: string;
   }) => (
     <>
       {mergedLineStatistics.linesMap[lineNumber].lines.map((l, i) => (
         <Timeline
-          key={`Timeline${randomId}${i}`}
+          key={`Timeline${l.timetables.map(t => t.objectId).join("-")}`}
           timetables={l.timetables}
         />
       ))}
@@ -100,8 +98,7 @@ export const LinesValidityList = ({
             {sortedLineNumbers.length > 1 &&
              <SortingChips sorting={sorting} setSorting={setSorting} />
             }
-            {sortedLineNumbers.map((lineNumber, index) => (
-              <>
+            {sortedLineNumbers.map((lineNumber) => (
                 <ExpandableTimeline
                   id={randomId}
                   open={isLineOpen(lineNumber)}
@@ -109,7 +106,7 @@ export const LinesValidityList = ({
                   effectivePeriodsForLineNumber={mergedLineStatistics.linesMap[lineNumber].effectivePeriods as PeriodValidity[]}
                   lineNumber={lineNumber}
                   lineNames={mergedLineStatistics.linesMap[lineNumber].lineNames.join(', ')}
-                  key={`LineItem${randomId}${index}`}
+                  key={`LineItem${lineNumber}`}
                   numberOfDaysHeader={
                     <ValidNumberOfDaysText
                       lineNumber={lineNumber}
@@ -118,7 +115,7 @@ export const LinesValidityList = ({
                   }
                   linesValidityListHeader={
                     <LinesValidityHeader
-                      key={`LineItemHeader${randomId}`}
+                      key={`LineItemHeader${lineNumber}`}
                       startDate={mergedLineStatistics.startDate}
                       validFromDate={mergedLineStatistics.requiredValidityDate}
                       endDate={mergedLineStatistics.endDate}
@@ -126,12 +123,10 @@ export const LinesValidityList = ({
                   }
                 >
                   <DayTypesValidity
-                    index={index}
                     lineNumber={lineNumber}
                     key={`DayTypesValidity${randomId}`}
                   />
                 </ExpandableTimeline>
-              </>
             ))}
           </>
         )}

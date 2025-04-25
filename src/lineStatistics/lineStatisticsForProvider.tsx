@@ -1,9 +1,9 @@
-import { useLineStatisticsForProvider } from './lineStatistics/apiHooks/useLineStatisticsForProvider';
-import style from './lineStatistics/lineStatistics.module.scss';
-import { Card } from './lineStatistics/components/card/card';
-import { LinesValidity } from './lineStatistics/components/linesValidity/linesValidity';
+import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForProvider';
+import style from './lineStatistics.module.scss';
+import { Card } from './components/card/card';
+import { LinesValidity } from './components/linesValidity/linesValidity';
 import React from 'react';
-import { Validity } from './lineStatistics/lineStatistics.types';
+import { Validity } from './lineStatistics.types';
 
 type Props = {
   providerId: string;
@@ -15,8 +15,6 @@ export const LineStatisticsForProvider = ({ providerId}: Props) => {
     error
   } = useLineStatisticsForProvider(providerId);
 
-  console.log({error})
-  console.log({lineStatistics});
   return (
     <>
       {(!loading && !error && (

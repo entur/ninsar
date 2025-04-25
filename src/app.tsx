@@ -1,13 +1,12 @@
 import React from 'react';
 import './app.module.scss';
-import { LineStatisticsForProvider } from './LineStatisticsForProvider';
 import { AppProvider } from './appProvider';
 import { NinsarPayload } from './index';
-import { LineStatisticsForAllProviders } from './LineStatisticsForAllProviders';
+import { LineStatisticsForAllProviders } from './lineStatistics/lineStatisticsForAllProviders';
+import { LineStatisticsForProvider } from './lineStatistics/lineStatisticsForProvider';
 
 export function App(props: NinsarPayload) {
   const [selectedProviderId, setSelectedProviderId] = React.useState<string | undefined>(props.providerId);
-  console.log({selectedProviderId});
   return (
     <React.StrictMode>
       <AppProvider {...props}>

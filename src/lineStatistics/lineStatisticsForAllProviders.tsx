@@ -1,4 +1,4 @@
-import { useLineStatisticsForAllProviders } from './lineStatistics/apiHooks/useLineStatisticsForAllProviders';
+import { useLineStatisticsForAllProviders } from './apiHooks/useLineStatisticsForAllProviders';
 import { PieStatisticsForAllProviders } from './pieStatisticsForAllProviders';
 import React from 'react';
 

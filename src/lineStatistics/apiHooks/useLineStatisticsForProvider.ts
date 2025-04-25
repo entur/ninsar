@@ -191,9 +191,6 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
           linesMap,
           validityCategories,
         };
-
-        console.log(transformedData);
-
         setLineStatistics(transformedData);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('An unknown error occurred'));
