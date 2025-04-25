@@ -12,12 +12,6 @@ export interface LineStatistics {
 
 export type LinesMap = { [lineNumber: string]: PublicLineValidity };
 
-export interface Provider {
-  id: number;
-  code: string;
-  name: string;
-}
-
 export interface PeriodValidity extends Period {
   timelineEndPosition: number;
   timelineStartPosition: number;

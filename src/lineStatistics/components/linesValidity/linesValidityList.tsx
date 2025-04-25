@@ -21,6 +21,7 @@ import { ExpandableTimeline } from '../expandableTimeline/expandableTimeline';
 import { ValidNumberOfDaysText } from './validNumberOfDaysText';
 import { LinesValidityHeader } from './linesValidityHeader';
 import { useLineStatisticsPublicLineDetails } from '../../apiHooks/useLineStatisticsPublicLineDetails';
+import { LoadingLineStatistics } from '../loadingLineStatistics';
 
 interface Props {
   providerId: string;
@@ -137,10 +138,15 @@ export const LinesValidityList = ({
                   />
                 }
               >
-                <DayTypesValidity
-                  lineNumber={lineNumber}
-                  key={`DayTypesValidity${randomId}`}
-                />
+                <LoadingLineStatistics
+                  isLoading={loading}
+                  lineStatisticsError={error}
+                >
+                  <DayTypesValidity
+                    lineNumber={lineNumber}
+                    key={`DayTypesValidity${randomId}`}
+                  />
+                </LoadingLineStatistics>
               </ExpandableTimeline>
             ))}
           </>

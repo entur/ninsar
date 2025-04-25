@@ -13,13 +13,8 @@ export const validityCategoryLabel = (locale?: Locale) => ({
 
 export const errorText = (locale?: Locale) => ({
   missingLineStatisticsFromOperatorPortal: textForLocale(
-    'Kunne ikke laste inn linjestatus for Operatørpotalen. Viser kun linjestatus for Nplan.',
-    'Could not load line statistics from operator portal. Showing only line statistics from Nplan.',
-    locale,
-  ),
-  missingLineStatisticsFromNplan: textForLocale(
-    'Kunne ikke laste inn linjestatus for Nplan. Viser kun linjestatus for Operatørpotalen.',
-    'Could not load line statistics from Nplan. Showing only line statistics from operator portal.',
+    'Kunne ikke laste inn linjestatus for Operatørpotalen.',
+    'Could not load line statistics from operator portal.',
     locale,
   ),
   failedToLoadData: textForLocale(
@@ -53,11 +48,6 @@ export const infoText = (locale?: Locale) => ({
 export const titleText = (locale?: Locale) => ({
   sortLines: textForLocale('Sorter linjer', 'Sort lines', locale),
   selectLines: textForLocale('Velg linjer ', 'Select lines', locale),
-  lineStatisticsFromNplan: textForLocale(
-    'Linjestatus fra NPlan',
-    'Line statistics from Nplan',
-    locale,
-  ),
   lineStatisticsFromChouette: textForLocale(
     'Linjestatus for rutedata',
     'Line statistics for timetable data',
@@ -78,16 +68,6 @@ export const titleText = (locale?: Locale) => ({
   days: textForLocale('dager', 'days', locale),
   numberOfDays: textForLocale('Antall dager', 'Number of days', locale),
   back: textForLocale('tilbake', 'back', locale),
-  showAllLinesFromNplan: textForLocale(
-    'Vis alle linjer fra Nplan',
-    'Show all lines from nplan',
-    locale,
-  ),
-  allLinesFromNplan: textForLocale(
-    'Alle linjer fra Nplan',
-    'All lines from nplan',
-    locale,
-  ),
   noLongerValid: function (lineNumber: string) {
     return textForLocale(
       `Linje ${lineNumber} er ikke gyldig lenger.`,

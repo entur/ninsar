@@ -6,32 +6,22 @@ import { errorText } from '../../lineStatistics.constants';
 import { useLocale } from '../../../appContext';
 
 interface Props {
-  lineStatisticsError?: FetchError | undefined;
-  exportedLineStatisticsError?: FetchError | undefined;
+  lineStatisticsError?: FetchError | null;
 }
 
 export const IncompleteLineStatisticsError = ({
   lineStatisticsError,
-  exportedLineStatisticsError,
 }: Props) => {
   const locale = useLocale();
   return (
     <>
-      {lineStatisticsError ||
-        (exportedLineStatisticsError && (
-          <div className={style.lineStatisticsErrorContainer}>
-            {(lineStatisticsError && !exportedLineStatisticsError && (
-              <SmallAlertBox variant="error">
-                {errorText(locale).missingLineStatisticsFromOperatorPortal}
-              </SmallAlertBox>
-            )) ||
-              (!lineStatisticsError && exportedLineStatisticsError && (
-                <SmallAlertBox variant="error">
-                  {errorText(locale).missingLineStatisticsFromNplan}
-                </SmallAlertBox>
-              ))}
-          </div>
-        ))}
+      {lineStatisticsError && (
+        <div className={style.lineStatisticsErrorContainer}>
+          <SmallAlertBox variant="error">
+            {errorText(locale).missingLineStatisticsFromOperatorPortal}
+          </SmallAlertBox>
+        </div>
+      )}
     </>
   );
 };

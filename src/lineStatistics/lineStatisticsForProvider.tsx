@@ -5,6 +5,12 @@ import { LinesValidity } from './components/linesValidity/linesValidity';
 import React from 'react';
 import { Validity } from './lineStatistics.types';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
+import { PieStatistics } from './components/pieStatistics/pieStatistics';
+import { getNumberOfLinesType } from './components/numberOfLines/numberOfLines.util';
+import { useAppConfig } from '../appContext';
+import { NumberOfLines } from './components/numberOfLines/numberOfLines';
+import { DaysToFirstExpiringLine } from './components/daysInFirstLineExpiration/daysToFirstExpiringLine';
+import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDeliveryDate';
 
 type Props = {
   providerId: string;
@@ -12,6 +18,10 @@ type Props = {
 export const LineStatisticsForProvider = ({ providerId }: Props) => {
   const { lineStatistics, loading, error } =
     useLineStatisticsForProvider(providerId);
+
+  const appConfig = useAppConfig();
+
+  const numberOfLines = getNumberOfLinesType(lineStatistics);
 
   return (
     <LoadingLineStatistics isLoading={loading} lineStatisticsError={error}>
@@ -28,6 +38,28 @@ export const LineStatisticsForProvider = ({ providerId }: Props) => {
                 lineStatistics={lineStatistics}
               />
             </Card>
+            <div className={style.rightPanel}>
+              <Card>
+                <PieStatistics
+                  handlePieOnClick={() => {}}
+                  handleShowAllClick={() => {}}
+                  providerName={lineStatistics?.providerName!}
+                  showHeader={false}
+                  numberOfLines={numberOfLines}
+                  className={style.pieChartContainer}
+                  showLineButton={false}
+                />
+              </Card>
+              {appConfig.showNumberOfLinesCard && (
+                <NumberOfLines numberOfLines={numberOfLines} />
+              )}
+              {appConfig.showExpiringDaysCard && lineStatistics && (
+                <DaysToFirstExpiringLine lineStatistics={lineStatistics} />
+              )}
+              {appConfig.showDeliveryDateCard && (
+                <LatestDeliveryDate providerId={providerId} />
+              )}
+            </div>
           </div>
         )}
       </>

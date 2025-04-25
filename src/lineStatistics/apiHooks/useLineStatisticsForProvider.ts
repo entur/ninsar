@@ -173,7 +173,7 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
         if (errors) {
           throw new Error(errors.map((e: any) => e.message).join(', '), {
             cause: {
-              status: 'N/A',
+              status: response.status,
               statusText: errors.map((e: any) => e.message).join(', '),
             },
           });
