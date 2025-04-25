@@ -4,7 +4,13 @@ import React from 'react';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 
-export const LineStatisticsForAllProviders = () => {
+type Props = {
+  setSelectedProvider: React.Dispatch<React.SetStateAction<string | undefined>>;
+};
+
+export const LineStatisticsForAllProviders = ({
+  setSelectedProvider,
+}: Props) => {
   const { lineStatisticsForAllProviders, loading, error } =
     useLineStatisticsForAllProviders();
 
@@ -16,8 +22,9 @@ export const LineStatisticsForAllProviders = () => {
           <div>
             <PieStatisticsForAllProviders
               lineStatistics={lineStatisticsForAllProviders}
+              // TODO this needs to be implemented
               handlePieOnClick={() => {}}
-              handleShowAll={() => {}}
+              handleShowAll={(providerId) => setSelectedProvider(providerId)}
             />
           </div>
         )}

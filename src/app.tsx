@@ -22,7 +22,11 @@ export function App(props: NinsarPayload) {
                 }
               />
             ) : (
-              <LineStatisticsForAllProviders />
+              <LineStatisticsForAllProviders
+                setSelectedProvider={(providerId) =>
+                  setSelectedProviderId(providerId)
+                }
+              />
             )}
           </div>
         </div>
