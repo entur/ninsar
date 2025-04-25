@@ -4,6 +4,7 @@ import { Card } from './components/card/card';
 import { LinesValidity } from './components/linesValidity/linesValidity';
 import React from 'react';
 import { Validity } from './lineStatistics.types';
+import { LoadingLineStatistics } from './components/loadingLineStatistics';
 
 type Props = {
   providerId: string;
@@ -16,8 +17,12 @@ export const LineStatisticsForProvider = ({ providerId}: Props) => {
   } = useLineStatisticsForProvider(providerId);
 
   return (
-    <>
-      {(!loading && !error && (
+      <LoadingLineStatistics
+        isLoading={loading}
+        lineStatisticsError={error}
+      >
+        <>
+      {!loading && !error && (
       <div className={style.linesStatisticsContainer}>
         <Card
           title={lineStatistics?.providerName}
@@ -30,7 +35,8 @@ export const LineStatisticsForProvider = ({ providerId}: Props) => {
           />
         </Card>
       </div>
-    ))}
-    </>
+    )}
+        </>
+    </LoadingLineStatistics>
   );
 }

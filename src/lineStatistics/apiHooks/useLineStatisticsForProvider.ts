@@ -15,11 +15,12 @@ import {
   validPeriod,
 } from '../lineStatisticsCalculator/utilities';
 import { useAuth } from '../../appContext';
+import { FetchError } from './lineStatistics.response.types';
 
 type Type = (providerId: string) => {
   lineStatistics: LineStatistics | undefined
   loading: boolean;
-  error: Error | null;
+  error: FetchError | null;
 };
 
 const GRAPHQL_ENDPOINT = process.env.REACT_APP_KILILI_API_URL;
@@ -132,7 +133,7 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
   const { getToken } = useAuth();
   const [lineStatistics, setLineStatistics] = useState<LineStatistics | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<FetchError | null>(null);
 
   useEffect(() => {
     const fetchLineStatistics = async () => {
@@ -155,13 +156,22 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
         });
 
         if (!response.ok) {
-          throw new Error(`GraphQL request failed with status ${response.status}`);
+          throw new Error(`GraphQL request failed with status ${response.status}`, { cause: {
+            status: response.status,
+            statusText: response.statusText
+            }
+          });
         }
 
         const { data, errors } = await response.json();
 
         if (errors) {
-          throw new Error(errors.map((e: any) => e.message).join(', '));
+          throw new Error(errors.map((e: any) => e.message).join(', '), {
+            cause: {
+              status: 'N/A',
+              statusText: errors.map((e: any) => e.message).join(', ')
+            }
+          });
         }
 
         const {
@@ -193,7 +203,7 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
         };
         setLineStatistics(transformedData);
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('An unknown error occurred'));
+        setError((err as Error).cause as FetchError);
         throw err;
       } finally {
         setLoading(false);
