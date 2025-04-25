@@ -4,11 +4,7 @@ import React from 'react';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { IncompleteLineStatisticsError } from './components/incompleteLineStatisticsError/incompleteLineStatisticsError';
 
-type Props = {
-  handleShowAll: (providerId: string) => void;
-};
-
-export const LineStatisticsForAllProviders = ({ handleShowAll }: Props) => {
+export const LineStatisticsForAllProviders = () => {
   const { lineStatisticsForAllProviders, loading, error } =
     useLineStatisticsForAllProviders();
 
@@ -20,8 +16,8 @@ export const LineStatisticsForAllProviders = ({ handleShowAll }: Props) => {
           <div>
             <PieStatisticsForAllProviders
               lineStatistics={lineStatisticsForAllProviders}
-              handlePieOnClick={(_, providerId) => handleShowAll(providerId)}
-              handleShowAll={(providerId) => handleShowAll(providerId)}
+              handlePieOnClick={() => {}}
+              handleShowAll={() => {}}
             />
           </div>
         )}

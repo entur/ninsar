@@ -15,13 +15,14 @@ export function App(props: NinsarPayload) {
         <div className="ninsar-app">
           <div className="ninsar-app-content">
             {selectedProviderId ? (
-              <LineStatisticsForProvider providerId={selectedProviderId!} />
-            ) : (
-              <LineStatisticsForAllProviders
-                handleShowAll={(providerId) =>
+              <LineStatisticsForProvider
+                providerId={selectedProviderId!}
+                setSelectedProvider={(providerId) =>
                   setSelectedProviderId(providerId)
                 }
               />
+            ) : (
+              <LineStatisticsForAllProviders />
             )}
           </div>
         </div>
