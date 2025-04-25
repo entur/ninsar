@@ -124,7 +124,7 @@ export const useLineStatisticsForAllProviders: Type = () => {
     };
 
     fetchLineStatistics();
-  }, []);
+  }, [getToken]);
 
   return {
     lineStatisticsForAllProviders,

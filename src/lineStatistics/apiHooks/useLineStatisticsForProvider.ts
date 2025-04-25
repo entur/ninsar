@@ -218,7 +218,7 @@ export const useLineStatisticsForProvider: Type = (providerId: string) => {
     };
 
     fetchLineStatistics();
-  }, [providerId]);
+  }, [providerId, getToken]);
 
   return {
     lineStatistics,

@@ -228,7 +228,7 @@ export const useLineStatisticsPublicLineDetails: Type = (
 
       fetchLineStatistics();
     },
-    [providerId],
+    [providerId, getToken, lineStatistics],
   );
 
   return {
