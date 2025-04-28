@@ -64,46 +64,49 @@ const mapLines = (lineStatisticsResponse: any) => {
 
       const effectivePeriodsFormatted: PeriodValidity[] =
         // @ts-ignore
-        [publicLine.effectivePeriod].filter(v => v !== null).map((effectivePeriod) => {
-          const effectivePeriodFrom: Moment = moment(
-            effectivePeriod.from,
-            'YYYY-MM-DD',
-          );
-          const effectivePeriodTo: Moment = moment(
-            effectivePeriod.to,
-            'YYYY-MM-DD',
-          );
-
-          const timelineStartPosition: number =
-            findTimeLineStartPositionForEffectivePeriod(
-              effectivePeriodFrom,
-              startDateLine,
-              lineStatisticsResponse.days,
+        [publicLine.effectivePeriod]
+          .filter((v) => v !== null)
+          .map((effectivePeriod) => {
+            const effectivePeriodFrom: Moment = moment(
+              effectivePeriod.from,
+              'YYYY-MM-DD',
+            );
+            const effectivePeriodTo: Moment = moment(
+              effectivePeriod.to,
+              'YYYY-MM-DD',
             );
 
-          const timelineEndPosition = findTimeLineEndPositionForEffectivePeriod(
-            effectivePeriodTo,
-            endDateLine,
-            lineStatisticsResponse.days,
-          );
+            const timelineStartPosition: number =
+              findTimeLineStartPositionForEffectivePeriod(
+                effectivePeriodFrom,
+                startDateLine,
+                lineStatisticsResponse.days,
+              );
 
-          let daysForward =
-            (timelineEndPosition / 100) * lineStatisticsResponse.days;
-          const validationLevel = findValidity(daysForward);
+            const timelineEndPosition =
+              findTimeLineEndPositionForEffectivePeriod(
+                effectivePeriodTo,
+                endDateLine,
+                lineStatisticsResponse.days,
+              );
 
-          publicLineValidPeriod = validPeriod(
-            publicLineValidPeriod || startDateLine,
-            effectivePeriodFrom,
-            effectivePeriodTo,
-          );
+            let daysForward =
+              (timelineEndPosition / 100) * lineStatisticsResponse.days;
+            const validationLevel = findValidity(daysForward);
 
-          return {
-            ...effectivePeriod,
-            timelineStartPosition,
-            timelineEndPosition,
-            validationLevel,
-          };
-        });
+            publicLineValidPeriod = validPeriod(
+              publicLineValidPeriod || startDateLine,
+              effectivePeriodFrom,
+              effectivePeriodTo,
+            );
+
+            return {
+              ...effectivePeriod,
+              timelineStartPosition,
+              timelineEndPosition,
+              validationLevel,
+            };
+          });
 
       const daysValid: number =
         getDaysRange(startDateLine, publicLineValidPeriod) || 0;
