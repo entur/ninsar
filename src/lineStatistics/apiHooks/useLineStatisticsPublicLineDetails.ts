@@ -39,7 +39,7 @@ const LINE_STATISTICS_QUERY = `
         publicLines(lineNumbers: $lineNumbers) {
           lineNumber
           lineNames
-          effectivePeriods {
+          effectivePeriod {
             from
             to
           }
@@ -77,7 +77,7 @@ const mapPublicLineValidity = (
 
   const effectivePeriodsFormatted: PeriodValidity[] =
     // @ts-ignore
-    publicLine.effectivePeriods.map((effectivePeriod) => {
+    [publicLine.effectivePeriod].map((effectivePeriod) => {
       const effectivePeriodFrom: Moment = moment(
         effectivePeriod.from,
         'YYYY-MM-DD',
