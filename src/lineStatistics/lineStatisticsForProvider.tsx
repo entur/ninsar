@@ -16,11 +16,15 @@ type Props = {
   providerId: string;
   setSelectedProvider: React.Dispatch<React.SetStateAction<string | undefined>>;
   externalProviderId: boolean;
+  selectedValidity: Validity;
+  setSelectedValidity: React.Dispatch<React.SetStateAction<Validity>>;
 };
 export const LineStatisticsForProvider = ({
   providerId,
   setSelectedProvider,
   externalProviderId,
+  selectedValidity,
+  setSelectedValidity,
 }: Props) => {
   const { lineStatistics, loading, error } =
     useLineStatisticsForProvider(providerId);
@@ -28,8 +32,6 @@ export const LineStatisticsForProvider = ({
   const appConfig = useAppConfig();
 
   const numberOfLines = getNumberOfLinesType(lineStatistics);
-
-  const [selectedValidity, setSelectedValidity] = useState(Validity.ALL);
 
   return (
     <LoadingLineStatistics isLoading={loading} lineStatisticsError={error}>
