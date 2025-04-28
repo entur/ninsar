@@ -29,6 +29,7 @@ const LINE_STATISTICS_QUERY = `
   query LineStatisticsForProvider($providerId: Int) {
     lineStatisticsForProvider(providerId: $providerId) {
         providerId
+        providerName
         startDate
         days
         validityCategories {
