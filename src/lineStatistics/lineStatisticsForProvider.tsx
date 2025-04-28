@@ -2,7 +2,7 @@ import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForPro
 import style from './lineStatistics.module.scss';
 import { Card } from './components/card/card';
 import { LinesValidity } from './components/linesValidity/linesValidity';
-import React from 'react';
+import React, { useState } from 'react';
 import { Validity } from './lineStatistics.types';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
@@ -27,6 +27,8 @@ export const LineStatisticsForProvider = ({
 
   const numberOfLines = getNumberOfLinesType(lineStatistics);
 
+  const [selectedValidity, setSelectedValidity] = useState(Validity.ALL);
+
   return (
     <LoadingLineStatistics isLoading={loading} lineStatisticsError={error}>
       <>
@@ -40,14 +42,14 @@ export const LineStatisticsForProvider = ({
             >
               <LinesValidity
                 providerId={providerId}
-                defaultSelectedValidity={Validity.ALL}
+                defaultSelectedValidity={selectedValidity}
                 lineStatistics={lineStatistics}
               />
             </Card>
             <div className={style.rightPanel}>
               <Card>
                 <PieStatistics
-                  handlePieOnClick={() => {}}
+                  handlePieOnClick={(validity) => setSelectedValidity(validity)}
                   handleShowAllClick={() => {}}
                   providerName={lineStatistics?.providerName!}
                   showHeader={false}
