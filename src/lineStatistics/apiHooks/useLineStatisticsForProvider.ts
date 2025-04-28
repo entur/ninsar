@@ -64,7 +64,7 @@ const mapLines = (lineStatisticsResponse: any) => {
 
       const effectivePeriodsFormatted: PeriodValidity[] =
         // @ts-ignore
-        [publicLine.effectivePeriod].map((effectivePeriod) => {
+        [publicLine.effectivePeriod].filter(v => v !== null).map((effectivePeriod) => {
           const effectivePeriodFrom: Moment = moment(
             effectivePeriod.from,
             'YYYY-MM-DD',
