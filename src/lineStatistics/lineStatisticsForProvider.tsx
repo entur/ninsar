@@ -2,7 +2,7 @@ import { useLineStatisticsForProvider } from './apiHooks/useLineStatisticsForPro
 import style from './lineStatistics.module.scss';
 import { Card } from './components/card/card';
 import { LinesValidity } from './components/linesValidity/linesValidity';
-import React, { useState } from 'react';
+import React from 'react';
 import { Validity } from './lineStatistics.types';
 import { LoadingLineStatistics } from './components/loadingLineStatistics';
 import { PieStatistics } from './components/pieStatistics/pieStatistics';
