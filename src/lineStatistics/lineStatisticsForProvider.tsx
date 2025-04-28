@@ -15,10 +15,12 @@ import { LatestDeliveryDate } from './components/latestDeliveryDate/latestDelive
 type Props = {
   providerId: string;
   setSelectedProvider: React.Dispatch<React.SetStateAction<string | undefined>>;
+  externalProviderId: boolean;
 };
 export const LineStatisticsForProvider = ({
   providerId,
   setSelectedProvider,
+  externalProviderId,
 }: Props) => {
   const { lineStatistics, loading, error } =
     useLineStatisticsForProvider(providerId);
@@ -37,8 +39,11 @@ export const LineStatisticsForProvider = ({
             <Card
               title={lineStatistics?.providerName}
               className={style.lineStatisticsCard}
-              // TODO close button should not be shown when user is not admin
-              handleClose={() => setSelectedProvider(undefined)}
+              handleClose={
+                externalProviderId
+                  ? undefined
+                  : () => setSelectedProvider(undefined)
+              }
             >
               <LinesValidity
                 providerId={providerId}

@@ -20,6 +20,7 @@ export function App(props: NinsarPayload) {
                 setSelectedProvider={(providerId) =>
                   setSelectedProviderId(providerId)
                 }
+                externalProviderId={!!props.providerId}
               />
             ) : (
               <LineStatisticsForAllProviders
