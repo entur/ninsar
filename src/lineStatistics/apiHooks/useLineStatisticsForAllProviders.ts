@@ -1,64 +1,134 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../../appContext';
-import { calculateLineStatistics } from '../lineStatisticsCalculator/lineStatisticsCalculator';
 import {
   FetchError,
   LineStatisticsPerProviderId,
-  LineStatisticsResponse,
 } from './lineStatistics.response.types';
+import { useEffect, useState } from 'react';
+import { Validity } from '../lineStatistics.types';
+import { useAuth } from '../../appContext';
 
-export const useLineStatisticsForAllProviders = () => {
+type Type = () => {
+  lineStatisticsForAllProviders: LineStatisticsPerProviderId;
+  loading: boolean;
+  error: FetchError | null;
+};
+
+const GRAPHQL_ENDPOINT = process.env.REACT_APP_KILILI_API_URL;
+
+const LINE_STATISTICS_QUERY = `
+  query {
+    lineStatistics {
+        providerId
+        providerName
+        startDate
+        days
+        validityCategories {
+          name
+          numDaysAtLeastValid
+          lineNumbersCount
+        }
+      }
+    }
+`;
+
+export const useLineStatisticsForAllProviders: Type = () => {
   const { getToken } = useAuth();
-
   const [lineStatisticsForAllProviders, setLineStatisticsForAllProviders] =
-    useState<LineStatisticsPerProviderId | undefined>();
-  const [
-    lineStatisticsForAllProvidersError,
-    setLineStatisticsForAllProvidersError,
-  ] = useState<FetchError | undefined>();
+    useState<LineStatisticsPerProviderId>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<FetchError | null>(null);
 
   useEffect(() => {
-    const fetchReport = async () => {
-      const accessToken = getToken ? await getToken() : '';
-      const response = await fetch(
-        `${process.env.REACT_APP_TIMETABLE_ADMIN_BASE_URL}/line_statistics/level1`,
-        {
+    const fetchLineStatistics = async () => {
+      try {
+        setLoading(true);
+
+        const response = await fetch(GRAPHQL_ENDPOINT!, {
+          method: 'POST',
           headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Et-Client-Name': 'entur-ninsar'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${await getToken!()}`,
+            'Et-Client-Name': 'entur-ninsar',
           },
-        },
-      );
-      if (response.ok) {
-        const lineStatisticsResponse = await response.json();
-        let lineStatisticsPerProviderId: LineStatisticsPerProviderId = {};
-        for (const providerId in lineStatisticsResponse) {
-          const lineStatisticsResponseForProvider: LineStatisticsResponse =
-            lineStatisticsResponse[providerId];
-          if (
-            lineStatisticsResponseForProvider &&
-            lineStatisticsResponseForProvider.publicLines.length > 0
-          ) {
-            const formatted = calculateLineStatistics(
-              lineStatisticsResponseForProvider,
-            );
-            lineStatisticsPerProviderId = {
-              ...lineStatisticsPerProviderId,
-              [providerId]: formatted,
+          body: JSON.stringify({
+            query: LINE_STATISTICS_QUERY,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `GraphQL request failed with status ${response.status}`,
+            {
+              cause: {
+                status: response.status,
+                statusText: response.statusText,
+              },
+            },
+          );
+        }
+
+        const { data, errors } = await response.json();
+
+        if (errors) {
+          throw new Error(errors.map((e: any) => e.message).join(', '), {
+            cause: {
+              status: response.status,
+              statusText: errors.map((e: any) => e.message).join(', '),
+            },
+          });
+        }
+
+        // Transform the response into the expected format
+        const transformedData: LineStatisticsPerProviderId = {};
+
+        data.lineStatistics.forEach((lineStatistics: any) => {
+          const { providerId } = lineStatistics;
+
+          if (lineStatistics) {
+            // Convert validityCategories to a Map
+            const validityCategories = new Map();
+            let sum = 0;
+            lineStatistics.validityCategories.forEach((category: any) => {
+              validityCategories.set(category.name, category.lineNumbersCount);
+              sum += category.lineNumbersCount;
+            });
+
+            validityCategories.set(Validity.ALL, sum);
+
+            // Since we don't have publicLines in the query, create an empty linesMap
+            const linesMap: { [lineNumber: string]: any } = {};
+
+            // Add the transformed data to the result
+            transformedData[providerId.toString()] = {
+              providerName: lineStatistics.providerName,
+              startDate: lineStatistics.startDate,
+              endDate: new Date(
+                new Date(lineStatistics.startDate).getTime() +
+                  lineStatistics.days * 24 * 60 * 60 * 1000,
+              )
+                .toISOString()
+                .split('T')[0],
+              requiredValidityDate: new Date().toISOString().split('T')[0], // Current date as a placeholder
+              linesMap,
+              validityCategories,
+              validityCategoriesCount: validityCategories,
             };
           }
-        }
-        setLineStatisticsForAllProviders(lineStatisticsPerProviderId);
-        setLineStatisticsForAllProvidersError(undefined);
-      } else {
-        setLineStatisticsForAllProvidersError({
-          status: response.status,
-          statusText: response.statusText,
         });
+
+        setLineStatisticsForAllProviders(transformedData);
+      } catch (err) {
+        setError((err as Error).cause as FetchError);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchReport();
+
+    fetchLineStatistics();
   }, [getToken]);
 
-  return { lineStatisticsForAllProviders, lineStatisticsForAllProvidersError };
+  return {
+    lineStatisticsForAllProviders,
+    loading,
+    error,
+  };
 };

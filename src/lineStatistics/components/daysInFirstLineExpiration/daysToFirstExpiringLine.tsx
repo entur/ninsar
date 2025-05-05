@@ -41,7 +41,10 @@ export const DaysToFirstExpiringLine = ({
   return (
     <Card className={style.daysInFirstLineExpiration}>
       <Heading4>{titleText(locale).daysToFirstExpiringLine}</Heading4>
-      <Heading1 className={style.days} style={{ color: 'var(--expiring-color)' }}>
+      <Heading1
+        className={style.days}
+        style={{ color: 'var(--expiring-color)' }}
+      >
         {numberOfDays}
       </Heading1>
     </Card>

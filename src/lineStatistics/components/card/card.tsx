@@ -4,8 +4,8 @@ import { BackArrowIcon } from '@entur/icons';
 import React, { ReactElement } from 'react';
 import { Heading2, Heading3 } from '@entur/typography';
 import classnames from 'classnames';
-import { titleText } from "../../lineStatistics.constants";
-import { useLocale } from "../../../appContext";
+import { titleText } from '../../lineStatistics.constants';
+import { useLocale } from '../../../appContext';
 
 interface Props {
   handleClose?: () => void;
@@ -22,7 +22,6 @@ export const Card = ({
   title,
   subTitle,
 }: Props) => {
-
   const locale = useLocale();
 
   return (

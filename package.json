@@ -2,7 +2,7 @@
   "name": "ninsar",
   "version": "0.1.0",
   "license": "EUPL-1.2",
-  "proxy": "http://localhost:11701",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@auth0/auth0-react": "1.12.1",
     "@entur/alert": "0.17.8",

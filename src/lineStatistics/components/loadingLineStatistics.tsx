@@ -5,18 +5,14 @@ import { LoadingOrFailed } from './LoadingOrFailed';
 import { useLocale } from '../../appContext';
 
 interface Props {
-  providerError?: FetchError | undefined;
-  lineStatisticsError?: FetchError | undefined;
-  exportedLineStatisticsError: FetchError | undefined;
+  lineStatisticsError: FetchError | null;
   children: ReactElement | ReactElement[];
   isLoading: boolean;
 }
 
 export const LoadingLineStatistics = ({
   isLoading,
-  providerError,
   lineStatisticsError,
-  exportedLineStatisticsError,
   children,
 }: Props) => {
   const locale = useLocale();
@@ -24,12 +20,7 @@ export const LoadingLineStatistics = ({
     <LoadingOrFailed
       errorText={errorText(locale).failedToLoadData}
       isLoading={isLoading}
-      error={
-        !!(
-          providerError ||
-          (lineStatisticsError && exportedLineStatisticsError)
-        )
-      }
+      error={!!lineStatisticsError}
     >
       {children}
     </LoadingOrFailed>

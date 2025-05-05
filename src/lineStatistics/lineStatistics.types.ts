@@ -1,20 +1,16 @@
 export type LineNumbers = string[];
 
 export interface LineStatistics {
+  providerName?: string;
   startDate: string;
   endDate: string;
   requiredValidityDate: string;
   linesMap: LinesMap;
   validityCategories: Map<Validity, LineNumbers>;
+  validityCategoriesCount?: Map<Validity, number>;
 }
 
 export type LinesMap = { [lineNumber: string]: PublicLineValidity };
-
-export interface Provider {
-  id: number;
-  code: string;
-  name: string;
-}
 
 export interface PeriodValidity extends Period {
   timelineEndPosition: number;

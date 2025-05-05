@@ -2,7 +2,7 @@ import style from './linesValidity.module.scss';
 import React from 'react';
 import { titleText } from '../../lineStatistics.constants';
 import { useLocale } from '../../../appContext';
-import { SmallText} from '@entur/typography';
+import { SmallText } from '@entur/typography';
 
 interface Props {
   startDate: string;

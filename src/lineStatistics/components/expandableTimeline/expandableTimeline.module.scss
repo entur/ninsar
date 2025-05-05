@@ -1,9 +1,13 @@
 @import '~@entur/tokens/dist/styles.scss';
 
 .timeLineContainer {
-  background: linear-gradient(to right,
-          var(--expired-color-light) 0%, var(--expired-color-light) var(--valid-line-percentage),
-          $colors-greys-grey70 var(--valid-line-percentage), $colors-greys-grey70 100%);
+  background: linear-gradient(
+    to right,
+    var(--expired-color-light) 0%,
+    var(--expired-color-light) var(--valid-line-percentage),
+    $colors-greys-grey70 var(--valid-line-percentage),
+    $colors-greys-grey70 100%
+  );
   width: 100%;
   height: 56px;
   display: flex;
@@ -13,10 +17,10 @@
 
 .headerLineNumber {
   width: 100px;
-  overflow:hidden;
-  white-space:nowrap;
-  display:inline-block;
-  text-overflow:ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  text-overflow: ellipsis;
 }
 
 .validPeriodTitleContainer {
@@ -64,7 +68,7 @@
   padding: 1px;
 
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
   }
 
   &:focus {
