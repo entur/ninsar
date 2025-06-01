@@ -14,7 +14,7 @@ jobs:
       REACT_APP_KILILI_API_URL: https://api.dev.entur.io/timetable-admin/v1/line-statistics/graphql
       REACT_APP_EVENT_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/events
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
