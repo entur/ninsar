@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'dev'
     env:
-      REACT_APP_AUTH0_DOMAIN: ror-entur-dev.eu.auth0.com
-      REACT_APP_AUTH0_CLIENT_ID: fa3xdcRIvN3QpVl3eVRUGPiJEoHSTy0C
+      REACT_APP_AUTH0_DOMAIN: https://partner.dev.entur.org
+      REACT_APP_AUTH0_CLIENT_ID: fBMaKFexHPwhsASUC57o2wvzrRxvAdNb
       REACT_APP_AUTH0_AUDIENCE: https://api.dev.entur.io
       REACT_APP_AUTH0_RELATIVE_CALLBACK_URL: /
       REACT_APP_KILILI_API_URL: https://api.dev.entur.io/timetable-admin/v1/line-statistics/graphql
