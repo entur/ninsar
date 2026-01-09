@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'dev'
     env:
-      REACT_APP_AUTH0_DOMAIN: https://partner.dev.entur.org
-      REACT_APP_AUTH0_CLIENT_ID: fBMaKFexHPwhsASUC57o2wvzrRxvAdNb
-      REACT_APP_AUTH0_AUDIENCE: https://api.dev.entur.io
-      REACT_APP_AUTH0_RELATIVE_CALLBACK_URL: /
       REACT_APP_KILILI_API_URL: https://api.dev.entur.io/timetable-admin/v1/line-statistics/graphql
       REACT_APP_EVENT_BASE_URL: https://api.dev.entur.io/timetable-admin/v1/events
     steps:
@@ -33,10 +29,6 @@ jobs:
     needs: [build_and_deploy_dev]
     environment: 'staging'
     env:
-      REACT_APP_AUTH0_DOMAIN: ror-entur-staging.eu.auth0.com
-      REACT_APP_AUTH0_CLIENT_ID: YcfrQxHGHBFBO9IukAvHG2e5d0yXwO1N
-      REACT_APP_AUTH0_AUDIENCE: https://ror.api.staging.entur.io
-      REACT_APP_AUTH0_RELATIVE_CALLBACK_URL: /
       REACT_APP_KILILI_API_URL: https://api.staging.entur.io/timetable-admin/v1/line-statistics/graphql
       REACT_APP_EVENT_BASE_URL: https://api.staging.entur.io/timetable-admin/v1/events
     steps:
@@ -55,10 +47,6 @@ jobs:
     needs: [build_and_deploy_dev, build_and_deploy_staging]
     environment: 'prod'
     env:
-      REACT_APP_AUTH0_DOMAIN: auth2.entur.org
-      REACT_APP_AUTH0_CLIENT_ID: VaHL7CIrAT293Og9Sm9uWXuNRSMnn8Pd
-      REACT_APP_AUTH0_AUDIENCE: https://ror.api.entur.io
-      REACT_APP_AUTH0_RELATIVE_CALLBACK_URL: /
       REACT_APP_KILILI_API_URL: https://api.entur.io/timetable-admin/v1/line-statistics/graphql
       REACT_APP_EVENT_BASE_URL: https://api.entur.io/timetable-admin/v1/events
     steps:
