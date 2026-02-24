@@ -21,7 +21,7 @@
     "@entur/tokens": "3.22.2",
     "@entur/typography": "1.9.14",
     "chart.js": "3.9.1",
-    "graphql": "16.12.0",
+    "graphql": "16.13.0",
     "graphql-request": "4.3.0",
     "http-proxy-middleware": "2.0.9",
     "moment": "2.30.1",
